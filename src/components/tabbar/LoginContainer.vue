@@ -16,7 +16,7 @@
                             <input type="text" v-model="password" class="login-password" placeholder="请输入密码">
                         </div>
                         <el-row class="login-btn-row">
-                            <el-button type="primary submit" round class="login-btn" @click="login()" >登录</el-button>
+                            <el-button type="primary submit" round class="login-btn" @click="login()" @keyup.enter.native="login()">登录</el-button>
                         </el-row>
                     </div>
                 </form>
@@ -38,19 +38,16 @@
                 password:''
             }
         },
-        // created(){
-        //     login();
-        // },
-        methods:{
 
+        methods:{
             login(){
 
                 // var a=this.username;
                 // var b = this.password;
-                if(this.username==='admin'&& this.password==='123456'){
-                        alert('登录成功')
+                if(this.username==='a'&& this.password==='123'){
+                    this.$router.push('/HomeContainer');
                 }else {
-                    alert('登录失败')
+                    alert('登录失败，请检查用户名或密码是否正确！')
                 }
             }
         }
@@ -59,6 +56,7 @@
 
 <style scoped lang="scss">
 .login-page {
+    overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
