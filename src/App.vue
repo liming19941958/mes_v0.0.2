@@ -13,9 +13,6 @@
 </script>
 
 <style scoped lang="scss">
-    .app-container{
-        overflow: hidden;
-    }
     .v-enter{
         transform: translateX(100%);
         opacity: 0;
@@ -27,6 +24,6 @@
      }
     .v-enter-active,
     .v-leave-active{
-        transition: all 0.7s ease;
+        transition: all 8s ease;
     }
 </style>

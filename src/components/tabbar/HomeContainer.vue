@@ -40,8 +40,18 @@
 </script>
 
 <style  lang="scss" scoped>
+    a:link{
+        text-decoration:none;
+    }
+    a:visited{
+        text-decoration:none; /*指已经访问过的链接*/
+    }
+    a:hover{
+        text-decoration:none;/*指鼠标在链接*/
+    }
+    a:active{
+        text-decoration:none;/* 指正在点的链接*/}
     .Home-page{
-        overflow: hidden;
         position: absolute;
         left: 0;
         right: 0;

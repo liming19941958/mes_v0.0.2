@@ -9,15 +9,16 @@
                     <div class="f-logo-input">
                         <div class="login-account-number">
                             <i class="el-icon-user"></i>
-                            <input type="text" v-model="username" class="login-input" placeholder="登录名/手机/邮箱">
+                            <input type="text" v-model="username" class="login-input" placeholder="登录名/手机/邮箱" v-focus>
                         </div>
                         <div class="login-account-password">
                             <i class="el-icon-lock"></i>
-                            <input type="text" v-model="password" class="login-password" placeholder="请输入密码">
+                            <input type="text" v-model="password" class="login-password" placeholder="请输入密码"  @keyup.enter="login()">
+                            <el-row class="login-btn-row" >
+                                <el-button type="primary"  round class="login-btn" @click="login()">登录</el-button>
+                            </el-row>
                         </div>
-                        <el-row class="login-btn-row">
-                            <el-button type="primary submit" round class="login-btn" @click="login()" @keyup.enter.native="login()">登录</el-button>
-                        </el-row>
+
                     </div>
                 </form>
             </div>
@@ -32,6 +33,14 @@
 
 <script>
     export default {
+        directives: {
+            focus: {
+                // 指令的定义
+                inserted: function (el) {
+                    el.focus()
+                }
+            }
+        },
         data(){
             return {
                 username:'',
@@ -56,7 +65,6 @@
 
 <style scoped lang="scss">
 .login-page {
-    overflow: hidden;
     position: absolute;
     top: 0;
     left: 0;
