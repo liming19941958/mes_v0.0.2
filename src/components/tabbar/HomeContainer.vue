@@ -1,5 +1,6 @@
 
 <template>
+    <transition>
     <div class="Home-page">
         <div class="Sidebar">
 
@@ -146,7 +147,7 @@
                 </el-submenu>
             </el-menu>
         </div>
-        <transition>
+
                 <div class="page-information">
                     <div class="ModifyInformation">
                         <!-- Form -->
@@ -211,8 +212,8 @@
                         </el-dropdown>
                     </div>
                 </div>
-        </transition>
-    </div>
+
+    </div>  </transition>
 </template>
 
 <script>
