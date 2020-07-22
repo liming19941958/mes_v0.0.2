@@ -6,7 +6,7 @@
                 <el-radio-button :label="false">展开</el-radio-button>
                 <el-radio-button :label="true">收起</el-radio-button>
             </el-radio-group>
-            <el-menu background-color="rgba(17, 46, 100, 0.70)"
+            <el-menu background-color="rgba(17, 46, 100, 0.75)"
                      text-color="#9B9B9B"
                      active-text-color="#ffd04b"
                      default-active="1-4-1" class="el-menu-vertical-demo"
