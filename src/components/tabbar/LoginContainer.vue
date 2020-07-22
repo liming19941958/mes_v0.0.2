@@ -1,4 +1,5 @@
 <template>
+    <transition>
     <div class="login-page">
         <div class="f-login-container">
             <div class="f-logo">
@@ -29,6 +30,7 @@
             </div>
         </div>
     </div>
+    </transition>
 </template>
 
 <script>
@@ -50,9 +52,6 @@
 
         methods:{
             login(){
-
-                // var a=this.username;
-                // var b = this.password;
                 if(this.username==='a'&& this.password==='123'){
                     this.$router.push('/HomeContainer');
                 }else {
@@ -64,6 +63,20 @@
 </script>
 
 <style scoped lang="scss">
+    .v-enter{
+        transform: translateX(100%);
+        opacity: 0;
+        /*position: absolute;*/
+    }
+    .v-leave-to{
+        transform: translateX(-100%);
+        opacity: 0;
+        position: absolute;
+    }
+    .v-leave-active,
+    .v-enter-active{
+        transition: all 1s ease;
+    }
 .login-page {
     position: absolute;
     top: 0;
