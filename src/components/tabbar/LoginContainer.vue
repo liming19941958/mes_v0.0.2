@@ -1,6 +1,7 @@
 <template>
-    <transition>
+
     <div class="login-page">
+        <transition>
         <div class="f-login-container">
             <div class="f-logo">
                 <h1>智能工厂系统</h1>
@@ -29,8 +30,9 @@
                 <p class="f-version">版本：0.0.1</p>
             </div>
         </div>
-    </div>
     </transition>
+    </div>
+
 </template>
 
 <script>

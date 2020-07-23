@@ -1,37 +1,57 @@
-.el-form-item__label{
+.ant{
+    position: absolute;
+    top:0;
+    bottom: 0;
+    right: 0;
+    width: calc(100% - 200px);
+    /*height: 500px;*/
+    background-color: #ffd9c2;
+    margin-left: 200px;
+    /*z-index: 99;*/
+}
+.el-form-item__label{ /*修改密码列表输入框前面文字样式*/
     color: rgba(0,0,0,0.7);
     font-weight: normal;
 }
-.el-radio-button__inner{
-    color:transparent;
-    padding: 0;
-    background-color: #fff;
-    position: absolute;
-    left: 0;
-    top: 90px;
-    width: 20px;
-    height: 650px;
-    z-index: 1;
-    opacity: 0.15;
-}
-.el-radio-button__inner:hover{
-    color:transparent;
-}
-.el-menu {
+.el-menu-item,
+.el-submenu__title { /*左侧边菜单栏 li 行高*/
+    height: 38px;
+    line-height: 38px;
     position: relative;
+}
+.el-scrollbar__wrap {
+    overflow-x: hidden;
+}
+.btn-inner{ /*侧边栏折叠按钮*/
+    border: none;
+    outline: none;
+    color: #fdf3ff;
+    padding: 0;
+    background-color: rgba(255,255,255,0.15);
+    position:absolute;
+    right: 0;
+    top: 50%;
+    margin-top: -325px;
+    width: 16px;
+    height: 650px;
+    z-index: 9;
+
+}
+
+.el-menu {/*取消左侧菜单栏右边框*/
      border-right: 0;
 }
-.Sidebar{
-    position: absolute;
-    left:0;
-    top: 0;
-    bottom: 0;
+.Sidebar{/*左侧边栏背景及高度*/
+    /*overflow-y: scroll;*/
+    display: inline-block;
+    position: relative;
+    height: 100%;
     background-color: rgb(17, 46, 100);
 }
-.el-menu-item:hover {
+.el-menu-item:hover {/*鼠标经过左侧边栏各个选项时的背景颜色*/
     background-color: rgba(255, 255, 255, 0.091) !important;
 
 }
-.el-submenu__title:hover {
+.el-submenu__title:hover {/*鼠标经过左侧边栏标题项时的背景颜色*/
     background-color: rgba(0, 0, 0, 0.1) !important;
 }
