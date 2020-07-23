@@ -12,7 +12,11 @@ import ExceptionLogPage from './components/systemSetting/ExceptionLog'
 import TopologyManagementPage from './components/systemSetting/TopologyManagement'
 import KanbanConfigurationPage from './components/systemSetting/KanbanConfiguration'
 import HomePageConfigurationPage from './components/systemSetting/HomePageConfiguration'
-
+import CustomerInformationPage from './components/BasicInformation/CustomerInformation'
+import DataImportPage from './components/BasicInformation/CustomerInformation'
+import StaffInformationPage from './components/BasicInformation/ManpowerInformation/StaffInformation'
+import ClassSettingPage from './components/BasicInformation/ManpowerInformation/ClassSetting'
+import SchedulingInformationPage from './components/BasicInformation/ManpowerInformation/SchedulingInformation'
 
 
 
@@ -30,7 +34,16 @@ var router = new VueRouter({
                 {path:'/ExceptionLogPage',component:ExceptionLogPage},
                 {path:'/TopologyManagementPage',component:TopologyManagementPage},
                 {path:'/KanbanConfigurationPage',component:KanbanConfigurationPage},
-                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage}
+                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage},
+                {path:'/CustomerInformationPage',component:CustomerInformationPage},
+                {path:'/DataImportPage',component:DataImportPage},
+                {path:'/StaffInformationPage',component:StaffInformationPage},
+                {path:'/ClassSettingPage',component:ClassSettingPage},
+                {path:'/SchedulingInformationPage',component:SchedulingInformationPage},
+                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage},
+                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage},
+                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage},
+                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage},
             ]
         },
         {path:'/MenberContainer',component:MenberContainer},

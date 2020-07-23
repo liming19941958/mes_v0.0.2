@@ -1,12 +1,12 @@
 <template>
-    <div class="topology-management-page">
-        <h1>这是拓扑管理页面</h1>
+    <div class="data-import-page">
+        <h1>这是资料导入页面</h1>
     </div>
 </template>
 
 <script>
     export default {
-        name: "home-contain"
+        name: "CustomerInformation"
     }
 </script>
 
@@ -15,7 +15,7 @@
         padding: 0;
         margin: 0;
     }
-    .topology-management-page{
+    .data-import-page{
         font-size: 50px;
         color: red;
         width: 100%;

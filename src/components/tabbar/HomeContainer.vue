@@ -62,8 +62,12 @@
                             <span slot="title">基础资料</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-1">客户资料</el-menu-item>
+                            <router-link to="/HomePageConfigurationPage">
+                                <el-menu-item index="2-1">客户资料</el-menu-item>
+                            </router-link>
+                            <router-link to="/DataImportPage">
                             <el-menu-item index="2-2">资料导入</el-menu-item>
+                            </router-link>
                             <el-submenu index="2-3">
                                 <span slot="title">人力资料</span>
                                 <el-menu-item index="2-3-1">职员资料</el-menu-item>
