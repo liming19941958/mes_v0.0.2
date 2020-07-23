@@ -11,6 +11,10 @@
 </script>
 
 <style scoped>
+    *{
+        padding: 0;
+        margin: 0;
+    }
     .customer-information-page{
         font-size: 50px;
         color: red;

@@ -1,6 +1,6 @@
 <template>
     <div class="main-content-table-page">
-        <h>这是首页</h>
+        <h1>这是首页</h1>
     </div>
 </template>
 
@@ -11,6 +11,10 @@
 </script>
 
 <style scoped>
+    *{
+        padding: 0;
+        margin: 0;
+    }
     .main-content-table-page{
         font-size: 50px;
         color: red;

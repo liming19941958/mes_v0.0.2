@@ -11,6 +11,10 @@
 </script>
 
 <style scoped>
+    *{
+        padding: 0;
+        margin: 0;
+    }
     .role-management-page{
         font-size: 50px;
         color: red;

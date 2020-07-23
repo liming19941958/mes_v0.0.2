@@ -11,6 +11,10 @@
 </script>
 
 <style scoped>
+    *{
+        padding: 0;
+        margin: 0;
+    }
     .exception-log-page{
         font-size: 50px;
         color: red;
