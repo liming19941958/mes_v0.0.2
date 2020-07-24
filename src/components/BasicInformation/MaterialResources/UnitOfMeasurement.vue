@@ -1,14 +1,11 @@
 <template>
-    <div>
-
-    </div>
+    
 </template>
 
 <script>
     export default {
-        name: "ModifyInformation",
-    };
-
+        name: "UnitOfMeasurement"
+    }
 </script>
 
 <style scoped>

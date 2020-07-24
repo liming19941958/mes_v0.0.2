@@ -1,6 +1,7 @@
 
 <template>
     <div class="Home-page">
+<!--        侧边导航栏-->
             <div class="Sidebar" @mouseover.prevent="btnInnerIsShow=true"  @mouseleave.prevent="btnInnerIsShow=false">
                 <span title="mouseover与mouseenter、mouseout与mouseleave用法注释">
                     <!--不论鼠标指针穿过被选元素或其子元素，都会触发 mouseover 事件。-->
@@ -8,7 +9,7 @@
                     <!-- mouseout与mouseleave 不论鼠标指针离开被选元素还是任何子元素，都会触发 mouseout 事件。-->
                     <!--只有在鼠标指针从元素内穿出被选元素（到元素外）时，才会触发 mouseleave 事件。-->
                 </span>
-                <button  v-show="btnInnerIsShow" v-on:click = "[isCollapse = !isCollapse,appName=!appName]" class="btn-inner"><i class="el-icon-d-arrow-left"></i></button>
+                <button  v-show="btnInnerIsShow" v-on:click = "[isCollapse = !isCollapse,appName=!appName,sideBarClass=!sideBarClass]" class="btn-inner"><i class="el-icon-d-arrow-left"></i></button>
                 <div class="logo"></div>
                 <transition>
                    <h3 v-show="appName">智能工厂系统</h3>
@@ -19,24 +20,39 @@
                          active-text-color="#ffd04b"
                          default-active="1-4-1" class="el-menu-vertical-demo"
                          @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+                    <router-link to="/HomeContainer">
                     <el-menu-item index="0">
                         <i class="el-icon-house"></i>
                         <span slot="title">首页</span>
                     </el-menu-item>
-
+                    </router-link>
                     <el-submenu index="1">
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span slot="title">系统设置</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="1-1">角色管理</el-menu-item>
-                            <el-menu-item index="1-2">用户管理</el-menu-item>
-                            <el-menu-item index="1-3">日志查询</el-menu-item>
-                            <el-menu-item index="1-4">异常日志</el-menu-item>
-                            <el-menu-item index="1-5">拓扑管理</el-menu-item>
-                            <el-menu-item index="1-6">看板配置</el-menu-item>
-                            <el-menu-item index="1-7">首页配置</el-menu-item>
+                            <router-link to="/RoleManagementPage">
+                                <el-menu-item index="1-1">角色管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/UserManagementPage">
+                                 <el-menu-item index="1-2">用户管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/LogQueryPage">
+                                 <el-menu-item index="1-3">日志查询</el-menu-item>
+                            </router-link>
+                            <router-link to="/ExceptionLogPage">
+                                 <el-menu-item index="1-4">异常日志</el-menu-item>
+                            </router-link>
+                            <router-link to="/TopologyManagementPage">
+                                 <el-menu-item index="1-5">拓扑管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/KanbanConfigurationPage">
+                                 <el-menu-item index="1-6">看板配置</el-menu-item>
+                            </router-link>
+                            <router-link to="/HomePageConfigurationPage">
+                                 <el-menu-item index="1-7">首页配置</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -46,8 +62,12 @@
                             <span slot="title">基础资料</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="2-1">客户资料</el-menu-item>
+                            <router-link to="/HomePageConfigurationPage">
+                                <el-menu-item index="2-1">客户资料</el-menu-item>
+                            </router-link>
+                            <router-link to="/DataImportPage">
                             <el-menu-item index="2-2">资料导入</el-menu-item>
+                            </router-link>
                             <el-submenu index="2-3">
                                 <span slot="title">人力资料</span>
                                 <el-menu-item index="2-3-1">职员资料</el-menu-item>
@@ -205,9 +225,23 @@
                     </div>
                 </h3>
             </div>
-             <div class="ant">
-                <div class="nav-header"></div>
-             </div>
+<!--        主内容区-->
+            <div class="main-contain-box" :class="{'main-contain-box-active':sideBarClass}">
+                <div class="nav-header">
+                    <el-breadcrumb separator-class="el-icon-arrow-right">
+                        <el-breadcrumb-item :to="{ path: '/HomeContainer' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动管理</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+                        <el-breadcrumb-item>活动详情</el-breadcrumb-item>
+                    </el-breadcrumb>
+                </div>
+                <div class="main-content-table">
+                    <div class="home-content-table">
+                        <router-view></router-view>
+                    </div>
+                </div>
+            </div>
+
             <div class="page-information">
                 <div class="ModifyInformation">
                     <!-- Form -->
@@ -280,6 +314,7 @@
         name: "home",
         data() {
             return {
+                sideBarClass:false,
                 btnInnerIsShow:false,
                 appName:true,
                 isCollapse: false,
@@ -335,6 +370,7 @@
 
 <style  lang="scss" scoped>
 
+
     .el-button--text {
         color: #606266;
     }
@@ -364,7 +400,28 @@
         right: 0;
         top: 0;
         bottom: 0;
-        background-color: #d8d8d8;
+        background-color: #f3f3f3;
+        .main-contain-box{
+            position: absolute;
+            top:0;
+            bottom: 0;
+            right: 0;
+            width: calc(100% - 200px);
+            .nav-header{
+                padding: 15px 0 0 10px;
+                background-color: #ecf3f0;
+                height: 45px;
+                border-bottom: 1px solid #bbbbbb;
+            }
+            .main-content-table{
+                width: 100%;
+                height: 100%;
+                background-color: #effff3;
+            }
+        }
+        .main-contain-box-active{
+            width: calc(100% - 64px);
+        }
         .Sidebar{
             .v-enter{
                 transform: translateX(-100%);
@@ -412,7 +469,7 @@
             text-align: center;
             position: absolute;
             right: 10px;
-            top: 10px;
+            top: 3px;
             .el-icon--right {
                  margin-left: 0;
             }
@@ -420,11 +477,13 @@
                 font-size: 25px;
                 margin-left: -13px;
                 margin-top: -8px;
+                color: #8d8d92;
             }
             .el-button--primary {
                 width: 40px;
                 height: 40px;
-                border-radius: 50%;
+                border:none;
+                background-color: #ecf3f0;
             }
 
         }

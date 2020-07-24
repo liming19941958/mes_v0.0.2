@@ -1,14 +1,4 @@
-.ant{
-    position: absolute;
-    top:0;
-    bottom: 0;
-    right: 0;
-    width: calc(100% - 200px);
-    /*height: 500px;*/
-    background-color: #ffd9c2;
-    margin-left: 200px;
-    /*z-index: 99;*/
-}
+
 .el-form-item__label{ /*修改密码列表输入框前面文字样式*/
     color: rgba(0,0,0,0.7);
     font-weight: normal;
@@ -54,4 +44,13 @@
 }
 .el-submenu__title:hover {/*鼠标经过左侧边栏标题项时的背景颜色*/
     background-color: rgba(0, 0, 0, 0.1) !important;
+}
+.el-breadcrumb__inner:hover{
+    color: #575757 !important;
+    font-weight: bold;
+
+}
+.el-breadcrumb__inner{
+    color: #7e7e7e !important;
+
 }
