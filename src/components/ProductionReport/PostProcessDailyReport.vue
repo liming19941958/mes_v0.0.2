@@ -1,10 +1,10 @@
 <template>
-    <div>计量单位页面</div>
+    <div>后工序日报</div>
 </template>
 
 <script>
     export default {
-        name: "UnitOfMeasurement"
+        name: "Post-processDailyReport"
     }
 </script>
 

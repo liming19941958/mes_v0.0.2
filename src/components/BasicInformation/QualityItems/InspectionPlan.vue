@@ -1,6 +1,6 @@
 <template>
-    <div class="test-items-page">
-        <h1>这是检验项目页面</h1>
+    <div class="inspection-plan-page">
+        <h1>这是检验方案页面</h1>
     </div>
 </template>
 
@@ -15,7 +15,7 @@
         padding: 0;
         margin: 0;
     }
-    .data-import-page{
+    .inspection-plan-page{
         font-size: 50px;
         color: red;
         width: 100%;

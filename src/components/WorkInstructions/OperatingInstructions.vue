@@ -1,10 +1,10 @@
 <template>
-    <div>计量单位页面</div>
+    <div>作业指导书</div>
 </template>
 
 <script>
     export default {
-        name: "UnitOfMeasurement"
+        name: "OperatingInstructions"
     }
 </script>
 

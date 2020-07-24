@@ -1,6 +1,6 @@
 <template>
-    <div class="test-items-page">
-        <h1>这是检验项目页面</h1>
+    <div class="Bad-reasons-page">
+        <h1>这是不良原因页面</h1>
     </div>
 </template>
 
@@ -15,7 +15,7 @@
         padding: 0;
         margin: 0;
     }
-    .data-import-page{
+    .Bad-reasons-page{
         font-size: 50px;
         color: red;
         width: 100%;

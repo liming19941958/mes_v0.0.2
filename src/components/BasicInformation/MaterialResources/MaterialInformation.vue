@@ -1,5 +1,5 @@
 <template>
-    
+    <div>料件资料页面</div>
 </template>
 
 <script>

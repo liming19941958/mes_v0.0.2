@@ -26,7 +26,7 @@
                         <span slot="title">首页</span>
                     </el-menu-item>
                     </router-link>
-                    <el-submenu index="1">
+                    <el-submenu index="1" v-show="true">
                         <template slot="title">
                             <i class="el-icon-location"></i>
                             <span slot="title">系统设置</span>
@@ -62,42 +62,77 @@
                             <span slot="title">基础资料</span>
                         </template>
                         <el-menu-item-group>
-                            <router-link to="/HomePageConfigurationPage">
+                            <router-link to="/CustomerInformationPage">
                                 <el-menu-item index="2-1">客户资料</el-menu-item>
                             </router-link>
                             <router-link to="/DataImportPage">
-                            <el-menu-item index="2-2">资料导入</el-menu-item>
+                                <el-menu-item index="2-2">资料导入</el-menu-item>
                             </router-link>
                             <el-submenu index="2-3">
                                 <span slot="title">人力资料</span>
-                                <el-menu-item index="2-3-1">职员资料</el-menu-item>
-                                <el-menu-item index="2-3-2">班别设定</el-menu-item>
-                                <el-menu-item index="2-3-3">排班资料</el-menu-item>
+                                <router-link to="/StaffInformationPage">
+                                    <el-menu-item index="2-3-1">职员资料</el-menu-item>
+                                </router-link>
+                                <router-link to="/ClassSettingPage">
+                                    <el-menu-item index="2-3-2">班别设定</el-menu-item>
+                                </router-link>
+                                <router-link to="/SchedulingInformationPage">
+                                     <el-menu-item index="2-3-3">排班资料</el-menu-item>
+                                </router-link>
                             </el-submenu>
                             <el-submenu index="2-4">
                                 <span slot="title">料件资源</span>
-                                <el-menu-item index="2-4-1">计量单位</el-menu-item>
-                                <el-menu-item index="2-4-2">料件资料</el-menu-item>
-                                <el-menu-item index="2-4-3">物料BOM</el-menu-item>
+                                <router-link to="/UnitOfMeasurementPage">
+                                    <el-menu-item index="2-4-1">计量单位</el-menu-item>
+                                </router-link>
+                                <router-link to="/MaterialInformationPage">
+                                    <el-menu-item index="2-4-2">料件资料</el-menu-item>
+                                </router-link>
+                                <router-link to="/MaterialBOMPage">
+                                    <el-menu-item index="2-4-3">物料BOM</el-menu-item>
+                                </router-link>
+                                <router-link to="/PackingSpecificationPage">
+                                    <el-menu-item index="2-4-4">包装规格</el-menu-item>
+                                </router-link>
                             </el-submenu>
                             <el-submenu index="2-5">
                                 <span slot="title">品质项目</span>
-                                <el-menu-item index="2-5-1">抽样标准</el-menu-item>
-                                <el-menu-item index="2-5-2">检验项目</el-menu-item>
-                                <el-menu-item index="2-5-3">检验方案</el-menu-item>
-                                <el-menu-item index="2-5-4">不良现象</el-menu-item>
-                                <el-menu-item index="2-5-5">不良原因</el-menu-item>
+                                <router-link to="/SamplingStandardPage">
+                                    <el-menu-item index="2-5-1">抽样标准</el-menu-item>
+                                </router-link>
+                                <router-link to="/TestItemsPage">
+                                    <el-menu-item index="2-5-2">检验项目</el-menu-item>
+                                </router-link>
+                                <router-link to="/InspectionPlanPage">
+                                    <el-menu-item index="2-5-3">检验方案</el-menu-item>
+                                </router-link>
+                                <router-link to="/UnpleasantSightPage">
+                                    <el-menu-item index="2-5-4">不良现象</el-menu-item>
+                                </router-link>
+                                <router-link to="/BadReasonsPage">
+                                    <el-menu-item index="2-5-5">不良原因</el-menu-item>
+                                </router-link>
                             </el-submenu>
                             <el-submenu index="2-6">
                                 <span slot="title">调剂参数</span>
-                                <el-menu-item index="2-6-1">参数资料</el-menu-item>
-                                <el-menu-item index="2-6-2">技术参数</el-menu-item>
-                                <el-menu-item index="2-6-3">版本管理</el-menu-item>
-                                <el-menu-item index="2-6-4">调机记录</el-menu-item>
+                                <router-link to="/ParametersPage">
+                                    <el-menu-item index="2-6-1">参数资料</el-menu-item>
+                                </router-link>
+                                <router-link to="/TechnicalParameterPage">
+                                    <el-menu-item index="2-6-2">技术参数</el-menu-item>
+                                </router-link>
+                                <router-link to="/VersionManagementPage">
+                                    <el-menu-item index="2-6-3">版本管理</el-menu-item>
+                                </router-link>
+                                <router-link to="/TuningRecordPage">
+                                    <el-menu-item index="2-6-4">调机记录</el-menu-item>
+                                </router-link>
                             </el-submenu>
+                            <router-link to="/JobManagementPage">
                             <el-menu-item index="2-7">
-                                <span slot="title">岗位管理</span>
+                                    <span slot="title">岗位管理</span>
                             </el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -107,7 +142,9 @@
                             <span slot="title">模具管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="3-1">模具资料</el-menu-item>
+                            <router-link to="/MoldInformationPage">
+                                 <el-menu-item index="3-1">模具资料</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -117,7 +154,9 @@
                             <span slot="title">设备管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="4-1">设备资料</el-menu-item>
+                            <router-link to="/EquipmentInformationPage">
+                                <el-menu-item index="4-1">设备资料</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -127,10 +166,18 @@
                             <span slot="title">制造工艺</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="5-1">工位管理</el-menu-item>
-                            <el-menu-item index="5-2">工序管理</el-menu-item>
-                            <el-menu-item index="5-3">工艺管理</el-menu-item>
-                            <el-menu-item index="5-4">料件途程</el-menu-item>
+                            <router-link to="/WorkstationManagementPage">
+                                <el-menu-item index="5-1">工位管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/ProcessManagementPage">
+                                <el-menu-item index="5-2">工序管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/CraftsManagementPage">
+                                <el-menu-item index="5-3">工艺管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/MaterialJourneyPage">
+                                <el-menu-item index="5-4">料件途程</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
                     <el-submenu index="6">
@@ -139,8 +186,12 @@
                             <span slot="title">作业指导</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="6-1">作业指导书</el-menu-item>
-                            <el-menu-item index="6-2">指导书关联</el-menu-item>
+                            <router-link to="/OperatingInstructionsPage">
+                                <el-menu-item index="6-1">作业指导书</el-menu-item>
+                            </router-link>
+                            <router-link to="/GuideBookConnectionPage">
+                                <el-menu-item index="6-2">指导书关联</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -150,8 +201,12 @@
                             <span slot="title">异常管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="7-1">异常定义</el-menu-item>
-                            <el-menu-item index="7-2">预警设置</el-menu-item>
+                            <router-link to="/ExceptionDefinitionPage">
+                                <el-menu-item index="7-1">异常定义</el-menu-item>
+                            </router-link>
+                            <router-link to="/WarningSettingsPage">
+                                <el-menu-item index="7-2">预警设置</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -161,10 +216,18 @@
                             <span slot="title">生产管理</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="8-1">工单管理</el-menu-item>
-                            <el-menu-item index="8-2">排单管理</el-menu-item>
-                            <el-menu-item index="8-3">机器调整</el-menu-item>
-                            <el-menu-item index="8-4">顺序调整</el-menu-item>
+                            <router-link to="/WorkOrderManagementPage">
+                                <el-menu-item index="8-1">工单管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/OrderManagementPage">
+                                <el-menu-item index="8-2">排单管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/MachineAdjustmentPage">
+                                <el-menu-item index="8-3">机器调整</el-menu-item>
+                            </router-link>
+                            <router-link to="/OrderAdjustmentPage">
+                                <el-menu-item index="8-4">顺序调整</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -174,12 +237,24 @@
                             <span slot="title">条码管理</span>
                         </template>
                         <el-menu-item-group>
+                            <router-link to="/TemplateFileManagementPage">
                             <el-menu-item index="9-1">模板文件管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/SequenceNumberGenerationRulesPage">
                             <el-menu-item index="9-2">序号生成规则</el-menu-item>
+                            </router-link>
+                            <router-link to="/LabelTemplateManagementPage">
                             <el-menu-item index="9-3">标签模板管理</el-menu-item>
+                            </router-link>
+                            <router-link to="/ItemNumberTemplateAssociationPage">
                             <el-menu-item index="9-4">料号模板关联</el-menu-item>
+                            </router-link>
+                            <router-link to="/LabelPrintingApplicationPagePage">
                             <el-menu-item index="9-5">标签打印申请</el-menu-item>
+                            </router-link>
+                            <router-link to="/LabelPrintJobPagePage">
                             <el-menu-item index="9-6">标签打印作业</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -188,7 +263,9 @@
                             <i class="el-icon-setting"></i>
                             <span slot="title">现场作业</span>
                         </template>
+                        <router-link to="/QualityInspectionRecordPage">
                             <el-menu-item index="10-1">质检记录</el-menu-item>
+                        </router-link>
                     </el-submenu>
 
                     <el-submenu index="11">
@@ -197,12 +274,24 @@
                             <span slot="title">生产报表</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="11-1">产量报表</el-menu-item>
-                            <el-menu-item index="11-2">在制查询</el-menu-item>
-                            <el-menu-item index="11-2">开机日报</el-menu-item>
-                            <el-menu-item index="11-2">后工序日报</el-menu-item>
-                            <el-menu-item index="11-2">机台生产状况</el-menu-item>
-                            <el-menu-item index="11-2">工单合格率</el-menu-item>
+                            <router-link to="/YieldReportPage">
+                                <el-menu-item index="11-1">产量报表</el-menu-item>
+                            </router-link>
+                            <router-link to="/InquiryPage">
+                                <el-menu-item index="11-2">在制查询</el-menu-item>
+                            </router-link>
+                            <router-link to="/BootDailyPage">
+                                <el-menu-item index="11-3">开机日报</el-menu-item>
+                            </router-link>
+                            <router-link to="/PostProcessDailyReportPage">
+                                <el-menu-item index="11-4">后工序日报</el-menu-item>
+                            </router-link>
+                            <router-link to="/MachineProductionStatusPage">
+                                <el-menu-item index="11-5">机台生产状况</el-menu-item>
+                            </router-link>
+                            <router-link to="/WorkOrderQualificationRatePage">
+                                <el-menu-item index="11-6">工单合格率</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
 
@@ -212,7 +301,9 @@
                             <span slot="title">看板预览</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="12-1">测试看板</el-menu-item>
+                            <router-link to="/TestBrowsPanelPagePage">
+                                <el-menu-item index="12-1">测试看板</el-menu-item>
+                            </router-link>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>

@@ -1,10 +1,10 @@
 <template>
-    <div>计量单位页面</div>
+    <div>模板文件管理</div>
 </template>
 
 <script>
     export default {
-        name: "UnitOfMeasurement"
+        name: "TemplateFileManagement"
     }
 </script>
 

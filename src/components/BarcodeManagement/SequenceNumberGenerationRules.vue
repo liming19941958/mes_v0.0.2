@@ -1,10 +1,10 @@
 <template>
-    <div>计量单位页面</div>
+    <div>序号生成规则</div>
 </template>
 
 <script>
     export default {
-        name: "UnitOfMeasurement"
+        name: "SequenceNumberGenerationRules"
     }
 </script>
 

@@ -1,10 +1,10 @@
 <template>
-    <div>计量单位页面</div>
+    <div>标签打印申请</div>
 </template>
 
 <script>
     export default {
-        name: "UnitOfMeasurement"
+        name: "LabelPrintingApplication"
     }
 </script>
 
