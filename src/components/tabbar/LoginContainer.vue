@@ -7,7 +7,7 @@
                 <h1>智能工厂系统</h1>
             </div>
             <div class="ant-form ant-form-horizontal f-login-form">
-                <form action="http://192.168.1.124:8090/#/home" >
+                <form>
                     <div class="f-logo-input">
                         <div class="login-account-number">
                             <i class="el-icon-user"></i>

@@ -28,7 +28,7 @@
                     </router-link>
                     <el-submenu index="1" v-show="true">
                         <template slot="title">
-                            <i class="el-icon-location"></i>
+                            <i class="el-icon-setting"></i>
                             <span slot="title">系统设置</span>
                         </template>
                         <el-menu-item-group>
@@ -58,7 +58,7 @@
 
                     <el-submenu index="2">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-coin"></i>
                             <span slot="title">基础资料</span>
                         </template>
                         <el-menu-item-group>
@@ -138,7 +138,7 @@
 
                     <el-submenu index="3">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-set-up"></i>
                             <span slot="title">模具管理</span>
                         </template>
                         <el-menu-item-group>
@@ -150,7 +150,7 @@
 
                     <el-submenu index="4">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-s-grid"></i>
                             <span slot="title">设备管理</span>
                         </template>
                         <el-menu-item-group>
@@ -162,7 +162,7 @@
 
                     <el-submenu index="5">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-s-operation"></i>
                             <span slot="title">制造工艺</span>
                         </template>
                         <el-menu-item-group>
@@ -182,7 +182,7 @@
                     </el-submenu>
                     <el-submenu index="6">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-notebook-2"></i>
                             <span slot="title">作业指导</span>
                         </template>
                         <el-menu-item-group>
@@ -197,7 +197,7 @@
 
                     <el-submenu index="7">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-info"></i>
                             <span slot="title">异常管理</span>
                         </template>
                         <el-menu-item-group>
@@ -212,7 +212,7 @@
 
                     <el-submenu index="8">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-loading"></i>
                             <span slot="title">生产管理</span>
                         </template>
                         <el-menu-item-group>
@@ -233,7 +233,7 @@
 
                     <el-submenu index="9">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-c-scale-to-original"></i>
                             <span slot="title">条码管理</span>
                         </template>
                         <el-menu-item-group>
@@ -260,7 +260,7 @@
 
                     <el-submenu index="10">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-document"></i>
                             <span slot="title">现场作业</span>
                         </template>
                         <router-link to="/QualityInspectionRecordPage">
@@ -270,7 +270,7 @@
 
                     <el-submenu index="11">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-date"></i>
                             <span slot="title">生产报表</span>
                         </template>
                         <el-menu-item-group>
@@ -297,7 +297,7 @@
 
                     <el-submenu index="12">
                         <template slot="title">
-                            <i class="el-icon-setting"></i>
+                            <i class="el-icon-monitor"></i>
                             <span slot="title">看板预览</span>
                         </template>
                         <el-menu-item-group>
@@ -507,6 +507,7 @@
             .main-content-table{
                 width: 100%;
                 height: 100%;
+
                 background-color: #effff3;
             }
         }
