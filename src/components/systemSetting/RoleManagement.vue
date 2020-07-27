@@ -169,7 +169,7 @@
                                         <el-menu-item index="1-2">组员</el-menu-item>
                                         <el-menu-item index="1-3">客户管理员</el-menu-item>
                                         <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
+                                        <el-menu-item index="1-5">客户3</el-menu-item>
 
                                         <el-menu-item index="1-6">主管</el-menu-item>
                                         <el-menu-item index="1-7">组员</el-menu-item>
@@ -271,10 +271,8 @@
         padding-left: 20px;
         padding-top: 15px;
         border-bottom: 1px solid #d3d3d3;
-        /*background-color: #B3C0D1;*/
+
         color: #333;
-        /*text-align: center;*/
-        /*height: 10vh;*/
         flex:0.4;
     }
      .el-footer {
