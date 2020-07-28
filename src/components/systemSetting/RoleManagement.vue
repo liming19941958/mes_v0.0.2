@@ -5,7 +5,7 @@
                 <div class="roles-menu-table">
                     <div class="role-menu">
                         <div class="roleList">
-                            <span>角色列表111</span>
+                            <span>角色列表</span>
                             <span>
                                 <i class="el-icon-plus"></i>
                                  <i class="el-icon-refresh-right"></i>
@@ -13,41 +13,43 @@
                         </div>
                         <div class="roleNameMenu">
                             <el-menu
-                                    default-active="2"
+                                    default-active="1-2"
                                     class="el-menu-vertical-demo"
                                     @open="handleOpen"
+                                    @select="handleOpen"
                                     @close="handleClose"
                                     background-color="#EFFFF3"
                                     text-color="#000000"
                                     active-text-color="#389DFF">
-                                <el-submenu index="1">
+                                <el-submenu index="1" >
                                     <template slot="title">
-                                        <i class="el-icon-location"></i>
-                                        <span>壕玮集团</span>
+                                        <i class="el-icon-d-caret"></i>
+                                        <el-menu-item index="1-1" style="display: inline-block" class="list-title">壕玮集团</el-menu-item>
                                     </template>
-                                    <el-menu-item-group>
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
+                                    <el-menu-item-group
+                                            >
+                                        <el-menu-item index="1-2">主管</el-menu-item>
+                                        <el-menu-item index="1-3">组员</el-menu-item>
+                                        <el-menu-item index="1-4">客户管理员</el-menu-item>
+                                        <el-menu-item index="1-5">客户1</el-menu-item>
+                                        <el-menu-item index="1-6">客户2</el-menu-item>
 
-                                        <el-menu-item index="1-6">主管</el-menu-item>
-                                        <el-menu-item index="1-7">组员</el-menu-item>
-                                        <el-menu-item index="1-8">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-9">客户1</el-menu-item>
-                                        <el-menu-item index="1-10">客户2</el-menu-item>
+                                        <el-menu-item index="1-7">主管</el-menu-item>
+                                        <el-menu-item index="1-8">组员</el-menu-item>
+                                        <el-menu-item index="1-9">客户管理员</el-menu-item>
+                                        <el-menu-item index="1-10">客户1</el-menu-item>
+                                        <el-menu-item index="1-11">客户2</el-menu-item>
 
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
+                                        <el-menu-item index="1-12">主管</el-menu-item>
+                                        <el-menu-item index="1-13">组员</el-menu-item>
+                                        <el-menu-item index="1-14">客户管理员</el-menu-item>
+                                        <el-menu-item index="1-15">客户1</el-menu-item>
+                                        <el-menu-item index="1-16">客户2</el-menu-item>
+                                        <el-menu-item index="1-17">主管</el-menu-item>
+                                        <el-menu-item index="1-18">组员</el-menu-item>
+                                        <el-menu-item index="1-19">客户管理员</el-menu-item>
+                                        <el-menu-item index="1-20">客户1</el-menu-item>
+                                        <el-menu-item index="1-21">客户2</el-menu-item>
                                     </el-menu-item-group>
                                 </el-submenu>
                             </el-menu>
@@ -306,6 +308,9 @@
 
             }
         },
+        created(){
+            this.handleOpen();
+        },
         methods: {
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
@@ -366,6 +371,7 @@
 
     }
     .role-management-page{
+
         position: relative;
         /*font-size: 50px;*/
         /*color: red;*/
@@ -377,6 +383,7 @@
             display: flex;
             height: 100vh;
             width: 100%;
+
             /*background-color: #74ff57;*/
             .role-menu{
                 float: left;
@@ -384,7 +391,9 @@
                 flex:1.5;
                 margin-right: 8px;
                 background-color: #eafaee;
+
                     .roleList{
+
                         width: 100%;
                         height: 50px;
                         border-bottom: 1px solid #d5d5d5;
@@ -404,7 +413,13 @@
                     .roleNameMenu{
                         height: 100%;
                         overflow: scroll;
+                        .el-submenu__icon-arrow {
+                            position: absolute!important;
+                            top: 55%!important;
+                            right: 130px!important;
+                        }
                     }
+
             }
             .role-table{
                 display: flex;
@@ -412,6 +427,7 @@
                 height: 100%;
                 flex:8.5;
                 background-color: #eafaee;
+
             }
         }
     }

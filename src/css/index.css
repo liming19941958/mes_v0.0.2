@@ -119,3 +119,8 @@
 .el-table td, .el-table th.is-leaf {
     text-align: center;
 }
+.list-title{
+    margin-left: 10px;
+    padding-left: 0px!important;
+}
+
