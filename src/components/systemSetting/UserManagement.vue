@@ -5,7 +5,7 @@
                style="height: 5%;width:100%;
               position:
                 relative;text-align: center;padding: 15px 0;
-                 border-bottom: 1px solid #cacaca">组织架构</el-col>
+                 border-bottom: 1px solid #cacaca">组织架构1</el-col>
             <el-col style="height: 95%;width:100%;position: relative"></el-col>
         </el-row>
         <el-row style="flex: 8.5;"></el-row>
