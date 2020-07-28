@@ -85,3 +85,37 @@
     padding-left: 15px;
     position: relative;
 }
+.el-input__inner{
+    height: 25px;
+}
+.el-form-item {
+    width: 35%;
+     margin-bottom: 0;
+}
+.el-form-item__label {
+    line-height: 30px;
+}
+.el-form-item__error {
+    width: 150px;
+    z-index: 99;
+    top: 12%;
+    left: 102%;
+}
+.el-form-item__content {
+    width: 75%;
+    line-height: 30px;
+}
+.el-textarea {
+    margin-bottom: 10px;
+
+}
+.el-button {
+    padding: 10px 17px;
+}
+.el-table th{
+    color: #000;
+    text-align: center;
+}
+.el-table td, .el-table th.is-leaf {
+    text-align: center;
+}

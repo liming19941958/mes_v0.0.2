@@ -309,12 +309,12 @@
                 </el-menu>
                 </el-scrollbar>
 
-                <h3 v-show="appName">
+                <h2 v-show="appName">
                     <div class="AppName">
                         <p>系统版本：0.0.1</p>
                         <p>版权所有：物联微电子有限公司</p>
                     </div>
-                </h3>
+                </h2>
             </div>
 <!--        主内容区-->
             <div class="main-contain-box" :class="{'main-contain-box-active':sideBarClass}">

@@ -5,7 +5,7 @@
                 <div class="roles-menu-table">
                     <div class="role-menu">
                         <div class="roleList">
-                            <span>角色列表1</span>
+                            <span>角色列表</span>
                             <span>
                                 <i class="el-icon-plus"></i>
                                  <i class="el-icon-refresh-right"></i>
@@ -78,7 +78,52 @@
                                     </el-form-item>
                                 </el-form>
                             </el-main>
-                            <el-footer>Footer</el-footer>
+                            <el-footer style="position: relative;padding: 0 5px">
+                                <el-row style="height:7%;width:100%;padding: 12px 5px;font-size: 15px;border-top: 1px solid #d6d6d6;border-bottom: 1px solid #d6d6d6;">
+                                    <span>包含用户</span>
+                                    <span style="display: inline-block;
+                                            float: right;
+                                            margin-right: 30px;
+                                            text-indent: 15px;
+                                            color: #007aff">
+                                        <i class="el-icon-plus"></i>
+                                        <i class="el-icon-delete"></i>
+                                        <i class="el-icon-refresh-right"></i>
+                                    </span>
+                                </el-row>
+                                <el-row style="height:93%;width:100%;overflow: scroll">
+                                    <el-table
+                                            ref="multipleTable"
+                                            :data="tableData"
+                                            tooltip-effect="dark"
+                                            style="width: 100%;"
+                                            @selection-change="handleSelectionChange">
+                                        <el-table-column type="selection">
+                                        </el-table-column>
+                                        <el-table-column
+                                                label="登录名"
+                                                width="840%">
+                                            <template slot-scope="scope">{{ scope.row.date }}</template>
+                                        </el-table-column>
+                                        <el-table-column
+                                                prop="name"
+                                                label="用户名"
+                                                >
+                                        </el-table-column>
+                                    </el-table>
+                                    <div class="block" style="margin-left: 60%;margin-top: 35px">
+                                        <el-pagination
+                                                @size-change="handleSizeChange"
+                                                @current-change="handleCurrentChange"
+                                                :current-page="currentPage4"
+                                                :page-sizes="[100, 200, 300, 400]"
+                                                :page-size="100"
+                                                layout="total, sizes, prev, pager, next, jumper"
+                                                :total="400">
+                                        </el-pagination>
+                                    </div>
+                                </el-row>
+                            </el-footer>
                         </el-container>
                     </div>
                 </div>
@@ -198,24 +243,18 @@
                 </div>
             </el-tab-pane>
         </el-tabs>
-
-
-
-
-
-
-
-
-
 </div>
 </template>
 
 <script>
-
     export default {
         name: "RoleManagement",
         data(){
             return{
+                currentPage1: 5,
+                currentPage2: 5,
+                currentPage3: 5,
+                currentPage4: 4,
                activeName:'first',
                 ruleForm: {
                     name: '',
@@ -233,7 +272,37 @@
 
 
 
-                }
+                },
+                tableData: [{
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-08',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-06',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }],
+                multipleSelection: []
 
             }
         },
@@ -259,6 +328,12 @@
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
+            },
+            handleSizeChange(val) {
+                console.log(`每页 ${val} 条`);
+            },
+            handleCurrentChange(val) {
+                console.log(`当前页: ${val}`);
             }
         }
 
@@ -267,6 +342,7 @@
 </script>
 
 <style scoped lang="scss">
+
     .el-header{
         padding-left: 20px;
         padding-top: 15px;
@@ -276,15 +352,16 @@
         flex:0.4;
     }
      .el-footer {
-          background-color: #B3C0D1;
+          /*background-color: #B3C0D1;*/
           color: #333;
+
          /*height: 100vh;*/
-         flex:8;
+         flex:7.7;
 
      }
     .el-main {
-        padding-right: 800px;
-        flex:2;
+        /*padding-right: 800px;*/
+        flex:2.3;
 
 
     }
@@ -304,7 +381,7 @@
             .role-menu{
                 float: left;
                 height: 100%;
-                flex:2.2;
+                flex:1.5;
                 margin-right: 8px;
                 background-color: #eafaee;
                     .roleList{
@@ -333,7 +410,7 @@
                 display: flex;
                 float: left;
                 height: 100%;
-                flex:7.8;
+                flex:8.5;
                 background-color: #eafaee;
             }
         }
