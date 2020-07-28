@@ -1,6 +1,14 @@
 <template>
     <div class="user-management-page">
-        <h1>这是用户管理页面</h1>
+        <el-row style="flex: 1.5;position: relative;border-right: 1px solid #cacaca">
+            <el-col
+               style="height: 5%;width:100%;
+              position:
+                relative;text-align: center;padding: 15px 0;
+                 border-bottom: 1px solid #cacaca">组织架构</el-col>
+            <el-col style="height: 95%;width:100%;position: relative"></el-col>
+        </el-row>
+        <el-row style="flex: 8.5;"></el-row>
     </div>
 </template>
 
@@ -10,16 +18,13 @@
     }
 </script>
 
-<style scoped>
-    *{
-        padding: 0;
-        margin: 0;
-    }
+<style scoped lang="scss">
     .user-management-page{
-        font-size: 50px;
-        color: red;
+        display: flex;
+        position: absolute;
         width: 100%;
         height: 100%;
-        background-color: #effff3;
+        /*background-color: #ffee80*/
+
     }
 </style>
