@@ -401,6 +401,7 @@
 </template>
 
 <script>
+
     export default {
         name: "home",
         data() {
@@ -425,6 +426,7 @@
         },
         methods:{
             getUserList(){
+
                 this.$http.get('user/getUserList',
                     {
                         params:{
