@@ -428,7 +428,7 @@
                 this.$http.get('user/getUserList',
                     {
                         params:{
-                        'size':"10",
+                        'size':"20",
                         'page':"1"
                      }
                 }).then(res=>{
