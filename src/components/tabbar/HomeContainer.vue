@@ -427,13 +427,8 @@
         methods:{
             getUserList(){
 
-                this.$http.get('user/getUserList',
-                    {
-                        params:{
-                        'size':"20",
-                        'page':"1"
-                     }
-                }).then(res=>{
+                this.$http.get('user/getUserList'
+                ).then(res=>{
                     console.log(res.result.data);
                 })
             },

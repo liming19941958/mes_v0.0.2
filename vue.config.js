@@ -50,17 +50,25 @@ module.exports = {
 
         // host: "192.168.0.101",
 
-        port: 9000,
+        port: 9001,
 
         proxy: {
             '/': {
-                target: 'http://192.168.1.124:8090',
+                target: 'http://192.168.1.111:9000',
                 changeOrigin: true,
                 ws: true,
                 pathRewrite: {
                     '^/': ''
                 }
             }
+            // '/UserManagementPage': {
+            //     target: 'http://192.168.1.111:9000',
+            //     changeOrigin: true,
+            //     ws: true,
+            //     pathRewrite: {
+            //         '^/UserManagementPage': ''
+            //     }
+            // }
         }
         // https: false,
         //

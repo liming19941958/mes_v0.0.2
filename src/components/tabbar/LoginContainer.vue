@@ -57,11 +57,22 @@
                 console.log(this.username);
                 console.log(this.password);
                 this.$http.post('user/login',{account:this.username,passWord:this.password}).then(res=>{
-                    console.log(res.body);
-                    if(res.status ===200){
-                        this.$router.push('/HomeContainer');
-                    }else {
-                        alert('登录失败，请检查用户名或密码是否正确！')
+                    if(res.status===200){
+                        let tokenid = res.body.result.TokenId;
+                        // this.setUserName(this.userName)
+                        sessionStorage.setItem('token', tokenid);
+                        var lastname = sessionStorage.getItem("token");
+                        console.log("login"+lastname);
+                        this.$message({
+                            message:'登录成功',
+                            type:'success'
+                        })
+                        this.$router.push('/HomeContainer')
+                    }else{
+                        this.$message({
+                            message:'用户名或者密码错误',
+                            type:'warning'
+                        })
                     }
                 })
             }
