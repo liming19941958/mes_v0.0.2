@@ -7,7 +7,7 @@
                 relative;text-align: center;padding: 15px 0;
                  border-bottom: 1px solid #cacaca">组织架构1</el-col>
             <el-col style="height: 95%;width:100%;position: relative;padding: 25px 25px 0 25px">
-                <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" style="background-color: #effff3"></el-tree>
+                <el-tree :data="data" :props="defaultProps" default-expand-all=true @node-click="handleNodeClick" style="background-color: #effff3"></el-tree>
             </el-col>
         </el-row>
         <el-row style="flex: 8.5;margin-left: 10px;border-left: 1px solid #cacaca;">
@@ -27,72 +27,72 @@
                             label="行号"
                             width="180">
                         <template slot-scope="scope">
-                            <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                            <span style="text-align: center">{{ scope.row.date }}</span>
                         </template>
                     </el-table-column>
                     <el-table-column
                             label="用户名"
                             width="180">
                         <template slot-scope="scope">
-                            <el-popover trigger="hover" placement="top">
-                                <p>姓名: {{ scope.row.name }}</p>
-                                <p>住址: {{ scope.row.address }}</p>
+<!--                            <el-popover trigger="hover" placement="top">-->
+<!--                                <p>姓名: {{ scope.row.name}}</p>-->
+<!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
                                     <el-tag size="medium">{{ scope.row.name }}</el-tag>
                                 </div>
-                            </el-popover>
+<!--                            </el-popover>-->
                         </template>
                     </el-table-column>
                     <el-table-column
                             label="登录名"
                             width="180">
                         <template slot-scope="scope">
-                            <el-popover trigger="hover" placement="top">
-                                <p>姓名: {{ scope.row.name }}</p>
-                                <p>住址: {{ scope.row.address }}</p>
+<!--                            <el-popover trigger="hover" placement="top">-->
+<!--                                <p>姓名: {{ scope.row.name }}</p>-->
+<!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
                                     <el-tag size="medium">{{ scope.row.name }}</el-tag>
                                 </div>
-                            </el-popover>
+<!--                            </el-popover>-->
                         </template>
                     </el-table-column>
                     <el-table-column
                             label="手机号码"
                             width="180">
                         <template slot-scope="scope">
-                            <el-popover trigger="hover" placement="top">
-                                <p>姓名: {{ scope.row.name }}</p>
-                                <p>住址: {{ scope.row.address }}</p>
+<!--                            <el-popover trigger="hover" placement="top">-->
+<!--                                <p>姓名: {{ scope.row.name }}</p>-->
+<!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
                                     <el-tag size="medium">{{ scope.row.name }}</el-tag>
                                 </div>
-                            </el-popover>
+<!--                            </el-popover>-->
                         </template>
                     </el-table-column>
                     <el-table-column
                             label="邮箱地址"
                             width="180">
                         <template slot-scope="scope">
-                            <el-popover trigger="hover" placement="top">
-                                <p>姓名: {{ scope.row.name }}</p>
-                                <p>住址: {{ scope.row.address }}</p>
+<!--                            <el-popover trigger="hover" placement="top">-->
+<!--                                <p>姓名: {{ scope.row.name }}</p>-->
+<!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
                                     <el-tag size="medium">{{ scope.row.name }}</el-tag>
                                 </div>
-                            </el-popover>
+<!--                            </el-popover>-->
                         </template>
                     </el-table-column>
                     <el-table-column
                             label="用户状态"
                             width="180">
                         <template slot-scope="scope">
-                            <el-popover trigger="hover" placement="top">
-                                <p>姓名: {{ scope.row.name }}</p>
-                                <p>住址: {{ scope.row.address }}</p>
+<!--                            <el-popover trigger="hover" placement="top">-->
+<!--                                <p>姓名: {{ scope.row.name }}</p>-->
+<!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
                                     <el-tag size="medium">{{ scope.row.name }}</el-tag>
                                 </div>
-                            </el-popover>
+<!--                            </el-popover>-->
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
@@ -118,14 +118,14 @@
         data() {
             return {
                 data: [{
-                    label: '一级 1',
+                    label: '壕玮集团',
                     children: [
-                        {label: '二级 1-1'},
+                        {label: '客户一部'},
                         {
-                            label: '一级 1',
+                            label: '注塑部',
                             children: [
-                                {label: '二级 1-1'},
-                                {label: '二级 1-2'},
+                                {label: '注塑二部'},
+                                {label: '注塑三部'},
                             ]
                         }
 
@@ -135,31 +135,7 @@
                     label: 'label'
                 },
 
-                tableData: [{
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                        date: '2016-05-03',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1516 弄'
-                    },{
-                        date: '2016-05-03',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1516 弄'
-                    }]
+                tableData: []
 
             };
         },

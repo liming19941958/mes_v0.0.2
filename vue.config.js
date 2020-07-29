@@ -52,6 +52,16 @@ module.exports = {
 
         port: 9000,
 
+        proxy: {
+            '/': {
+                target: 'http://192.168.1.124:8090',
+                changeOrigin: true,
+                ws: true,
+                pathRewrite: {
+                    '^/': ''
+                }
+            }
+        }
         // https: false,
         //
         // hotOnly: false, // See https://github.com/vuejs/vue-cli/blob/dev/docs/cli-service.md#configuring-proxy

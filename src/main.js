@@ -20,7 +20,8 @@ Vue.use(ElementUI);
 //如果我们通过全局配置了请求数据的接口 根域名，则在每次单独发起
 // http 请求的时候，请求的url 路径，应该以相对路径 开头，
 // 前面不带 “/”，否则，不会启动根路径做拼接
-Vue.http.options.root = 'http://192.168.2.17:8081/'
+Vue.http.options.root = 'http://localhost:9000/'
+
 // 全局配置emulateJSON
 Vue.http.options.emulateJSON = true;
 new Vue({

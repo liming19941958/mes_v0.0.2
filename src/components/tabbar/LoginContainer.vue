@@ -11,11 +11,11 @@
                     <div class="f-logo-input">
                         <div class="login-account-number">
                             <i class="el-icon-user"></i>
-                            <input type="text" v-model="data.username" class="login-input" placeholder="登录名/手机/邮箱" v-focus>
+                            <input type="text" v-model="username" class="login-input" placeholder="登录名/手机/邮箱" v-focus>
                         </div>
                         <div class="login-account-password">
                             <i class="el-icon-lock"></i>
-                            <input type="text" v-model="data.password" class="login-password" placeholder="请输入密码"  @keyup.enter="login()">
+                            <input type="text" v-model="password" class="login-password" placeholder="请输入密码"  @keyup.enter="login()">
                             <el-row class="login-btn-row" >
                                 <el-button type="primary"  round class="login-btn" @click="login()">登录</el-button>
                             </el-row>
@@ -47,24 +47,22 @@
         },
         data(){
             return {
-                data:{
-                    username:'',
-                    password:''
-                }
-
+                    username:'admin',
+                    password:'123456'
             }
         },
 
         methods:{
             login(){
-                console.log(this.data);
-                this.$http.post('user/login',this.data).then(res=>{
+                console.log(this.username);
+                console.log(this.password);
+                this.$http.post('user/login',{account:this.username,passWord:this.password}).then(res=>{
                     console.log(res.body);
-                    // if(){
-                    //     this.$router.push('/HomeContainer');
-                    // }else {
-                    //     alert('登录失败，请检查用户名或密码是否正确！')
-                    // }
+                    if(res.status ===200){
+                        this.$router.push('/HomeContainer');
+                    }else {
+                        alert('登录失败，请检查用户名或密码是否正确！')
+                    }
                 })
             }
         }

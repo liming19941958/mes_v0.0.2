@@ -36,7 +36,7 @@
                                 <el-menu-item index="1-1">角色管理</el-menu-item>
                             </router-link>
                             <router-link to="/UserManagementPage">
-                                 <el-menu-item index="1-2">用户管理</el-menu-item>
+                                 <el-menu-item index="1-2" @click="getUserList">用户管理</el-menu-item>
                             </router-link>
                             <router-link to="/LogQueryPage">
                                  <el-menu-item index="1-3">日志查询</el-menu-item>
@@ -424,6 +424,17 @@
             };
         },
         methods:{
+            getUserList(){
+                this.$http.get('user/getUserList',
+                    {
+                        params:{
+                        'size':"10",
+                        'page':"1"
+                     }
+                }).then(res=>{
+                    console.log(res.result.data);
+                })
+            },
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
             },
