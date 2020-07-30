@@ -18,7 +18,7 @@
                 <el-menu background-color="rgb(17, 46, 100)"
                          text-color="#9B9B9B"
                          active-text-color="#ffd04b"
-                         default-active="1-4-1" class="el-menu-vertical-demo"
+                         :default-active="active" class="el-menu-vertical-demo"
                          @open="handleOpen" @close="handleClose" :collapse="isCollapse">
                     <router-link to="/HomeContainer">
                     <el-menu-item index="0">
@@ -35,7 +35,7 @@
                             <router-link to="/RoleManagementPage">
                                 <el-menu-item index="1-1">角色管理</el-menu-item>
                             </router-link>
-                            <router-link to="/UserManagementPage">
+                            <router-link to="/organization">
                                  <el-menu-item index="1-2" @click="getUserList">用户管理</el-menu-item>
                             </router-link>
                             <router-link to="/LogQueryPage">
@@ -328,7 +328,7 @@
                 </div>
                 <div class="main-content-table">
                     <div class="home-content-table">
-                        <router-view></router-view>
+                        <router-view  v-bind:userList="userList"></router-view>
                     </div>
                 </div>
             </div>
@@ -403,9 +403,11 @@
 <script>
 
     export default {
-        name: "home",
+        // name: "home",
         data() {
             return {
+                routePath:'',
+                active:'',
                 sideBarClass:false,
                 btnInnerIsShow:false,
                 appName:true,
@@ -421,15 +423,37 @@
                     email:'1119785311@qq.com',
                     userIcon:'是你吗？',
                 },
-                formLabelWidth: '120px'
+                formLabelWidth: '120px',
+                userList:[]
             };
         },
+        created(){
+            this.refresh();
+        },
+        mounted(){
+            this.active = this.$route.name;
+        },
         methods:{
+            refresh(){
+                if(sessionStorage.getItem("Path")){
+                    this.getUserList();
+                }
+            },
             getUserList(){
-
-                this.$http.get('user/getUserList'
-                ).then(res=>{
-                    console.log(res.result.data);
+                this.routePath = '/organization';
+                let r_path = this.routePath;
+                // this.setUserName(this.userName)
+                sessionStorage.setItem('Path',r_path );
+                this.$http.get('user/getUserList',
+                    {
+                        params:{
+                        'size':"20",
+                        'page':"1"
+                     }
+                }).then(result=>{
+                    console.log(result.body.result.data);
+                    let userListData = result.body.result.data;
+                    this.userList = userListData;
                 })
             },
             handleOpen(key, keyPath) {
@@ -589,3 +613,4 @@
         }
     }
 </style>
+<!--export default routePath-->

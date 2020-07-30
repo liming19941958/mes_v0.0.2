@@ -5,7 +5,7 @@
                style="height: 5%;width:100%;
               position:
                 relative;text-align: center;padding: 15px 0;
-                 border-bottom: 1px solid #cacaca">组织架构1</el-col>
+                 border-bottom: 1px solid #cacaca">组织架构1{{name}}</el-col>
             <el-col style="height: 95%;width:100%;position: relative;padding: 25px 25px 0 25px">
                 <el-tree :data="data" :props="defaultProps" default-expand-all=true @node-click="handleNodeClick" style="background-color: #effff3"></el-tree>
             </el-col>
@@ -21,14 +21,12 @@
             </el-col>
             <el-col style="height: 95%;width:100%;position: relative;padding: 15px 15px 15px 15px">
                 <el-table
-                        :data="tableData"
+                        :data="userList"
                         style="width: 100%">
                     <el-table-column
                             label="行号"
-                            width="180">
-                        <template slot-scope="scope">
-                            <span style="text-align: center">{{ scope.row.date }}</span>
-                        </template>
+                            width="180"
+                            type="index">
                     </el-table-column>
                     <el-table-column
                             label="用户名"
@@ -38,7 +36,7 @@
 <!--                                <p>姓名: {{ scope.row.name}}</p>-->
 <!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                                    <el-tag size="medium">{{ scope.row.userName }}</el-tag>
                                 </div>
 <!--                            </el-popover>-->
                         </template>
@@ -51,7 +49,7 @@
 <!--                                <p>姓名: {{ scope.row.name }}</p>-->
 <!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                                    <el-tag size="medium">{{ scope.row.loginName }}</el-tag>
                                 </div>
 <!--                            </el-popover>-->
                         </template>
@@ -64,7 +62,7 @@
 <!--                                <p>姓名: {{ scope.row.name }}</p>-->
 <!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                                    <el-tag size="medium">{{ scope.row.mobileNumber }}</el-tag>
                                 </div>
 <!--                            </el-popover>-->
                         </template>
@@ -77,7 +75,7 @@
 <!--                                <p>姓名: {{ scope.row.name }}</p>-->
 <!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                                    <el-tag size="medium">{{ scope.row.emailAddress }}</el-tag>
                                 </div>
 <!--                            </el-popover>-->
                         </template>
@@ -90,7 +88,7 @@
 <!--                                <p>姓名: {{ scope.row.name }}</p>-->
 <!--                                <p>住址: {{ scope.row.address }}</p>-->
                                 <div slot="reference" class="name-wrapper">
-                                    <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                                    <el-tag size="medium">{{ scope.row.state }}</el-tag>
                                 </div>
 <!--                            </el-popover>-->
                         </template>
@@ -115,6 +113,12 @@
 <script>
     export default {
         name: "UserManagement",
+        props:{
+            userList:{
+                type:Array,
+                required:true
+            }
+        },
         data() {
             return {
                 data: [{
@@ -148,6 +152,9 @@
             },
             handleDelete(index, row) {
                 console.log(index, row);
+            },
+            indexMethod(index) {
+                return (index +1 );
             }
         }
     }

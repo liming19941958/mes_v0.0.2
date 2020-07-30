@@ -3,7 +3,7 @@ import HomeContainer from './components/tabbar/HomeContainer'
 import LoginPage from './components/tabbar/LoginContainer'
 import HomePage from './components/home/home-contain'
 import RoleManagementPage from './components/systemSetting/RoleManagement'
-import UserManagementPage from './components/systemSetting/UserManagement'
+import organization from './components/systemSetting/UserManagement'//系统设置-用户管理
 import LogQueryPage from './components/systemSetting/LogQuery'
 import ExceptionLogPage from './components/systemSetting/ExceptionLog'
 import TopologyManagementPage from './components/systemSetting/TopologyManagement'
@@ -66,61 +66,61 @@ var router = new VueRouter({
         {path:'/LoginPage',component:LoginPage},
         {path:'/HomeContainer',component:HomeContainer,
             children:[
-                {path:'/HomeContainer',component:HomePage},
-                {path:'/RoleManagementPage',component:RoleManagementPage},
-                {path:'/UserManagementPage',component:UserManagementPage},
-                {path:'/LogQueryPage',component:LogQueryPage},
-                {path:'/ExceptionLogPage',component:ExceptionLogPage},
-                {path:'/TopologyManagementPage',component:TopologyManagementPage},
-                {path:'/KanbanConfigurationPage',component:KanbanConfigurationPage},
-                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage},
-                {path:'/CustomerInformationPage',component:CustomerInformationPage},
-                {path:'/DataImportPage',component:DataImportPage},
-                {path:'/StaffInformationPage',component:StaffInformationPage},
-                {path:'/ClassSettingPage',component:ClassSettingPage},
-                {path:'/SchedulingInformationPage',component:SchedulingInformationPage},
-                {path:'/UnitOfMeasurementPage',component:UnitOfMeasurementPage},
-                {path:'/MaterialInformationPage',component:MaterialInformationPage},
-                {path:'/MaterialBOMPage',component:MaterialBOMPage},
-                {path:'/PackingSpecificationPage',component:PackingSpecificationPage},
-                {path:'/SamplingStandardPage',component:SamplingStandardPage},
-                {path:'/TestItemsPage',component:TestItemsPage},
-                {path:'/InspectionPlanPage',component:InspectionPlanPage},
-                {path:'/UnpleasantSightPage',component:UnpleasantSightPage},
-                {path:'/BadReasonsPage',component:BadReasonsPage},
-                {path:'/ParametersPage',component:ParametersPage},
-                {path:'/TechnicalParameterPage',component:TechnicalParameterPage},
-                {path:'/VersionManagementPage',component:VersionManagementPage},
-                {path:'/TuningRecordPage',component:TuningRecordPage},
-                {path:'/JobManagementPage',component:JobManagementPage},
-                {path:'/MoldInformationPage',component:MoldInformationPage},
-                {path:'/EquipmentInformationPage',component:EquipmentInformationPage},
-                {path:'/WorkstationManagementPage',component:WorkstationManagementPage},
-                {path:'/ProcessManagementPage',component:ProcessManagementPage},
-                {path:'/CraftsManagementPage',component:CraftsManagementPage},
-                {path:'/MaterialJourneyPage',component:MaterialJourneyPage},
-                {path:'/OperatingInstructionsPage',component:OperatingInstructionsPage},
-                {path:'/GuideBookConnectionPage',component:GuideBookConnectionPage},
-                {path:'/ExceptionDefinitionPage',component:ExceptionDefinitionPage},
-                {path:'/WarningSettingsPage',component:WarningSettingsPage},
-                {path:'/WorkOrderManagementPage',component:WorkOrderManagementPage},
-                {path:'/OrderManagementPage',component:OrderManagementPage},
-                {path:'/MachineAdjustmentPage',component:MachineAdjustmentPage},
-                {path:'/OrderAdjustmentPage',component:OrderAdjustmentPage},
-                {path:'/TemplateFileManagementPage',component:TemplateFileManagementPage},
-                {path:'/SequenceNumberGenerationRulesPage',component:SequenceNumberGenerationRulesPage},
-                {path:'/LabelTemplateManagementPage',component:LabelTemplateManagementPage},
-                {path:'/ItemNumberTemplateAssociationPage',component:ItemNumberTemplateAssociationPage},
-                {path:'/LabelPrintingApplicationPagePage',component:LabelPrintingApplicationPage},
-                {path:'/LabelPrintJobPagePage',component:LabelPrintJobPage},
-                {path:'/QualityInspectionRecordPage',component:QualityInspectionRecordPage},
-                {path:'/YieldReportPage',component:YieldReportPage},
-                {path:'/InquiryPage',component:InquiryPage},
-                {path:'/BootDailyPage',component:BootDailyPage},
-                {path:'/PostProcessDailyReportPage',component:PostProcessDailyReportPage},
-                {path:'/MachineProductionStatusPage',component:MachineProductionStatusPage},
-                {path:'/WorkOrderQualificationRatePage',component:WorkOrderQualificationRatePage},
-                {path:'/TestBrowsPanelPagePage',component:TestBrowsPanelPage},
+                {path:'/HomeContainer',component:HomePage,name:'0'},//首页
+                {path:'/RoleManagementPage',component:RoleManagementPage,name:'1-1',},//角色管理
+                {path:'/organization',component:organization,name:'1-2',},
+                {path:'/LogQueryPage',component:LogQueryPage,name:'1-3'},
+                {path:'/ExceptionLogPage',component:ExceptionLogPage,name:'1-4'},
+                {path:'/TopologyManagementPage',component:TopologyManagementPage,name:'1-5'},
+                {path:'/KanbanConfigurationPage',component:KanbanConfigurationPage,name:'1-6'},
+                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage,name:'1-7'},
+                {path:'/CustomerInformationPage',component:CustomerInformationPage,name:'2-1'},
+                {path:'/DataImportPage',component:DataImportPage,name:'2-2'},
+                {path:'/StaffInformationPage',component:StaffInformationPage,name:'2-3-1'},
+                {path:'/ClassSettingPage',component:ClassSettingPage,name:'2-3-2'},
+                {path:'/SchedulingInformationPage',component:SchedulingInformationPage,name:'2-3-3'},
+                {path:'/UnitOfMeasurementPage',component:UnitOfMeasurementPage,name:'2-4-1'},//计量单位
+                {path:'/MaterialInformationPage',component:MaterialInformationPage,name:'2-4-2'},//料件资料
+                {path:'/MaterialBOMPage',component:MaterialBOMPage,name:'2-4-3'},//物料BOM
+                {path:'/PackingSpecificationPage',component:PackingSpecificationPage,name:'2-4-4'},//包装规格
+                {path:'/SamplingStandardPage',component:SamplingStandardPage,name:'1-16'},//抽样标准
+                {path:'/TestItemsPage',component:TestItemsPage,name:'1-17'},//检验项目
+                {path:'/InspectionPlanPage',component:InspectionPlanPage,name:'1-18'},//检验方案
+                {path:'/UnpleasantSightPage',component:UnpleasantSightPage,name:'1-19'},//不良现象
+                {path:'/BadReasonsPage',component:BadReasonsPage,name:'1-21'},//不良原因
+                {path:'/ParametersPage',component:ParametersPage,name:'1-22'},//参数资料
+                {path:'/TechnicalParameterPage',component:TechnicalParameterPage,name:'1-23'},//技术参数
+                {path:'/VersionManagementPage',component:VersionManagementPage,name:'1-24'},//版本管理
+                {path:'/TuningRecordPage',component:TuningRecordPage,name:'1-25'},//调机记录
+                {path:'/JobManagementPage',component:JobManagementPage,name:'1-11'},//岗位管理
+                {path:'/MoldInformationPage',component:MoldInformationPage,name:'1-11'},//模具资料
+                {path:'/EquipmentInformationPage',component:EquipmentInformationPage,name:'1-11'},//设备管理
+                {path:'/WorkstationManagementPage',component:WorkstationManagementPage,name:'1-11'},
+                {path:'/ProcessManagementPage',component:ProcessManagementPage,name:'1-11'},
+                {path:'/CraftsManagementPage',component:CraftsManagementPage,name:'1-11'},
+                {path:'/MaterialJourneyPage',component:MaterialJourneyPage,name:'1-11'},
+                {path:'/OperatingInstructionsPage',component:OperatingInstructionsPage,name:'1-11'},
+                {path:'/GuideBookConnectionPage',component:GuideBookConnectionPage,name:'1-11'},
+                {path:'/ExceptionDefinitionPage',component:ExceptionDefinitionPage,name:'1-11'},
+                {path:'/WarningSettingsPage',component:WarningSettingsPage,name:'1-11'},
+                {path:'/WorkOrderManagementPage',component:WorkOrderManagementPage,name:'1-11'},
+                {path:'/OrderManagementPage',component:OrderManagementPage,name:'1-11'},
+                {path:'/MachineAdjustmentPage',component:MachineAdjustmentPage,name:'1-11'},
+                {path:'/OrderAdjustmentPage',component:OrderAdjustmentPage,name:'1-11'},
+                {path:'/TemplateFileManagementPage',component:TemplateFileManagementPage,name:'1-11'},
+                {path:'/SequenceNumberGenerationRulesPage',component:SequenceNumberGenerationRulesPage,name:'1-11'},
+                {path:'/LabelTemplateManagementPage',component:LabelTemplateManagementPage,name:'1-11'},
+                {path:'/ItemNumberTemplateAssociationPage',component:ItemNumberTemplateAssociationPage,name:'1-11'},
+                {path:'/LabelPrintingApplicationPagePage',component:LabelPrintingApplicationPage,name:'1-11'},
+                {path:'/LabelPrintJobPagePage',component:LabelPrintJobPage,name:'1-11'},
+                {path:'/QualityInspectionRecordPage',component:QualityInspectionRecordPage,name:'1-11'},
+                {path:'/YieldReportPage',component:YieldReportPage,name:'1-11'},
+                {path:'/InquiryPage',component:InquiryPage,name:'1-11'},
+                {path:'/BootDailyPage',component:BootDailyPage,name:'1-11'},
+                {path:'/PostProcessDailyReportPage',component:PostProcessDailyReportPage,name:'1-11'},
+                {path:'/MachineProductionStatusPage',component:MachineProductionStatusPage,name:'1-11'},
+                {path:'/WorkOrderQualificationRatePage',component:WorkOrderQualificationRatePage,name:'1-11'},
+                {path:'/TestBrowsPanelPagePage',component:TestBrowsPanelPage,name:'1-11'},
 
             ]
         }
