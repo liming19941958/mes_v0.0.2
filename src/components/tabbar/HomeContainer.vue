@@ -38,8 +38,8 @@
                             <router-link to="/organization">
                                  <el-menu-item index="1-2" @click="getUserList">用户管理</el-menu-item>
                             </router-link>
-                            <router-link to="/LogQueryPage">
-                                 <el-menu-item index="1-3">日志查询</el-menu-item>
+                            <router-link to="/userlog">
+                                 <el-menu-item index="1-3" @click="getLog">日志查询</el-menu-item>
                             </router-link>
                             <router-link to="/ExceptionLogPage">
                                  <el-menu-item index="1-4">异常日志</el-menu-item>
@@ -328,7 +328,12 @@
                 </div>
                 <div class="main-content-table">
                     <div class="home-content-table">
-                        <router-view  v-bind:userList="userList"></router-view>
+<!--                        <router-view  v-bind:userList="userList"></router-view>-->
+                        <router-view
+                                v-bind:userList="userList"
+                                v-bind:userLog="userLog"
+                                v-bind:dataText="dataText"
+                                v-bind:loadStatus="loadStatus"></router-view>
                     </div>
                 </div>
             </div>
@@ -424,22 +429,30 @@
                     userIcon:'是你吗？',
                 },
                 formLabelWidth: '120px',
-                userList:[]
+                dataText:'',
+                loadStatus:'',
+                userList:[],
+                userLog:[]
             };
         },
         created(){
             this.refresh();
         },
         mounted(){
+
             this.active = this.$route.name;
         },
         methods:{
             refresh(){
-                if(sessionStorage.getItem("Path")){
+                if(sessionStorage.getItem("Path")=='/organization'){
                     this.getUserList();
+                }else if (sessionStorage.getItem("Path")=='/userlog'){
+                    this.getLog();
                 }
             },
             getUserList(){
+                //先将变量清空
+                this.dataText = ' ';
                 this.routePath = '/organization';
                 let r_path = this.routePath;
                 // this.setUserName(this.userName)
@@ -451,9 +464,51 @@
                         'page':"1"
                      }
                 }).then(result=>{
-                    console.log(result.body.result.data);
-                    let userListData = result.body.result.data;
-                    this.userList = userListData;
+                    // console.log(result.body.result.data);
+                    if (result.status === 200) {
+                        let userListData = result.body.result.data;
+                        this.userList = userListData;
+                        console.log(this.userList.length);
+                        if(this.userList.length !==0){
+                            this.loadStatus = "ok";
+                        }
+
+                    }
+
+                    if(this.userList.length === 0){
+                        this.dataText = "暂无数据";
+                    }
+
+                })
+            },
+            getLog(){
+                this.dataText = '88888';
+                this.routePath = '/userlog';
+                let r_path = this.routePath;
+                // this.setUserName(this.userName)
+                sessionStorage.setItem('Path',r_path );
+                this.$http.get('/userLog/getPageByDateAndContent',
+                    {
+                        params:{
+                            'size':"40",
+                            'page':"1"
+                        }
+                    }).then(result=>{
+
+                    if (result.status === 200) {
+                        let userLogData = result.body.result.data;
+                        this.userLog = userLogData;
+
+                    }
+
+                    if(this.userLog.length > 0){
+                        this.loadStatus = 'ok';
+                        console.log("Homepage"+this.loadStatus)
+                    }
+                    if(this.userLog.length === 0){
+                        this.dataText = "暂无数据";
+                    }
+
                 })
             },
             handleOpen(key, keyPath) {

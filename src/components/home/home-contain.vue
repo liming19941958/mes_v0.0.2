@@ -1,8 +1,5 @@
 <template>
-
-
     <div class="main-content-table-page">
-
             <div class="home-page-box">
 <!--                 设备运行状态-->
                 <div id="equipment-operating-status" ref="EquipmentOperatingStatus"></div>
@@ -785,7 +782,7 @@
             height: 100%;
             #equipment-operating-status{
                 float: left;
-                width: 450px;
+                width: 300px;
                 height: 280px;
                 /*background-color: #ffe9e8;*/
             }

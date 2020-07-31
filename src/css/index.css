@@ -123,4 +123,15 @@
     margin-left: 10px;
     padding-left: 0px!important;
 }
+/*body{*/
+/*    background:#FCCFCFC;*/
+/*    min-width: 1220px;*/
+/*    !*_width: expression(document.documentElement.clientHeight > 1220 ? "1220px" : "");*!*/
+/*    font-size:13px;*/
+/*    height:101%;!*始终出现Y轴的滚动条*!*/
+/*}*/
+.el-input--medium .el-input__inner {
+     height: 100%;
+     line-height: 100%;
+}
 
