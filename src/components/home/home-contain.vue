@@ -75,10 +75,7 @@
 <!--                 合格率走势图-->
                 <div id="qualification-rate-chart" ref="QualificationRateChart"></div>
             </div>
-
     </div>
-
-
 </template>
 
 <script>
@@ -180,7 +177,6 @@
                     }]
             }
         },
-        // created(){this.drawLine();},
         mounted() {
             this.drawLine();
         },
@@ -760,14 +756,12 @@
                         }
                     ]
                 })
-
             }
         }
     }
 </script>
 
 <style scoped lang="scss">
-
     .main-content-table-page{
         overflow: scroll;
         position: absolute;
@@ -950,5 +944,4 @@
         }
 
     }
-
 </style>

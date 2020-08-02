@@ -60,10 +60,10 @@
                             <el-header>角色详细信息</el-header>
                             <el-main>
                                 <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
-                                    <el-form-item label="角色名称" prop="name">
+                                    <el-form-item label="角色名称" prop="name" style="margin-bottom: 10px;">
                                         <el-input v-model="ruleForm.name"></el-input>
                                     </el-form-item>
-                                    <el-form-item label="节点类型">
+                                    <el-form-item label="节点类型" prop="nodeType">
                                         <el-radio-group v-model="ruleForm.resource">
                                             <el-radio label="角色"></el-radio>
                                             <el-radio label="非角色"></el-radio>
@@ -117,7 +117,7 @@
                                         <el-pagination
                                                 @size-change="handleSizeChange"
                                                 @current-change="handleCurrentChange"
-                                                :current-page="currentPage4"
+                                                :current-page="currentPage3"
                                                 :page-sizes="[100, 200, 300, 400]"
                                                 :page-size="100"
                                                 layout="total, sizes, prev, pager, next, jumper"
@@ -253,27 +253,26 @@
         name: "RoleManagement",
         data(){
             return{
-                currentPage1: 5,
-                currentPage2: 5,
-                currentPage3: 5,
-                currentPage4: 4,
+                currentPage1: 1,
                activeName:'first',
                 ruleForm: {
                     name: '',
                     SortCode:'',
-                    delivery: false,
-                    type: [],
-                    resource: '',
+                    nodeType: '',
                     desc: ''
                 },
                 rules: {
+                    // 定义是否必填项
                     name: [
                         { required: true, message: '请输入角色名称', trigger: 'blur' },
                         { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
                     ],
-
-
-
+                    nodeType: [
+                        { required: false, message: '请选择节点类型', trigger: 'change' }
+                    ],
+                    desc: [
+                        { required: false, message: '请填写活动形式', trigger: 'blur' }
+                    ]
                 },
                 tableData: [{
                     date: '2016-05-03',
@@ -331,9 +330,7 @@
                     }
                 });
             },
-            resetForm(formName) {
-                this.$refs[formName].resetFields();
-            },
+
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
@@ -367,8 +364,7 @@
     .el-main {
         /*padding-right: 800px;*/
         flex:2.3;
-
-
+        padding: 15px 0 39px 15px;
     }
     .role-management-page{
 

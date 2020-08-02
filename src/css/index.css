@@ -134,4 +134,25 @@
      height: 100%;
      line-height: 100%;
 }
+.el-pagination {
+    /*margin-right: 3px;*/
+    color: #606266 !important;
+    font-weight: normal;
+
+}
+ .el-table .cell {
+     /*table行号最小宽度*/
+     min-width: 67px;
+ }
+.el-input__inner {
+    height: 32px;
+}
+
+ .el-input__icon {
+     line-height: 32px;
+ }
+.el-form-item__error {
+    top: 89%;
+    left: 0;
+}
 

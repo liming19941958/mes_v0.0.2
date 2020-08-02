@@ -1,6 +1,7 @@
 
 <template>
     <div class="Home-page">
+
 <!--        侧边导航栏-->
             <div class="Sidebar" @mouseover.prevent="btnInnerIsShow=true"  @mouseleave.prevent="btnInnerIsShow=false">
                 <span title="mouseover与mouseenter、mouseout与mouseleave用法注释">
@@ -18,7 +19,8 @@
                 <el-menu background-color="rgb(17, 46, 100)"
                          text-color="#9B9B9B"
                          active-text-color="#ffd04b"
-                         :default-active="active" class="el-menu-vertical-demo"
+                         :default-active="active"
+                         class="el-menu-vertical-demo"
                          @open="handleOpen" @close="handleClose" :collapse="isCollapse">
                     <router-link to="/HomeContainer">
                     <el-menu-item index="0">
@@ -326,53 +328,81 @@
                         <el-breadcrumb-item>活动详情</el-breadcrumb-item>
                     </el-breadcrumb>
                 </div>
-                <div class="main-content-table">
+                <div class="main-content-table" style="">
                     <div class="home-content-table">
-<!--                        <router-view  v-bind:userList="userList"></router-view>-->
-                        <router-view
-                                v-bind:userList="userList"
-                                v-bind:userLog="userLog"
-                                v-bind:dataText="dataText"
-                                v-bind:loadStatus="loadStatus"></router-view>
+                     <transition mode="out-in">
+                        <router-view></router-view>
+                     </transition>
                     </div>
                 </div>
             </div>
 
             <div class="page-information">
-                <div class="ModifyInformation">
+                <div class="ModifyInformation" >
                     <!-- Form -->
-                    <el-dialog title="修改密码" :visible.sync="dialogFormChangePasswordVisible">
-                        <el-form :model="form">
-                            <el-form-item label="旧密码：" :label-width="formLabelWidth" >
-                                <el-input v-model="form.oldPassword" autocomplete="off"></el-input>
+                    <el-dialog width="30%" title="修改密码" :visible.sync="dialogFormChangePasswordVisible">
+<!--                        <el-form :model="form" :rules="rules" ref="form" class="demo-ruleForm">-->
+<!--                            <el-form-item label="旧密码：" :label-width="formLabelWidth" prop="old">-->
+<!--                                <el-input v-model="form.oldPassword" autocomplete="off"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                            <el-form-item label="新密码：" :label-width="formLabelWidth">-->
+<!--                                <el-input v-model="form.newPassword" autocomplete="off"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                            <el-form-item label="重复密码：" :label-width="formLabelWidth">-->
+<!--                                <el-input v-model="form.RepeatPassword" autocomplete="off"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                        </el-form>-->
+
+
+
+                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
+                            <el-form-item label="旧密码" prop="old" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.old" type="password" style="width:200%"></el-input>
                             </el-form-item>
-                            <el-form-item label="新密码：" :label-width="formLabelWidth">
-                                <el-input v-model="form.newPassword" autocomplete="off"></el-input>
+
+                            <el-form-item label="新密码" prop="new" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.new" type="password" style="width:200%"></el-input>
                             </el-form-item>
-                            <el-form-item label="重复密码：" :label-width="formLabelWidth">
-                                <el-input v-model="form.RepeatPassword" autocomplete="off"></el-input>
+                            <el-form-item label="重复密码" prop="repeat" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.repeat" type="password" style="width:200%" @input="changePwd"></el-input>
                             </el-form-item>
+
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="dialogFormChangePasswordVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="[SubBtnPassword(),dialogFormChangePasswordVisible = false]">确 定</el-button>
+                            <el-button type="primary" @click="SubBtnPassword('ruleForm')">确 定</el-button>
                         </div>
                     </el-dialog>
-                    <el-dialog title="修改信息" :visible.sync="dialogFormModifyInformationVisible">
-                        <el-form :model="form">
-                            <el-form-item label="用户姓名：" :label-width="formLabelWidth">
-                                <el-input v-model="form.name" autocomplete="off"></el-input>
+                    <el-dialog width="30%" title="修改信息" :visible.sync="dialogFormModifyInformationVisible">
+                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                            <el-form-item label="用户姓名：" prop="name" :label-width="formLabelWidth" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.name"  style="width:200%"></el-input>
                             </el-form-item>
-                            <el-form-item label="手机号码：" :label-width="formLabelWidth">
-                                <el-input v-model="form.phoneNumber" autocomplete="off"></el-input>
+                            <el-form-item label="手机号码：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.phoneNumber"  style="width:200%"></el-input>
                             </el-form-item>
-                            <el-form-item label="邮箱地址：" :label-width="formLabelWidth">
-                                <el-input v-model="form.email" autocomplete="off"></el-input>
+                            <el-form-item label="邮箱地址：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.email" style="width:200%"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户图标：" :label-width="formLabelWidth">
-                                <el-input v-model="form.userIcon" autocomplete="off"></el-input>
+                            <el-form-item label="用户图标：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.userIcon" style="width:200%"></el-input>
                             </el-form-item>
                         </el-form>
+
+
+<!--                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >-->
+<!--                            <el-form-item label="旧密码" prop="old" style="margin-bottom: 15px;">-->
+<!--                                <el-input v-model="ruleForm.old" type="password" style="width:200%"></el-input>-->
+<!--                            </el-form-item>-->
+
+<!--                            <el-form-item label="新密码" prop="new" style="margin-bottom: 15px;">-->
+<!--                                <el-input v-model="ruleForm.new" type="password" style="width:200%"></el-input>-->
+<!--                            </el-form-item>-->
+<!--                            <el-form-item label="重复密码" prop="repeat" style="margin-bottom: 15px;">-->
+<!--                                <el-input v-model="ruleForm.repeat" type="password" style="width:200%" @input="changePwd"></el-input>-->
+<!--                            </el-form-item>-->
+
+<!--                        </el-form>-->
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="dialogFormModifyInformationVisible = false">取 消</el-button>
                             <el-button type="primary" @click="[SubBtnInformation(),dialogFormModifyInformationVisible = false]">确 定</el-button>
@@ -381,7 +411,6 @@
                 </div>
                 <div class="Home-page-menu">
                     <el-dropdown class="menu">
-
                         <el-button type="primary" class="btn-icon">
                             <i class="el-icon-s-custom"></i>
                         </el-button>
@@ -419,98 +448,44 @@
                 isCollapse: false,
                 dialogFormModifyInformationVisible: false,
                 dialogFormChangePasswordVisible: false,
-                form: {
-                    oldPassword: '123456',
-                    newPassword: '7891011',
-                    RepeatPassword: '7891011',
-                    name: '黎明',
-                    phoneNumber:'18520930936',
-                    email:'1119785311@qq.com',
-                    userIcon:'是你吗？',
+
+                ruleForm: {
+                    old: '',
+                    new:'',
+                    repeat: '',
+                    name:'',
+                    phoneNumber:'',
+                    email:'',
+                    userIcon:'',
+                    change:true
+                },
+                rules: {
+                    // 定义是否必填项
+                    old: [
+                        { required: true, message: '请输入旧密码', trigger: 'blur' },
+                        { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+                    ],
+                    new: [
+                        { required: true, message: '请输入新密码', trigger: 'blur' },
+                        { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+                    ],
+                    repeat: [
+                        { required: true, message: '请重复密码', trigger: 'blur' },
+                        { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
+                    ],
+                    name: [
+                        { required: true, message: '请输入用户姓名', trigger: 'blur' },
+                    ],
                 },
                 formLabelWidth: '120px',
-                dataText:'',
-                loadStatus:'',
-                userList:[],
-                userLog:[]
             };
         },
         created(){
-            this.refresh();
         },
         mounted(){
-
             this.active = this.$route.name;
         },
         methods:{
-            refresh(){
-                if(sessionStorage.getItem("Path")=='/organization'){
-                    this.getUserList();
-                }else if (sessionStorage.getItem("Path")=='/userlog'){
-                    this.getLog();
-                }
-            },
-            getUserList(){
-                //先将变量清空
-                this.dataText = ' ';
-                this.routePath = '/organization';
-                let r_path = this.routePath;
-                // this.setUserName(this.userName)
-                sessionStorage.setItem('Path',r_path );
-                this.$http.get('user/getUserList',
-                    {
-                        params:{
-                        'size':"20",
-                        'page':"1"
-                     }
-                }).then(result=>{
-                    // console.log(result.body.result.data);
-                    if (result.status === 200) {
-                        let userListData = result.body.result.data;
-                        this.userList = userListData;
-                        console.log(this.userList.length);
-                        if(this.userList.length !==0){
-                            this.loadStatus = "ok";
-                        }
-
-                    }
-
-                    if(this.userList.length === 0){
-                        this.dataText = "暂无数据";
-                    }
-
-                })
-            },
-            getLog(){
-                this.dataText = '88888';
-                this.routePath = '/userlog';
-                let r_path = this.routePath;
-                // this.setUserName(this.userName)
-                sessionStorage.setItem('Path',r_path );
-                this.$http.get('/userLog/getPageByDateAndContent',
-                    {
-                        params:{
-                            'size':"40",
-                            'page':"1"
-                        }
-                    }).then(result=>{
-
-                    if (result.status === 200) {
-                        let userLogData = result.body.result.data;
-                        this.userLog = userLogData;
-
-                    }
-
-                    if(this.userLog.length > 0){
-                        this.loadStatus = 'ok';
-                        console.log("Homepage"+this.loadStatus)
-                    }
-                    if(this.userLog.length === 0){
-                        this.dataText = "暂无数据";
-                    }
-
-                })
-            },
             handleOpen(key, keyPath) {
                 console.log(key, keyPath);
             },
@@ -518,9 +493,9 @@
                 console.log(key, keyPath);
             },
             SubBtnInformation:function(){
-                console.log(this.form);
-                var data = this.form;
-                this.$http.post(('/api/employee/insert'),data,{emulateJSON:false}).then(response => {
+                console.log(this.ruleForm);
+                var data = this.ruleForm;
+                this.$http.post(('user/changePassWord'),data,{emulateJSON:false}).then(response => {
                     console.log(response.body);
                     this.grouplist = response.body;
                     alert("提交成功！")
@@ -528,19 +503,59 @@
                     console.log(response);
                     alert("出问题啦！")
                 });
-
             },
-            SubBtnPassword(){
-                console.log(this.form);
-                var data = this.form;
-                this.$http.post(('/api/employee/insert'),data,{emulateJSON:false}).then(response => {
-                    // console.log(response.body);
-                    this.grouplist = response.body;
-                    alert("提交成功！")
-                }, response => {
-                    console.log(response);
-                    alert("出问题啦！")
-                });
+            getkey(){
+                console.log('okkkkkk')
+            },
+            //修改密码重复密码验证
+            changePwd(){
+                console.log(this.ruleForm.repeat)
+                if (this.ruleForm.repeat===this.ruleForm.new) {
+                    this.ruleForm.change = true
+                    console.log(this.ruleForm.change);
+                }else {
+                    this.ruleForm.change = false
+                }
+            },
+            SubBtnPassword(formName){
+                console.log('oooopppp')
+                // 先做校验（valid）有效性！
+                if (this.ruleForm.change) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            this.$http.post(('user/changePassWord'),{oldPwd:this.ruleForm.old,newPwd:this.ruleForm.new,repeatNewPwd:this.ruleForm.repeat}).then(response => {
+                                console.log(response.body);
+                                if (response.body.status===200){
+                                    this.$message({
+                                        message:'修改密码成功，请重新登录！',
+                                        type:'success'
+                                    });
+                                    this.$router.push('/LoginPage')
+                                }else if (response.body.status ===500) {
+                                    this.$message({
+                                        message:'用户名或密码错误，请重新输入！',
+                                        type:'error',
+
+                                    });
+
+                                }
+                            }, response => {
+                                console.log(response);
+                                alert("出问题啦！")
+                            });
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                }else if (!this.ruleForm.change) {
+                    this.$message({
+                        message:'两次输入的密码不一致，请重新输入！',
+                        type:'error'
+                    });
+                }
+
+
             }
         }
     }
@@ -548,7 +563,19 @@
 
 <style  lang="scss" scoped>
 
-
+    .v-enter{
+        transform: translateX(0px);
+        opacity: 0.1;
+    }
+    .v-leave-to{
+        transform: translateX(200px);
+        opacity: 0.1;
+        /*position: absolute;*/
+    }
+    .v-enter-active,
+    .v-leave-active{
+        transition: all 0.5s ease;
+    }
     .el-button--text {
         color: #606266;
     }
@@ -579,6 +606,7 @@
         top: 0;
         bottom: 0;
         background-color: #f3f3f3;
+
         .main-contain-box{
             position: absolute;
             top:0;
@@ -594,7 +622,7 @@
             .main-content-table{
                 width: 100%;
                 height: 100%;
-
+                overflow: hidden;
                 background-color: #effff3;
             }
         }
@@ -668,4 +696,3 @@
         }
     }
 </style>
-<!--export default routePath-->

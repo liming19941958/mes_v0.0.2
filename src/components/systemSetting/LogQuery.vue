@@ -1,12 +1,36 @@
 <template>
     <div class="log-query-page">
-        <el-row style="width: 100%;height: 1005px;">
-            <el-col style="height: 5%;width:100%;position:
-                    relative;padding: 6px 0;
-                    border-bottom: 1px solid #cacaca">
-
-                <el-button type="primary" style="display: inline-block;float: right;margin-right: 20px;width: 5%;height: 100%;position: relative;padding: 0 0;">查询</el-button>
-                <el-input size="medium" v-model="input" placeholder="搜索关键字" style="display: inline-block;width: 20%;margin-right: 15px;position: relative;height: 100%;padding: 0 0;float: right"></el-input>
+        <el-row style="width: 100%;overflow: scroll;height: 100vh;position: relative">
+            <el-col style="min-height:42.5px;width:100%;position:
+                    relative;padding: 6px 11px;
+                    border-bottom: 1px solid #cacaca;
+                    float: left">
+<!--                <div style="height: 32px;width: 6%;color: #7e7e7e;min-width: 98px;float:left;align-items:center; display: flex;">选择时间区间：</div>-->
+<!--                <DatePicker type="datetimerange" placeholder="请选择日期" style="width: 20%;min-width: 315px;float: left;margin-right: 40%;"></DatePicker>-->
+                <div class="block" style="height: 32px;min-width: 350px;float: left;align-items:center; display: flex;">
+                    <span class="demonstration">开始时间：</span>
+                    <el-date-picker
+                            v-model="value1"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
+                </div>
+                <div class="block" style="height: 32px;min-width: 350px;float: left;align-items:center;display: flex;">
+                    <span class="demonstration">结束时间：</span>
+                    <el-date-picker
+                            v-model="value2"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
+                </div>
+                <div style="height: 32px;width: 18%;min-width: 305px;float:left;position: relative;display: inline-block;">
+                    <div style="height: 32px;color: #7e7e7e;float:left;line-height: 32px;position: relative;display: inline-block;">搜索内容：</div>
+                    <el-input
+                            size="medium" v-model="input" placeholder="请输入查询内容"
+                            style="display: inline-block;width: 20%;min-width: 220px;margin-right: 15px;position: relative;height: 32px;padding: 0 0;float: left">
+                    </el-input>
+                </div>
+                <el-button type="primary" style="display: inline-block;float: left;width: 5%;min-width: 35px;height: 32px;position: relative;padding: 0 0;" @click="serch">查询</el-button>
 
             </el-col>
             <el-col style="height: 100%;width:100%;padding: 15px 15px 15px 15px;">
@@ -18,11 +42,11 @@
                         element-loading-background="rgba(0, 0, 0, 0.08)"
                         lazy=true
                         :data="userLog"
-                        style="width: 100%;height: 75%;overflow: scroll">
+                        style="width: 100%;height: 83%; overflow: scroll">
                     <el-table-column
                             label="行号"
-
-                            type="index">
+                            type="index"
+                            :index="indexMethod">
                     </el-table-column>
                     <el-table-column
                             label="用户名"
@@ -77,6 +101,20 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <div class="block"
+                     style="position:relative;
+                      margin-top: 20px;float: right">
+                    <el-pagination
+                            @size-change="handleSizeChange"
+                            @current-change="handleCurrentChange"
+                            :current-page="params.page"
+                            :page-sizes="[10, 20, 30, 40]"
+                            :page-size="params.size"
+                            layout="total,slot,sizes, prev, pager, next, jumper"
+                            :total="total">
+                        <span>共{{totalPage}}页</span>
+                    </el-pagination>
+                </div>
             </el-col>
         </el-row>
     </div>
@@ -85,59 +123,104 @@
 <script>
     export default {
         name: "UserManagement",
-        props:{
-            userLog:{
-                type:Array,
-                required:true
-            },
-            dataText:{
-                type:String,
-                required:true
-            },
-            loadStatus:{
-                type: String,
-                required: true
-            }
-        },
         data() {
             return {
-                data: [{
-                    label: '壕玮集团',
-                    children: [
-                        {label: '客户一部'},
-                        {
-                            label: '注塑部',
-                            children: [
-                                {label: '注塑二部'},
-                                {label: '注塑三部'},
-                            ]
-                        }
-
-                    ]}],
+                value1: '',
+                value2: '',
+                serchTime:'',
                 defaultProps: {
                     children: 'children',
                     label: 'label'
                 },
+                total:'',
+                totalPage:'',
+                params:{
+                  size:'10',
+                  page:'1',
+                  startTime:'',
+                  endTime:''
+                },
+                dataText:'',
+                userLog:[],
                 loading:true,
                 tableData: []
-
             };
         },
         created(){
-            this.loadind();
+            this.getLog();
         },
-        // mounted(){
-        //     this.loadind();
-        // },
+        mounted(){
+
+        },
         methods: {
-            loadind(){
-                console.log("getLog"+this.loadStatus);
-                console.log("getLogggg"+this.dataText);
-                console.log("loghhhhhhh"+this.userLog.length);
-                if (this.loadStatus == 'ok'){
-                    this.loading=false;
-                    // console.log(this.loading)
-                }
+            serch(){
+                var t1 = new Date();
+                t1.setTime(this.value1);
+                var date1 = t1.getFullYear() + '-' + ((t1.getMonth() + 1)<10?'0'+(t1.getMonth() + 1):(t1.getMonth() + 1)) +  '-' + (t1.getDate()<10?'0'+t1.getDate():t1.getDate()) +'+'+
+                    (t1.getHours()<10?'0'+t1.getHours():t1.getHours()) + ':'+ (t1.getMinutes()< 10?'0'+t1.getMinutes():t1.getMinutes())
+                    + ':' + (t1.getSeconds()< 10?'0'+t1.getSeconds():t1.getSeconds());
+                this.params.startTime = date1;
+                var t2 = new Date();
+                t2.setTime(this.value2);
+                var date2 = t2.getFullYear() + '-' + ((t2.getMonth() + 1)<10?'0'+(t2.getMonth() + 1):(t2.getMonth() + 1)) +  '-' + (t2.getDate()<10?'0'+t2.getDate():t2.getDate()) +'+'+
+                    (t2.getHours()<10?'0'+t2.getHours():t2.getHours()) + ':'+ (t2.getMinutes()< 10?'0'+t2.getMinutes():t2.getMinutes())
+                    + ':' + (t2.getSeconds()< 10?'0'+t2.getSeconds():t2.getSeconds());
+                this.params.endTime = date2;
+
+                console.log('start'+this.params.startTime);
+                console.log('end'+this.params.endTime);
+                this.dataText = ' ';
+                let r_path = '/userlog';
+                sessionStorage.setItem('Path',r_path );
+                this.$http.get('userLog/getPageByDateAndContent',
+                    {
+                        params:{
+                            'size':this.params.size,
+                            'page':this.params.page,
+                            'startTime':this.params.startTime,
+                            'endTime':this.params.endTime,
+                        }
+                    }).then(result=>{
+                    if (result.status === 200) {
+                        let userLogData = result.body.result.data;
+                        this.userLog = userLogData;
+                        this.total = result.body.result.totalCount;
+                        this.totalPage = result.body.result.totalPage;
+                        // console.log(this.userLog.length);
+                        if(this.userLog.length !==0){
+                            this.loading = false;
+                        }
+                    }
+                    if(this.userLog.length === 0){
+                        this.dataText = "暂无数据";
+                    }
+                })
+            },
+            getLog(){
+                this.dataText = ' ';
+                let r_path = '/userlog';
+                sessionStorage.setItem('Path',r_path );
+                this.$http.get('/userLog/getPageByDateAndContent',
+                    {
+                        params:{
+                            'size':this.params.size,
+                            'page':this.params.page,
+                        }
+                    }).then(result=>{
+                    if (result.status === 200) {
+                        let userLogData = result.body.result.data;
+                        this.userLog = userLogData;
+                        this.total = result.body.result.totalCount;
+                        this.totalPage = result.body.result.totalPage;
+                        // console.log(this.userLog.length);
+                        if(this.userLog.length !==0){
+                            this.loading = false;
+                        }
+                    }
+                    if(this.userLog.length === 0){
+                        this.dataText = "暂无数据";
+                    }
+                })
             },
             handleNodeClick(data) {
                 console.log(data);
@@ -148,9 +231,19 @@
             handleDelete(index, row) {
                 console.log(index, row);
             },
+            handleSizeChange(val) {
+                this.params.size= `${val}`;
+                this.getLog();
+                console.log(this.params.size);
+            },
+            handleCurrentChange(val) {
+                this.params.page = `${val}`;
+                this.getLog();
+                console.log(`当前页: ${val}`);
+            },
             indexMethod(index) {
-                return (index +1 );
-            }
+                return (this.params.page - 1) * this.params.size + index + 1;
+            },
         }
     }
 </script>
