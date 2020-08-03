@@ -1,9 +1,8 @@
 
 <template>
     <div class="Home-page">
-
 <!--        侧边导航栏-->
-            <div class="Sidebar" @mouseover.prevent="btnInnerIsShow=true"  @mouseleave.prevent="btnInnerIsShow=false">
+            <div class="Sidebar" @mouseover="btnInnerIsShow=true"  @mouseleave="btnInnerIsShow=false">
                 <span title="mouseover与mouseenter、mouseout与mouseleave用法注释">
                     <!--不论鼠标指针穿过被选元素或其子元素，都会触发 mouseover 事件。-->
                     <!--只有在鼠标指针从元素外穿入被选元素（到元素内）时，才会触发 mouseenter 事件。-->
@@ -341,20 +340,6 @@
                 <div class="ModifyInformation" >
                     <!-- Form -->
                     <el-dialog width="30%" title="修改密码" :visible.sync="dialogFormChangePasswordVisible">
-<!--                        <el-form :model="form" :rules="rules" ref="form" class="demo-ruleForm">-->
-<!--                            <el-form-item label="旧密码：" :label-width="formLabelWidth" prop="old">-->
-<!--                                <el-input v-model="form.oldPassword" autocomplete="off"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="新密码：" :label-width="formLabelWidth">-->
-<!--                                <el-input v-model="form.newPassword" autocomplete="off"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="重复密码：" :label-width="formLabelWidth">-->
-<!--                                <el-input v-model="form.RepeatPassword" autocomplete="off"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                        </el-form>-->
-
-
-
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
                             <el-form-item label="旧密码" prop="old" style="margin-bottom: 15px;">
                                 <el-input v-model="ruleForm.old" type="password" style="width:200%"></el-input>
@@ -375,34 +360,19 @@
                     </el-dialog>
                     <el-dialog width="30%" title="修改信息" :visible.sync="dialogFormModifyInformationVisible">
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                            <el-form-item label="用户姓名：" prop="name" :label-width="formLabelWidth" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.name"  style="width:200%"></el-input>
+                            <el-form-item label="用户姓名：" prop="user" :label-width="formLabelWidth" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.user"  style="width:200%"></el-input>
                             </el-form-item>
                             <el-form-item label="手机号码：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.phoneNumber"  style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.mobile"  style="width:200%"></el-input>
                             </el-form-item>
                             <el-form-item label="邮箱地址：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
                                 <el-input v-model="ruleForm.email" style="width:200%"></el-input>
                             </el-form-item>
                             <el-form-item label="用户图标：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.userIcon" style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.avatar" style="width:200%"></el-input>
                             </el-form-item>
                         </el-form>
-
-
-<!--                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >-->
-<!--                            <el-form-item label="旧密码" prop="old" style="margin-bottom: 15px;">-->
-<!--                                <el-input v-model="ruleForm.old" type="password" style="width:200%"></el-input>-->
-<!--                            </el-form-item>-->
-
-<!--                            <el-form-item label="新密码" prop="new" style="margin-bottom: 15px;">-->
-<!--                                <el-input v-model="ruleForm.new" type="password" style="width:200%"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="重复密码" prop="repeat" style="margin-bottom: 15px;">-->
-<!--                                <el-input v-model="ruleForm.repeat" type="password" style="width:200%" @input="changePwd"></el-input>-->
-<!--                            </el-form-item>-->
-
-<!--                        </el-form>-->
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="dialogFormModifyInformationVisible = false">取 消</el-button>
                             <el-button type="primary" @click="[SubBtnInformation(),dialogFormModifyInformationVisible = false]">确 定</el-button>
@@ -448,15 +418,14 @@
                 isCollapse: false,
                 dialogFormModifyInformationVisible: false,
                 dialogFormChangePasswordVisible: false,
-
-                ruleForm: {
+                ruleForm:{
                     old: '',
                     new:'',
                     repeat: '',
-                    name:'',
-                    phoneNumber:'',
-                    email:'',
-                    userIcon:'',
+                    user:"",
+                    mobile:"",
+                    email:"",
+                    avatar:"",
                     change:true
                 },
                 rules: {
@@ -473,7 +442,7 @@
                         { required: true, message: '请重复密码', trigger: 'blur' },
                         { min: 6, max: 30, message: '长度在 6 到 30 个字符', trigger: 'blur' }
                     ],
-                    name: [
+                    user: [
                         { required: true, message: '请输入用户姓名', trigger: 'blur' },
                     ],
                 },
@@ -492,20 +461,17 @@
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
-            SubBtnInformation:function(){
-                console.log(this.ruleForm);
-                var data = this.ruleForm;
-                this.$http.post(('user/changePassWord'),data,{emulateJSON:false}).then(response => {
+            SubBtnInformation(){
+                this.$http.post(('user/changeProfile'),{
+                        userName:this.ruleForm.user,
+                        mobileNumber:this.ruleForm.mobile,
+                        emailAddress:this.ruleForm.email,
+                        Avatar:this.ruleForm.avatar}).then(response => {
                     console.log(response.body);
-                    this.grouplist = response.body;
-                    alert("提交成功！")
                 }, response => {
                     console.log(response);
                     alert("出问题啦！")
                 });
-            },
-            getkey(){
-                console.log('okkkkkk')
             },
             //修改密码重复密码验证
             changePwd(){
@@ -565,11 +531,11 @@
 
     .v-enter{
         transform: translateX(0px);
-        opacity: 0.1;
+        opacity: 0;
     }
     .v-leave-to{
         transform: translateX(200px);
-        opacity: 0.1;
+        opacity: 0;
         /*position: absolute;*/
     }
     .v-enter-active,

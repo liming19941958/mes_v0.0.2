@@ -16,8 +16,8 @@
                         relative;padding: 6px 0;
                         border-bottom: 1px solid #cacaca">
                     <el-button type="primary" style="margin: 0 0 0 15px;display: inline-block;width: 5%;height: 100%;position: relative;text-align: center;padding: 0 0;">新增</el-button>
-                    <el-button type="primary" style="display: inline-block;float: right;margin-right: 20px;width: 5%;height: 100%;position: relative;padding: 0 0;">查询</el-button>
-                    <el-input size="medium" v-model="input" placeholder="搜索关键字" style="display: inline-block;width: 20%;margin-right: 15px;position: relative;height: 100%;padding: 0 0;float: right"></el-input>
+                    <el-button type="primary" style="display: inline-block;float: right;margin-right: 20px;width: 5%;height: 100%;position: relative;padding: 0 0;" @click="search">查询</el-button>
+                    <el-input size="medium" v-model="params.search" placeholder="搜索关键字" style="display: inline-block;width: 20%;margin-right: 15px;position: relative;height: 100%;padding: 0 0;float: right"></el-input>
 
                 </el-col>
                 <el-col style="height: 100%;width:100%;padding: 15px 15px 15px 15px">
@@ -159,7 +159,8 @@
                 totalPage:'',
                 params:{
                     size:'10',
-                    page:'1'
+                    page:'1',
+                    search:''
                 },
                 dataText:'',
                 loading: true,
@@ -173,6 +174,29 @@
 
         },
         methods: {
+            search(){
+                this.$http.get('user/getUserList',
+                    {
+                        params:{
+                            'size':this.params.size,
+                            'page':this.params.page,
+                            'search':this.params.search
+                        }
+                    }).then(result=>{
+                    if (result.status === 200) {
+                        let userListData = result.body.result.data;
+                        this.userList = userListData;
+                        this.total = result.body.result.totalCount;
+                        this.totalPage = result.body.result.totalPage;
+                        if(this.userLog.length !==0){
+                            this.loading = false;
+                        }
+                    }
+                    if(this.userLog.length === 0){
+                        this.dataText = "暂无数据";
+                    }
+                })
+            },
             getUserList(){
                 this.dataText = ' ';
                 let r_path = '/organization';

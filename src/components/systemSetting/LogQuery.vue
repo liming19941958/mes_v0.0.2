@@ -26,7 +26,7 @@
                 <div style="height: 32px;width: 18%;min-width: 305px;float:left;position: relative;display: inline-block;">
                     <div style="height: 32px;color: #7e7e7e;float:left;line-height: 32px;position: relative;display: inline-block;">搜索内容：</div>
                     <el-input
-                            size="medium" v-model="input" placeholder="请输入查询内容"
+                            size="medium" v-model="params.search" placeholder="请输入查询内容"
                             style="display: inline-block;width: 20%;min-width: 220px;margin-right: 15px;position: relative;height: 32px;padding: 0 0;float: left">
                     </el-input>
                 </div>
@@ -127,7 +127,6 @@
             return {
                 value1: '',
                 value2: '',
-                serchTime:'',
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -138,7 +137,8 @@
                   size:'10',
                   page:'1',
                   startTime:'',
-                  endTime:''
+                  endTime:'',
+                  search:'',
                 },
                 dataText:'',
                 userLog:[],
@@ -156,13 +156,13 @@
             serch(){
                 var t1 = new Date();
                 t1.setTime(this.value1);
-                var date1 = t1.getFullYear() + '-' + ((t1.getMonth() + 1)<10?'0'+(t1.getMonth() + 1):(t1.getMonth() + 1)) +  '-' + (t1.getDate()<10?'0'+t1.getDate():t1.getDate()) +'+'+
+                var date1 = t1.getFullYear() + '-' + ((t1.getMonth() + 1)<10?'0'+(t1.getMonth() + 1):(t1.getMonth() + 1)) +  '-' + (t1.getDate()<10?'0'+t1.getDate():t1.getDate()) +' '+
                     (t1.getHours()<10?'0'+t1.getHours():t1.getHours()) + ':'+ (t1.getMinutes()< 10?'0'+t1.getMinutes():t1.getMinutes())
                     + ':' + (t1.getSeconds()< 10?'0'+t1.getSeconds():t1.getSeconds());
                 this.params.startTime = date1;
                 var t2 = new Date();
                 t2.setTime(this.value2);
-                var date2 = t2.getFullYear() + '-' + ((t2.getMonth() + 1)<10?'0'+(t2.getMonth() + 1):(t2.getMonth() + 1)) +  '-' + (t2.getDate()<10?'0'+t2.getDate():t2.getDate()) +'+'+
+                var date2 = t2.getFullYear() + '-' + ((t2.getMonth() + 1)<10?'0'+(t2.getMonth() + 1):(t2.getMonth() + 1)) +  '-' + (t2.getDate()<10?'0'+t2.getDate():t2.getDate()) +' '+
                     (t2.getHours()<10?'0'+t2.getHours():t2.getHours()) + ':'+ (t2.getMinutes()< 10?'0'+t2.getMinutes():t2.getMinutes())
                     + ':' + (t2.getSeconds()< 10?'0'+t2.getSeconds():t2.getSeconds());
                 this.params.endTime = date2;
@@ -172,29 +172,34 @@
                 this.dataText = ' ';
                 let r_path = '/userlog';
                 sessionStorage.setItem('Path',r_path );
-                this.$http.get('userLog/getPageByDateAndContent',
-                    {
-                        params:{
-                            'size':this.params.size,
-                            'page':this.params.page,
-                            'startTime':this.params.startTime,
-                            'endTime':this.params.endTime,
+                if(this.params.startTime === this.params.endTime){
+                    this.params.startTime=this.params.endTime=null;
+                    this.$http.get('userLog/getPageByDateAndContent',
+                        {
+                            params:{
+                                'size':this.params.size,
+                                'page':this.params.page,
+                                'startTime':this.params.startTime,
+                                'endTime':this.params.endTime,
+                                'search':this.params.search
+                            }
+                        }).then(result=>{
+                        if (result.status === 200) {
+                            let userLogData = result.body.result.data;
+                            this.userLog = userLogData;
+                            this.total = result.body.result.totalCount;
+                            this.totalPage = result.body.result.totalPage;
+                            // console.log(this.userLog.length);
+                            if(this.userLog.length !==0){
+                                this.loading = false;
+                            }
                         }
-                    }).then(result=>{
-                    if (result.status === 200) {
-                        let userLogData = result.body.result.data;
-                        this.userLog = userLogData;
-                        this.total = result.body.result.totalCount;
-                        this.totalPage = result.body.result.totalPage;
-                        // console.log(this.userLog.length);
-                        if(this.userLog.length !==0){
-                            this.loading = false;
+                        if(this.userLog.length === 0){
+                            this.dataText = "暂无数据";
                         }
-                    }
-                    if(this.userLog.length === 0){
-                        this.dataText = "暂无数据";
-                    }
-                })
+                    })
+                }
+
             },
             getLog(){
                 this.dataText = ' ';
