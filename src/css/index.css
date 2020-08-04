@@ -1,7 +1,6 @@
 ::-webkit-scrollbar {
     width: 0.55rem;
     height: 0.25rem;
-    /*background-image: linear-gradient(135deg, #f4f4f4 0%, rgb(214, 214, 214) 72%, rgba(226, 226, 226) 100%);*/
 }
 ::-webkit-scrollbar-track {
     border-radius: 8px;
