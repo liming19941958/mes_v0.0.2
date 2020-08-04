@@ -20,11 +20,17 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(ElementUI);
 Vue.use(ViewUI);
+//导入格式化时间的插件
+// import moment from 'moment'
+//定义全局的时间过滤器
+// Vue.filter('dateFormat',function (dataStr,pattern ="YYYY-MM-DD HH:mm:ss") {
+//   return moment(dataStr).format(pattern)
+// })
 //如果我们通过全局配置了请求数据的接口 根域名，则在每次单独发起
 // http 请求的时候，请求的url 路径，应该以相对路径 开头，
 // 前面不带 “/”，否则，不会启动根路径做拼接
-Vue.http.options.root = 'http://192.168.1.122:9001/';
-// Vue.http.options.root = 'http://localhost:9001/';
+// Vue.http.options.root = 'http://192.168.1.122:9001/';
+Vue.http.options.root = 'http://localhost:9001/';
 
 Vue.http.interceptors.push((request,next)  =>{
 

@@ -15,7 +15,7 @@
                 <el-col style="height: 5%;min-height:35px;width:100%;position:
                         relative;padding: 6px 0;
                         border-bottom: 1px solid #cacaca">
-                    <el-button type="primary" style="margin: 0 0 0 15px;display: inline-block;width: 5%;height: 100%;position: relative;text-align: center;padding: 0 0;">新增</el-button>
+                    <el-button type="primary" style="margin: 0 0 0 15px;display: inline-block;width: 5%;height: 100%;position: relative;text-align: center;padding: 0 0;" @click="addUser">新增</el-button>
                     <el-button type="primary" style="display: inline-block;float: right;margin-right: 20px;width: 5%;height: 100%;position: relative;padding: 0 0;" @click="search">查询</el-button>
                     <el-input size="medium" v-model="params.search" placeholder="搜索关键字" style="display: inline-block;width: 20%;margin-right: 15px;position: relative;height: 100%;padding: 0 0;float: right"></el-input>
 
@@ -174,6 +174,9 @@
 
         },
         methods: {
+            addUser(){
+
+            },
             search(){
                 this.$http.get('user/getUserList',
                     {

@@ -33,7 +33,7 @@
                             <span slot="title">系统设置</span>
                         </template>
                         <el-menu-item-group>
-                            <router-link to="/RoleManagementPage">
+                            <router-link to="/role">
                                 <el-menu-item index="1-1">角色管理</el-menu-item>
                             </router-link>
                             <router-link to="/organization">
@@ -342,14 +342,14 @@
                     <el-dialog width="30%" title="修改密码" :visible.sync="dialogFormChangePasswordVisible">
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
                             <el-form-item label="旧密码" prop="old" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.old" type="password" style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.old" type="password"></el-input>
                             </el-form-item>
 
                             <el-form-item label="新密码" prop="new" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.new" type="password" style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.new" type="password"></el-input>
                             </el-form-item>
                             <el-form-item label="重复密码" prop="repeat" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.repeat" type="password" style="width:200%" @input="changePwd"></el-input>
+                                <el-input v-model="ruleForm.repeat" type="password" @input="changePwd"></el-input>
                             </el-form-item>
 
                         </el-form>
@@ -361,16 +361,16 @@
                     <el-dialog width="30%" title="修改信息" :visible.sync="dialogFormModifyInformationVisible">
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                             <el-form-item label="用户姓名：" prop="user" :label-width="formLabelWidth" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.user"  style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.user"></el-input>
                             </el-form-item>
                             <el-form-item label="手机号码：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.mobile"  style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.mobile"></el-input>
                             </el-form-item>
                             <el-form-item label="邮箱地址：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.email" style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.email"></el-input>
                             </el-form-item>
                             <el-form-item label="用户图标：" :label-width="formLabelWidth" style="margin-bottom: 15px;">
-                                <el-input v-model="ruleForm.avatar" style="width:200%"></el-input>
+                                <el-input v-model="ruleForm.avatar"></el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
@@ -462,11 +462,20 @@
                 console.log(key, keyPath);
             },
             SubBtnInformation(){
-                this.$http.post(('user/changeProfile'),{
-                        userName:this.ruleForm.user,
-                        mobileNumber:this.ruleForm.mobile,
-                        emailAddress:this.ruleForm.email,
-                        Avatar:this.ruleForm.avatar}).then(response => {
+                // 后台接口需要传给他json字符串格式所以需要用 Json.stringify
+                this.$http.post(('user/changeProfile'),JSON.stringify({
+                    avatar: this.ruleForm.avatar,
+                    emailAddress: this.ruleForm.email,
+                    mobileNumber: this.ruleForm.mobile,
+                    userName: this.ruleForm.user
+                })).then(response => {
+                    if (response.body.status===200) {
+                        this.$message({
+                            message:'修改信息成功，请重新登录！',
+                            type:'success'
+                        });
+                        this.$router.push('/LoginPage')
+                    }
                     console.log(response.body);
                 }, response => {
                     console.log(response);

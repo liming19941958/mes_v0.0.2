@@ -67,7 +67,7 @@ var router = new VueRouter({
         {path:'/HomeContainer',component:HomeContainer,
             children:[
                 {path:'/HomeContainer',component:HomePage,name:'0'},//首页
-                {path:'/RoleManagementPage',component:RoleManagementPage,name:'1-1',},//角色管理
+                {path:'/role',component:RoleManagementPage,name:'1-1',},//角色管理
                 {path:'/organization',component:organization,name:'1-2',},
                 {path:'/userlog',component:userlog,name:'1-3'},
                 {path:'/ExceptionLogPage',component:ExceptionLogPage,name:'1-4'},
