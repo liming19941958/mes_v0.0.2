@@ -67,7 +67,7 @@
                             message:'登录成功',
                             type:'success'
                         })
-                        this.$router.push('/HomeContainer')
+                        this.$router.push('/home')
                     }else{
                         this.$message({
                             message:'用户名或者密码错误',

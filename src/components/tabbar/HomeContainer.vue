@@ -21,7 +21,7 @@
                          :default-active="active"
                          class="el-menu-vertical-demo"
                          @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-                    <router-link to="/HomeContainer">
+                    <router-link to="/home">
                     <el-menu-item index="0">
                         <i class="el-icon-house"></i>
                         <span slot="title">首页</span>

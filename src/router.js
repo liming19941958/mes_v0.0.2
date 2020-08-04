@@ -64,9 +64,9 @@ var router = new VueRouter({
     routes:[
         {path:'/',redirect:'/LoginPage'},
         {path:'/LoginPage',component:LoginPage},
-        {path:'/HomeContainer',component:HomeContainer,
+        {path:'/home',component:HomeContainer,
             children:[
-                {path:'/HomeContainer',component:HomePage,name:'0'},//首页
+                {path:'/home',component:HomePage,name:'0'},//首页
                 {path:'/role',component:RoleManagementPage,name:'1-1',},//角色管理
                 {path:'/organization',component:organization,name:'1-2',},
                 {path:'/userlog',component:userlog,name:'1-3'},

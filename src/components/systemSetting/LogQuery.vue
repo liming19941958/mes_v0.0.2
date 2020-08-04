@@ -127,6 +127,8 @@
             return {
                 value1: '',
                 value2: '',
+                startTime:'',
+                endTime:'',
                 defaultProps: {
                     children: 'children',
                     label: 'label'
@@ -136,8 +138,6 @@
                 params:{
                   size:'10',
                   page:'1',
-                  startTime:'',
-                  endTime:'',
                   search:'',
                 },
                 dataText:'',
@@ -154,18 +154,8 @@
         },
         methods: {
             search(){
-                var t1 = new Date();
-                t1.setTime(this.value1);
-                var date1 = t1.getFullYear() + '-' + ((t1.getMonth() + 1)<10?'0'+(t1.getMonth() + 1):(t1.getMonth() + 1)) +  '-' + (t1.getDate()<10?'0'+t1.getDate():t1.getDate()) +' '+
-                    (t1.getHours()<10?'0'+t1.getHours():t1.getHours()) + ':'+ (t1.getMinutes()< 10?'0'+t1.getMinutes():t1.getMinutes())
-                    + ':' + (t1.getSeconds()< 10?'0'+t1.getSeconds():t1.getSeconds());
-                this.params.startTime = date1;
-                var t2 = new Date();
-                t2.setTime(this.value2);
-                var date2 = t2.getFullYear() + '-' + ((t2.getMonth() + 1)<10?'0'+(t2.getMonth() + 1):(t2.getMonth() + 1)) +  '-' + (t2.getDate()<10?'0'+t2.getDate():t2.getDate()) +' '+
-                    (t2.getHours()<10?'0'+t2.getHours():t2.getHours()) + ':'+ (t2.getMinutes()< 10?'0'+t2.getMinutes():t2.getMinutes())
-                    + ':' + (t2.getSeconds()< 10?'0'+t2.getSeconds():t2.getSeconds());
-                this.params.endTime = date2;
+                this.params.startTime = this.changeDateTime(this.value1);
+                this.params.endTime = this.changeDateTime(this.value2);
                 this.dataText = ' ';
                 let r_path = '/userlog';
                 sessionStorage.setItem('Path',r_path );
@@ -260,12 +250,12 @@
             },
             handleSizeChange(val) {
                 this.params.size= `${val}`;
-                this.getLog();
+                this.search();
                 console.log(this.params.size);
             },
             handleCurrentChange(val) {
                 this.params.page = `${val}`;
-                this.getLog();
+                this.search();
                 console.log(`当前页: ${val}`);
             },
             indexMethod(index) {

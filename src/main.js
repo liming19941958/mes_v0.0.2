@@ -20,12 +20,36 @@ Vue.use(VueRouter);
 Vue.use(VueResource);
 Vue.use(ElementUI);
 Vue.use(ViewUI);
-//导入格式化时间的插件
-// import moment from 'moment'
 //定义全局的时间过滤器
-// Vue.filter('dateFormat',function (dataStr,pattern ="YYYY-MM-DD HH:mm:ss") {
-//   return moment(dataStr).format(pattern)
-// })
+Vue.filter('dateFormat',function(originVal){
+  const dt = new Date(originVal)
+  //年的时间
+  const y = dt.getFullYear()
+  //月的时间  .padStart 不足两位自动补0  2位长度
+  const m = (dt.getMonth() + 1 + '').padStart(2,'0')
+  //日的时间
+  const d = (dt.getDate() + '').padStart(2,'0')
+
+  //小时
+  const hh = (dt.getHours()+'').padStart(2,'0')
+  //分钟
+  const mm = (dt.getMinutes()+'').padStart(2,'0')
+  //秒数
+  const ss = (dt.getSeconds()+'').padStart(2,'0')
+
+  //将它们拼接成完整的字符串
+  //return 'yyyy-mm-dd hh:mm:ss'  可以改成下面的方法
+  return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+});
+//定义全局的时间格式化函数对象
+Vue.prototype.changeDateTime = function (time){//changeData是函数名
+  var t1 = new Date();
+  t1.setTime(time);
+  var date = t1.getFullYear() + '-' + ((t1.getMonth() + 1)<10?'0'+(t1.getMonth() + 1):(t1.getMonth() + 1)) +  '-' + (t1.getDate()<10?'0'+t1.getDate():t1.getDate()) +' '+
+      (t1.getHours()<10?'0'+t1.getHours():t1.getHours()) + ':'+ (t1.getMinutes()< 10?'0'+t1.getMinutes():t1.getMinutes())
+      + ':' + (t1.getSeconds()< 10?'0'+t1.getSeconds():t1.getSeconds());
+  return date;
+}
 //如果我们通过全局配置了请求数据的接口 根域名，则在每次单独发起
 // http 请求的时候，请求的url 路径，应该以相对路径 开头，
 // 前面不带 “/”，否则，不会启动根路径做拼接
@@ -40,14 +64,9 @@ Vue.http.interceptors.push((request,next)  =>{
   console.log("mainjs" + lastname);
   if(a){
     request.headers.set('token',lastname);
-    // request.headers.set('requestPage','/organization');
     request.headers.set('requestPage',path);
-
-
   }
-
   console.log(request.headers)
-
   next((response) => {
     console.log(response.status)
     return response
