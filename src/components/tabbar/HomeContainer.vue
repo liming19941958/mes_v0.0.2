@@ -375,7 +375,7 @@
                         </el-form>
                         <div slot="footer" class="dialog-footer">
                             <el-button @click="dialogFormModifyInformationVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="[SubBtnInformation(),dialogFormModifyInformationVisible = false]">确 定</el-button>
+                            <el-button type="primary" @click="SubBtnInformation('ruleForm')">确 定</el-button>
                         </div>
                     </el-dialog>
                 </div>
@@ -461,26 +461,34 @@
             handleClose(key, keyPath) {
                 console.log(key, keyPath);
             },
-            SubBtnInformation(){
+            SubBtnInformation(formName){
                 // 后台接口需要传给他json字符串格式所以需要用 Json.stringify
-                this.$http.post(('user/changeProfile'),JSON.stringify({
-                    avatar: this.ruleForm.avatar,
-                    emailAddress: this.ruleForm.email,
-                    mobileNumber: this.ruleForm.mobile,
-                    userName: this.ruleForm.user
-                })).then(response => {
-                    if (response.body.status===200) {
-                        this.$message({
-                            message:'修改信息成功，请重新登录！',
-                            type:'success'
-                        });
-                        this.$router.push('/LoginPage')
-                    }
-                    console.log(response.body);
-                }, response => {
-                    console.log(response);
-                    alert("出问题啦！")
-                });
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            this.$http.post(('user/changeProfile'),JSON.stringify({
+                                avatar: this.ruleForm.avatar,
+                                emailAddress: this.ruleForm.email,
+                                mobileNumber: this.ruleForm.mobile,
+                                userName: this.ruleForm.user
+                            })).then(response => {
+                                if (response.body.status===200) {
+                                    this.$message({
+                                        message:'修改信息成功，请重新登录！',
+                                        type:'success'
+                                    });
+                                    this.$router.push('/LoginPage')
+                                }
+                                console.log(response.body);
+                            }, response => {
+                                console.log(response);
+                                alert("出问题啦！")
+                            });
+                        } else{
+                            this.dialogFormModifyInformationVisible = true;
+                            return false;
+                        }
+                    });
+
             },
             //修改密码重复密码验证
             changePwd(){
@@ -493,7 +501,6 @@
                 }
             },
             SubBtnPassword(formName){
-                console.log('oooopppp')
                 // 先做校验（valid）有效性！
                 if (this.ruleForm.change) {
                     this.$refs[formName].validate((valid) => {
