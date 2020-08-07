@@ -1,6 +1,6 @@
 import VueRouter from 'vue-router'
 import HomeContainer from './components/tabbar/HomeContainer'
-import LoginPage from './components/tabbar/LoginContainer'
+import login from './components/tabbar/LoginContainer'
 import HomePage from './components/home/home-contain'
 import RoleManagementPage from './components/systemSetting/RoleManagement'
 import organization from './components/systemSetting/UserManagement'//系统设置-用户管理
@@ -62,8 +62,8 @@ import TestBrowsPanelPage from './components/BrowsePanelPreview/TestBrowsPanel'
 //创建路由对象
 var router = new VueRouter({
     routes:[
-        {path:'/',redirect:'/LoginPage'},
-        {path:'/LoginPage',component:LoginPage},
+        {path:'/',redirect:'/login'},
+        {path:'/login',component:login},
         {path:'/home',component:HomeContainer,
             children:[
                 {path:'/home',component:HomePage,name:'0'},//首页

@@ -397,7 +397,7 @@
                                 <el-button type="text" @click="dialogFormModifyInformationVisible = true">修改信息</el-button>
                             </el-dropdown-item>
 
-                            <router-link to="/LoginPage">
+                            <router-link to="/login">
                                 <el-dropdown-item >退出登录</el-dropdown-item>
                             </router-link>
 
@@ -454,9 +454,12 @@
             };
         },
         created(){
+            let r_path =this.$route.path;
+            sessionStorage.setItem('Path',r_path );
         },
         mounted(){
             this.active = this.$route.name;
+
         },
         methods:{
             handleOpen(key, keyPath) {
@@ -516,7 +519,7 @@
                                         message:'修改密码成功，请重新登录！',
                                         type:'success'
                                     });
-                                    this.$router.push('/LoginPage')
+                                    this.$router.push('/login')
                                 }else if (response.body.status ===500) {
                                     this.$message({
                                         message:'用户名或密码错误，请重新输入！',

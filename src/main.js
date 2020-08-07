@@ -67,11 +67,14 @@ Vue.http.interceptors.push((request,next)  =>{
 
   var lastname = sessionStorage.getItem("token");
   var path = sessionStorage.getItem("Path");
+
+  console.log(path);
   var a= true;
   console.log("mainjs" + lastname);
   if(a){
     request.headers.set('token',lastname);
     request.headers.set('requestPage',path);
+
   }
   console.log(request.headers)
   next((response) => {

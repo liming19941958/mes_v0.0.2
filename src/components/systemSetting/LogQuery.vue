@@ -155,8 +155,8 @@
         methods: {
             getLog(){
                 this.dataText = ' ';
-                let r_path = '/userlog';
-                sessionStorage.setItem('Path',r_path );
+                // let r_path = '/userlog';
+                // sessionStorage.setItem('Path',r_path );
                 this.params.startTime = this.changeDateTime(this.value1);
                 this.params.endTime = this.changeDateTime(this.value2);
                 if(this.params.startTime === this.params.endTime){

@@ -1,6 +1,7 @@
 <template>
     <div class="user-management-page">
-            <el-row style="width: 15%;float:left;position: relative;border-right: 1px solid #cacaca">
+<!--        组织架构-->
+            <el-row style="min-width:167px; width: 15%;float:left;position: relative;border-right: 1px solid #cacaca">
                 <el-col
                    style="height: 5%;width:100%;
                   position:relative;
@@ -26,50 +27,19 @@
                 <el-col style="height: 5%;min-height:35px;width:100%;position:
                         relative;padding: 6px 0;
                         border-bottom: 1px solid #cacaca">
-                    <el-button type="primary" style="margin: 0 0 0 15px;display: inline-block;width: 5%;height: 100%;position: relative;text-align: center;padding: 0 0;"  @click="dialogFormModifyInformationVisible = true">新增</el-button>
-                    <el-dialog width="30%" title="添加用户"  :visible.sync="dialogFormModifyInformationVisible">
-<!--                        <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >-->
-<!--                            <el-form-item  label="用户姓名" prop="use" style="margin-bottom: 15px;">-->
-<!--                                <el-input placeholder="请输入用户姓名" v-model="ruleForm.username" ></el-input>-->
-<!--                            </el-form-item>-->
-
-<!--                            <el-form-item label="登录名" prop="login" style="margin-bottom: 15px;">-->
-<!--                                <el-input placeholder="请输入登录名" v-model="ruleForm.new"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="用户密码" prop="user_password" style="margin-bottom: 15px;">-->
-<!--                                <el-input placeholder="请输入用户密码" v-model="ruleForm.repeat" type="password" @input="changePwd"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="重复密码" prop="repeat" style="margin-bottom: 15px;">-->
-<!--                                <el-input placeholder="请重复密码" v-model="ruleForm.repeat" type="password" @input="changePwd"></el-input>-->
-<!--                            </el-form-item>-->
-
-<!--                            <el-form-item label="邮箱地址" style="margin-bottom: 15px;">-->
-<!--                                <el-input placeholder="请输入邮箱地址" v-model="ruleForm.repeat" type="password" @input="changePwd"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="显示顺序" prop="repeat" style="margin-bottom: 15px;width: 25%;">-->
-<!--                                <el-input v-model="ruleForm.order" @input="changePwd"></el-input>-->
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="所属部门" :label-width="formLabelWidth">-->
-<!--                                <el-select ref= "mySelect" v-model="ruleForm.department" placeholder="请选择活动区域">-->
-<!--                                    <el-option style="display: inline-block;">-->
-<!--                                        <el-tree :data="data"-->
-<!--                                                 :props="defaultProps"-->
-<!--                                                 default-expand-all=true-->
-<!--                                                 @node-click="handleNodeAddUser"-->
-<!--                                                 style="position:relative;">-->
-<!--                                        </el-tree>-->
-<!--                                    </el-option>-->
-<!--                                </el-select>-->
-
-<!--                            </el-form-item>-->
-<!--                            <el-form-item label="用户状态" :label-width="formLabelWidth">-->
-<!--                                <el-select v-model="ruleForm.userStatus" placeholder="请选择活动区域">-->
-<!--                                    <el-option label="正常" value="正常"></el-option>-->
-<!--                                    <el-option label="禁用" value="禁用"></el-option>-->
-<!--                                </el-select>-->
-<!--                            </el-form-item>-->
-
-<!--                        </el-form>-->
+                    <el-button type="primary"
+                               style="margin: 0 0 0 15px;
+                               display: inline-block;
+                               width: 5%;
+                               height: 100%;
+                               position: relative;
+                               text-align: center;
+                               padding: 0 0;"
+                               @click="dialogFormAddInformationVisible = true">
+                               新增
+                    </el-button>
+<!--                    添加用户-->
+                    <el-dialog width="30%" title="添加用户"  :visible.sync="dialogFormAddInformationVisible">
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
                             <el-form-item label="用户姓名" prop="username" style="margin-bottom: 15px;">
 <!--                                prop的值要与 v-model的值相同-->
@@ -122,15 +92,72 @@
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
-                            <el-button @click="dialogFormModifyInformationVisible = false">取 消</el-button>
+                            <el-button @click="dialogFormAddInformationVisible = false">取 消</el-button>
                             <el-button type="primary" @click="addUser('ruleForm')">确 定</el-button>
                         </div>
                     </el-dialog>
                     <el-button type="primary" style="display: inline-block;float: right;margin-right: 20px;width: 5%;height: 100%;position: relative;padding: 0 0;" @click="getUserList">查询</el-button>
                     <el-input size="medium" v-model="params.search" placeholder="搜索关键字" style="display: inline-block;width: 20%;margin-right: 15px;position: relative;height: 100%;padding: 0 0;float: right"></el-input>
-
                 </el-col>
+<!--                修改用户-->
                 <el-col style="height: 100%;width:100%;padding: 15px 15px 15px 15px">
+                    <el-dialog width="30%" title="修改用户"  :visible.sync="dialogFormEditInformationVisible">
+                        <el-form :model="editForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-editForm" >
+                            <el-form-item label="用户姓名" prop="username" style="margin-bottom: 15px;">
+                                <!--                                prop的值要与 v-model的值相同-->
+                                <el-input v-model="editForm.username"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="登录名" prop="login_name" style="margin-bottom: 15px;">
+                                <el-input v-model="editForm.login_name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="用户密码" prop="user_password" style="margin-bottom: 15px;">
+                                <el-input v-model="ruleForm.user_password" type="password" @input="changePwd"></el-input>
+                            </el-form-item>
+                            <el-form-item label="重复密码" prop="repeat_password" style="margin-bottom: 15px;">
+                                <el-input v-model="editForm.repeat_password" type="password" @input="changePwd"></el-input>
+                            </el-form-item>
+                            <el-form-item label="手机号码" prop="mobile_number" style="margin-bottom: 15px;width: 40%;">
+                                <el-input
+                                        type="text"
+                                        placeholder="请输入手机号码"
+                                        v-model="editForm.mobile_number"
+                                        maxlength="11"
+                                        show-word-limit
+                                >
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="邮箱地址" style="margin-bottom: 15px;">
+                                <el-input placeholder="请输入邮箱地址" v-model="editForm.email" @input="changePwd"></el-input>
+                            </el-form-item>
+                            <el-form-item label="显示顺序" prop="order" style="margin-bottom: 15px;width: 25%;">
+                                <el-input v-model="editForm.order" @input="changePwd"></el-input>
+                            </el-form-item>
+                            <el-form-item label="所属部门" prop="department">
+                                <el-select ref= "mySelect" v-model="editForm.department" placeholder="请选择所属部门">
+                                    <el-option style="display: inline-block; ">
+                                        <el-tree :data="data"
+                                                 :props="defaultProps"
+                                                 default-expand-all=true
+                                                 @node-click="handleNodeAddUser"
+                                        >
+                                        </el-tree>
+                                    </el-option>
+                                </el-select>
+
+                            </el-form-item>
+                            <el-form-item label="用户状态" prop="user_status">
+                                <el-select v-model="editForm.user_status" placeholder="请选择用户状态">
+                                    <el-option label="正常" value="1"></el-option>
+                                    <el-option label="禁用" value="2"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="dialogFormEditInformationVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="addUser('editForm')">确 定</el-button>
+                        </div>
+                    </el-dialog>
                     <el-table
                             v-loading="loading"
                             element-loading-text="拼命加载中"
@@ -244,11 +271,11 @@
     export default {
         name: "UserManagement",
         filters:{
-            userStatus:function(data) {
-                if (data.state===1){
-                    return data+'正常';
+            userStatus:function(state) {
+                if (state===1){
+                    return '正常';
                 }else {
-                    return data+'禁用';
+                    return '禁用';
                 }
             }
         },
@@ -259,9 +286,23 @@
                     children: 'Subdirectory',
                     label: 'departmentName'
                 },
-                dialogFormModifyInformationVisible: false,
+                dialogFormEditInformationVisible: false,
+                dialogFormAddInformationVisible: false,
                 dialogFormChangePasswordVisible: false,
                 ruleForm:{
+                    username: '',
+                    login_name:'',
+                    repeat_password: '',
+                    mobile_number:'',
+                    order:'999',
+                    user_status:'',
+                    department:'',
+                    user_password:'',
+                    email:"",
+                    change:true,
+                    errorMsg:''
+                },
+                editForm:{
                     username: '',
                     login_name:'',
                     repeat_password: '',
@@ -346,8 +387,9 @@
             },
             getUserList(){
                 this.dataText = ' ';
-                let r_path = '/organization';
-                sessionStorage.setItem('Path',r_path );
+                // let r_path = '/organization';
+                // let r_path = '/organization';
+                // sessionStorage.setItem('Path',r_path );
                 this.$http.get('user/getUserList',
                     {
                         params:{
@@ -382,19 +424,6 @@
                 }
             },
             addUser(formName){
-
-                if (this.ruleForm.department===this.data[0].label){//根目录
-                    this.ruleForm.orgIds=this.data[0].uuid;
-                }else if (this.ruleForm.department===this.data[0].children[0].label) {//根目录的孩子1（无孩子）
-                    this.ruleForm.orgIds=this.data[0].children[0].uuid
-                }else if (this.ruleForm.department===this.data[0].children[1].label) {//根目录的孩子2（有孩子）
-                    this.ruleForm.orgIds=this.data[0].children[1].uuid
-                }else if (this.ruleForm.department===this.data[0].children[1].children[0].label) {//根目录的孩子的孩子1）
-                    this.ruleForm.orgIds=this.data[0].children[1].children[0].uuid
-                }else if (this.ruleForm.department=== this.data[0].children[1].children[1].label) {//根目录的孩子的孩子2）
-                    this.ruleForm.orgIds=this.data[0].children[1].children[1].uuid
-                }
-                console.log(this.ruleForm.orgIds);
                 // 先做校验（valid）有效性！
                 if (this.ruleForm.change) {
                     this.$refs[formName].validate((valid) => {
@@ -409,7 +438,56 @@
                                 modifyPassword1:this.ruleForm.repeat_password,
                                 showIndex: this.ruleForm.order,
                                 state: this.ruleForm.user_status,
-                                orgIds:this.ruleForm.orgIds
+                                orgIds:this.params.orgId
+                            })).then(response => {
+                                console.log(response.body);
+                                if (response.body.status===200){
+                                    this.dialogFormModifyInformationVisible = false;
+                                    this.$message({
+                                        message:'新增成功！',
+                                        type:'success'
+                                    });
+                                    this.getUserList();
+                                }else if (response.body.status ===500) {
+                                    console.log(response.body);
+                                    this.ruleForm.errorMsg = response.body.message;
+                                    this.$message({
+                                        message:this.ruleForm.errorMsg,
+                                        type:'error',
+                                    });
+                                }
+                            }, response => {
+                                console.log(response);
+                                alert("出问题啦！")
+                            });
+                        } else {
+                            console.log('error submit!!');
+                            return false;
+                        }
+                    });
+                }else if (!this.ruleForm.change) {
+                    this.$message({
+                        message:'两次输入的密码不一致，请重新输入！',
+                        type:'error'
+                    });
+                }
+            },
+            updateUser(formName){
+                // 先做校验（valid）有效性！
+                if (this.ruleForm.change) {
+                    this.$refs[formName].validate((valid) => {
+                        if (valid) {
+                            this.$http.post(('user/save'),JSON.stringify({
+                                userName:this.ruleForm.username,
+                                emailAddress:this.ruleForm.email,
+                                inheritMode: "true",
+                                loginName:this.ruleForm.login_name,
+                                mobileNumber:this.ruleForm.mobile_number,
+                                modifyPassword:this.ruleForm.user_password,
+                                modifyPassword1:this.ruleForm.repeat_password,
+                                showIndex: this.ruleForm.order,
+                                state: this.ruleForm.user_status,
+                                orgIds:this.params.orgId
                             })).then(response => {
                                 console.log(response.body);
                                 if (response.body.status===200){
@@ -446,14 +524,30 @@
             handleNodeClick(data){
                 this.params.orgId=data.uuid;
                 this.getUserList();
+                console.log(this.params.orgId)
             },
             handleNodeAddUser(data) {
-
-                this.ruleForm.department=data.label;
+                this.params.orgId=data.uuid;
+                console.log(this.params.orgId)
+                this.ruleForm.department=data.departmentName;
+                this.editForm.department=data.departmentName;
                 console.log(this.ruleForm.department);
                 this.$refs.mySelect.handleClose();//设置选中后自动收起
             },
             handleEdit(index, row) {
+                this.dialogFormEditInformationVisible=true;
+                this.editForm.username=row.userName;
+                this.editForm.login_name=row.loginName;
+                this.editForm.mobile_number=row.mobileNumber;
+                this.editForm.email=row.emailAddress;
+                if (row.state===1){
+                    this.editForm.user_status='正常';
+                }else{
+                    this.editForm.user_status='禁用';
+                }
+                this.$refs.mySelect.handleClose();//设置选中后自动收起
+                console.log(row.state);
+
                 console.log(index, row);
             },
             handleDelete(index, row) {
