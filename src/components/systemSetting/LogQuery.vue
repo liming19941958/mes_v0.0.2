@@ -198,12 +198,12 @@
             },
             handleSizeChange(val) {
                 this.params.size= `${val}`;
-                this.search();
+                this.getLog();
                 console.log(this.params.size);
             },
             handleCurrentChange(val) {
                 this.params.page = `${val}`;
-                this.search();
+                this.getLog();
                 console.log(`当前页: ${val}`);
             },
             indexMethod(index) {

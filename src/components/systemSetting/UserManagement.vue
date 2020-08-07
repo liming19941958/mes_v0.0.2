@@ -13,7 +13,6 @@
                             element-loading-text="拼命加载中"
                             element-loading-spinner="el-icon-loading"
                             element-loading-background="rgba(0, 0, 0, 0.001)"
-                            lazy="true"
                             :empty-text="dataText2"
                             :data="data"
                             :props="defaultProps"
@@ -201,7 +200,7 @@
 <!--                                    <p>姓名: {{ scope.row.name }}</p>-->
 <!--                                    <p>住址: {{ scope.row.address }}</p>-->
                                     <div slot="reference" class="name-wrapper">
-                                        <el-tag size="medium">{{ scope.row.state }}</el-tag>
+                                        <el-tag size="medium">{{ scope.row.state | userStatus}}</el-tag>
                                     </div>
 <!--                                </el-popover>-->
                             </template>
@@ -244,6 +243,15 @@
 <script>
     export default {
         name: "UserManagement",
+        filters:{
+            userStatus:function(data) {
+                if (data.state===1){
+                    return data+'正常';
+                }else {
+                    return data+'禁用';
+                }
+            }
+        },
         data() {
             return {
                 data: null,
@@ -453,12 +461,12 @@
             },
             handleSizeChange(val) {
                 this.params.size= `${val}`;
-                this.search();
+                this.getUserList();
                 console.log(this.params.size);
             },
             handleCurrentChange(val) {
                 this.params.page = `${val}`;
-                this.search();
+                this.getUserList();
                 console.log(`当前页: ${val}`);
             },
             indexMethods(index) {
