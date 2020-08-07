@@ -9,7 +9,11 @@
                     <!-- mouseout与mouseleave 不论鼠标指针离开被选元素还是任何子元素，都会触发 mouseout 事件。-->
                     <!--只有在鼠标指针从元素内穿出被选元素（到元素外）时，才会触发 mouseleave 事件。-->
                 </span>
-                <button  v-show="btnInnerIsShow" v-on:click = "[isCollapse = !isCollapse,appName=!appName,sideBarClass=!sideBarClass]" class="btn-inner"><i class="el-icon-d-arrow-left"></i></button>
+                <button  v-show="btnInnerIsShow"
+                         v-on:click = "[isCollapse = !isCollapse,appName=!appName,sideBarClass=!sideBarClass]"
+                         class="btn-inner">
+                    <i class="el-icon-d-arrow-left"></i>
+                </button>
                 <div class="logo"></div>
                 <transition>
                    <h3 v-show="appName">智能工厂系统</h3>
@@ -37,10 +41,10 @@
                                 <el-menu-item index="1-1">角色管理</el-menu-item>
                             </router-link>
                             <router-link to="/organization">
-                                 <el-menu-item index="1-2" @click="getUserList">用户管理</el-menu-item>
+                                 <el-menu-item index="1-2">用户管理</el-menu-item>
                             </router-link>
                             <router-link to="/userlog">
-                                 <el-menu-item index="1-3" @click="getLog">日志查询</el-menu-item>
+                                 <el-menu-item index="1-3">日志查询</el-menu-item>
                             </router-link>
                             <router-link to="/ExceptionLogPage">
                                  <el-menu-item index="1-4">异常日志</el-menu-item>

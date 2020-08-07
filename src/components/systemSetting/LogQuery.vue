@@ -30,7 +30,7 @@
                             style="display: inline-block;width: 20%;min-width: 220px;margin-right: 15px;position: relative;height: 32px;padding: 0 0;float: left">
                     </el-input>
                 </div>
-                <el-button type="primary" style="display: inline-block;float: left;width: 5%;min-width: 35px;height: 32px;position: relative;padding: 0 0;" @click="search">查询</el-button>
+                <el-button type="primary" style="display: inline-block;float: left;width: 5%;min-width: 35px;height: 32px;position: relative;padding: 0 0;" @click="getLog">查询</el-button>
 
             </el-col>
             <el-col style="height: 100%;width:100%;padding: 15px 15px 15px 15px;">
@@ -153,75 +153,23 @@
 
         },
         methods: {
-            search(){
-                this.params.startTime = this.changeDateTime(this.value1);
-                this.params.endTime = this.changeDateTime(this.value2);
-                this.dataText = ' ';
-                let r_path = '/userlog';
-                sessionStorage.setItem('Path',r_path );
-                if(this.params.startTime === this.params.endTime){
-                    this.params.startTime=this.params.endTime=null;
-                    this.$http.get('userLog/getPageByDateAndContent',
-                        {
-                            params:{
-                                'size':this.params.size,
-                                'page':this.params.page,
-                                'startTime':this.params.startTime,
-                                'endTime':this.params.endTime,
-                                'search':this.params.search
-                            }
-                        }).then(result=>{
-                        if (result.status === 200) {
-                            let userLogData = result.body.result.data;
-                            this.userLog = userLogData;
-                            this.total = result.body.result.totalCount;
-                            this.totalPage = result.body.result.totalPage;
-                            // console.log(this.userLog.length);
-                            if(this.userLog.length !==0){
-                                this.loading = false;
-                            }
-                        }
-                        if(this.userLog.length === 0){
-                            this.dataText = "暂无数据";
-                        }
-                    })
-                }else if (this.params.startTime !== this.params.endTime){
-                    this.$http.get('userLog/getPageByDateAndContent',
-                        {
-                            params:{
-                                'size':this.params.size,
-                                'page':this.params.page,
-                                'startTime':this.params.startTime,
-                                'endTime':this.params.endTime,
-                                'search':this.params.search
-                            }
-                        }).then(result=>{
-                        if (result.status === 200) {
-                            let userLogData = result.body.result.data;
-                            this.userLog = userLogData;
-                            this.total = result.body.result.totalCount;
-                            this.totalPage = result.body.result.totalPage;
-                            // console.log(this.userLog.length);
-                            if(this.userLog.length !==0){
-                                this.loading = false;
-                            }
-                        }
-                        if(this.userLog.length === 0){
-                            this.dataText = "暂无数据";
-                        }
-                    })
-                }
-
-            },
             getLog(){
                 this.dataText = ' ';
                 let r_path = '/userlog';
                 sessionStorage.setItem('Path',r_path );
+                this.params.startTime = this.changeDateTime(this.value1);
+                this.params.endTime = this.changeDateTime(this.value2);
+                if(this.params.startTime === this.params.endTime){
+                    this.params.startTime=this.params.endTime=null;
+                }
                 this.$http.get('/userLog/getPageByDateAndContent',
                     {
                         params:{
                             'size':this.params.size,
                             'page':this.params.page,
+                            'startTime':this.params.startTime,
+                            'endTime':this.params.endTime,
+                            'search':this.params.search
                         }
                     }).then(result=>{
                     if (result.status === 200) {

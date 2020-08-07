@@ -8,7 +8,19 @@
                   padding: 15px 0;
                   border-bottom: 1px solid #cacaca">组织架构</el-col>
                 <el-col style="height: 95%;width:100%;position: relative;padding: 25px 25px 0 25px">
-                    <el-tree :data="data" :props="defaultProps" default-expand-all=true @node-click="handleNodeClick" style="background-color: #effff3"></el-tree>
+                    <el-tree
+                            v-loading="loading2"
+                            element-loading-text="拼命加载中"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-background="rgba(0, 0, 0, 0.001)"
+                            lazy="true"
+                            :empty-text="dataText2"
+                            :data="data"
+                            :props="defaultProps"
+                            default-expand-all=true
+                            @node-click="handleNodeClick"
+                            style="background-color: #effff3">
+                    </el-tree>
                 </el-col>
             </el-row>
             <el-row style="width: 85%;float:left;margin-left: 10px;border-left: 1px solid #cacaca;position: relative">
@@ -125,7 +137,7 @@
                             element-loading-text="拼命加载中"
                             element-loading-spinner="el-icon-loading"
                             element-loading-background="rgba(0, 0, 0, 0.08)"
-                            lazy=true
+                            lazy="true"
                             :empty-text="dataText"
                             :data="userList"
                             style="width: 100%;height: 83%;overflow: scroll">
@@ -234,33 +246,10 @@
         name: "UserManagement",
         data() {
             return {
-                data: [{
-                    label: '',
-                    uuid:'',
-                    children: [
-                        {
-                            label: '',
-                            uuid:'',
-                        },
-                        {
-                            label: '',
-                            uuid:'',
-                            children: [
-                                {
-                                    label: '',
-                                    uuid:'',
-                                },
-                                {
-                                    label: '',
-                                    uuid:'',
-                                },
-                            ]
-                        }
-                    ]
-                }],
+                data: null,
                 defaultProps: {
-                    children: 'children',
-                    label: 'label'
+                    children: 'Subdirectory',
+                    label: 'departmentName'
                 },
                 dialogFormModifyInformationVisible: false,
                 dialogFormChangePasswordVisible: false,
@@ -274,7 +263,6 @@
                     department:'',
                     user_password:'',
                     email:"",
-                    orgIds:'',
                     change:true,
                     errorMsg:''
                 },
@@ -313,36 +301,66 @@
                 params:{
                     size:'10',
                     page:'1',
-                    search:''
+                    search:'',
+                    orgId:'',
                 },
                 dataText:'',
                 loading: true,
+                dataText2:'',
+                loading2: true,
                 userList: [],
 
             };
         },
         created(){
-            this.getUserList();
             this.show();
+            this.getUserList();
         },
         mounted(){
-
         },
         methods: {
+            //获取组织架构树
             show(){
+                this.dataText2 = ' ';
+                let r_path = '/organization';
+                sessionStorage.setItem('Path',r_path );
                 this.$http.post(('organization/show'),{}).then(response=>{
-                    let act = JSON.parse(response.body.result);
-                    console.log(act[0]);
-                    this.data[0].label=act[0].departmentName;//根目录
-                    this.data[0].uuid = act[0].uuid;
-                    this.data[0].children[0].label = act[0].Subdirectory[0].departmentName;//根目录的孩子1（无孩子）
-                    this.data[0].children[0].uuid = act[0].Subdirectory[0].uuid;
-                    this.data[0].children[1].label = act[0].Subdirectory[1].departmentName;//根目录的孩子2（有孩子）
-                    this.data[0].children[1].uuid = act[0].Subdirectory[1].uuid;
-                    this.data[0].children[1].children[0].label = act[0].Subdirectory[1].Subdirectory[0].departmentName;//根目录的孩子的孩子1）
-                    this.data[0].children[1].children[0].uuid = act[0].Subdirectory[1].Subdirectory[0].uuid;
-                    this.data[0].children[1].children[1].label = act[0].Subdirectory[1].Subdirectory[1].departmentName;//根目录的孩子的孩子2）
-                    this.data[0].children[1].children[1].uuid = act[0].Subdirectory[1].Subdirectory[1].uuid;
+                    if (response.status===200){
+                        let act = JSON.parse(response.body.result);
+                        this.data=act;
+                        if(this.data.length !==0){
+                            this.loading2 = false;
+                        }else if (this.data.length === 0) {
+                            this.dataText2 = "暂无数据";
+                        }
+                    }
+                })
+            },
+            getUserList(){
+                this.dataText = ' ';
+                let r_path = '/organization';
+                sessionStorage.setItem('Path',r_path );
+                this.$http.get('user/getUserList',
+                    {
+                        params:{
+                            'size':this.params.size,
+                            'page':this.params.page,
+                            'search':this.params.search,
+                            'orgId':this.params.orgId
+                        }
+                    }).then(result=>{
+                    if (result.status === 200) {
+                        let userListData = result.body.result.data;
+                        this.userList = userListData;
+                        console.log(this.userList);
+                        this.total = result.body.result.totalCount;
+                        this.totalPage = result.body.result.totalPage;
+                        if(this.userList.length !==0){
+                            this.loading = false;
+                        }else if (this.userList.length === 0) {
+                            this.dataText = "暂无数据";
+                        }
+                    }
                 })
             },
             //修改密码重复密码验证
@@ -417,40 +435,9 @@
                     });
                 }
             },
-            getUserList(){
-                this.dataText = ' ';
-                let r_path = '/organization';
-                sessionStorage.setItem('Path',r_path );
-                this.$http.get('user/getUserList',
-                    {
-                        params:{
-                            'size':this.params.size,
-                            'page':this.params.page,
-                            'search':this.params.search,
-                        }
-                    }).then(result=>{
-                    if (result.status === 200) {
-                        let userListData = result.body.result.data;
-                        // let dataList = [];
-                        // for(var i=0;i < userListData.length; i++){
-                        //     if (userListData[i].state===1){
-                        //        let
-                        //     }
-                        //
-                        // }
-                        this.userList = userListData;
-                        console.log(this.userList);
-                        this.total = result.body.result.totalCount;
-                        this.totalPage = result.body.result.totalPage;
-                        if(this.userList.length !==0){
-                            this.loading = false;
-                        }
-                    }
-                    if(this.userList.length === 0){
-                        this.dataText = "暂无数据";
-                    }
-
-                })
+            handleNodeClick(data){
+                this.params.orgId=data.uuid;
+                this.getUserList();
             },
             handleNodeAddUser(data) {
 
@@ -490,6 +477,5 @@
         height: 100%;
         /*min-width: 863px;*/
         /*background-color: #ffee80*/
-
     }
 </style>
