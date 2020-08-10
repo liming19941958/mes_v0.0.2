@@ -1,6 +1,8 @@
 <template>
-    <div class="topology-management-page">
-        <h1>这是拓扑管理页面</h1>
+    <div class="topology-management-page" style="display: flex;width: 100vw;height: 100vh;background-color: #2629ff;">
+<!--        row为横向布局-->
+        <el-row style="flex: 2;background-color: #7fff35;"></el-row>
+        <el-row style="flex: 8;background-color: #ff411d;"></el-row>
     </div>
 </template>
 

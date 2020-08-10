@@ -68,9 +68,9 @@ var router = new VueRouter({
             children:[
                 {path:'/home',component:HomePage,name:'0'},//首页
                 {path:'/role',component:RoleManagementPage,name:'1-1',},//角色管理
-                {path:'/organization',component:organization,name:'1-2',},
-                {path:'/userlog',component:userlog,name:'1-3'},
-                {path:'/ExceptionLogPage',component:ExceptionLogPage,name:'1-4'},
+                {path:'/organization',component:organization,name:'1-2',},//用户管理
+                {path:'/userlog',component:userlog,name:'1-3'},//日志查询
+                {path:'/debuglog',component:ExceptionLogPage,name:'1-4'},//异常日志
                 {path:'/TopologyManagementPage',component:TopologyManagementPage,name:'1-5'},
                 {path:'/KanbanConfigurationPage',component:KanbanConfigurationPage,name:'1-6'},
                 {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage,name:'1-7'},

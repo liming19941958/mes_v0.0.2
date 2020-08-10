@@ -6,7 +6,20 @@
 
 <script>
     export default {
-        name: "App"
+        name: "App",
+        created(){
+            // 全局监听路由变化，并把末路由地址存入浏览器自带的sessionStorage中，供main.js中全局设置请求头使用
+            this.$router.beforeEach((to, from, next) => {
+                // console.log(to.path);
+                let r_path =to.path;
+                // alert(r_path);
+                sessionStorage.setItem('Path',r_path );
+                next();
+            });
+        },
+        methods:{
+
+        }
     }
 </script>
 

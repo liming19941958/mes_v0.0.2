@@ -30,7 +30,7 @@
                             style="display: inline-block;width: 20%;min-width: 220px;margin-right: 15px;position: relative;height: 32px;padding: 0 0;float: left">
                     </el-input>
                 </div>
-                <el-button type="primary" style="display: inline-block;float: left;width: 5%;min-width: 35px;height: 32px;position: relative;padding: 0 0;" @click="getLog">查询</el-button>
+                <el-button type="primary" style="display: inline-block;float: left;width: 5%;min-width: 35px;height: 32px;position: relative;padding: 0 0;" @click="serach">查询</el-button>
 
             </el-col>
             <el-col style="height: 100%;width:100%;padding: 15px 15px 15px 15px;">
@@ -40,7 +40,6 @@
                         element-loading-text="拼命加载中"
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(0, 0, 0, 0.08)"
-                        lazy=true
                         :data="userLog"
                         style="width: 100%;height: 83%; overflow: scroll">
                     <el-table-column
@@ -91,13 +90,13 @@
                             label="登录时间"
                             >
                         <template slot-scope="scope">
-                            <!--                            <el-popover trigger="hover" placement="top">-->
-                            <!--                                <p>姓名: {{ scope.row.name }}</p>-->
-                            <!--                                <p>住址: {{ scope.row.address }}</p>-->
+<!--                                                        <el-popover trigger="hover" placement="top">-->
+<!--                                                            <p>姓名: {{ scope.row.name }}</p>-->
+<!--                                                            <p>住址: {{ scope.row.address }}</p>-->
                             <div slot="reference" class="name-wrapper">
                                 <el-tag size="medium">{{ scope.row.createDate }}</el-tag>
                             </div>
-                            <!--                            </el-popover>-->
+<!--                                                        </el-popover>-->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -129,10 +128,6 @@
                 value2: '',
                 startTime:'',
                 endTime:'',
-                defaultProps: {
-                    children: 'children',
-                    label: 'label'
-                },
                 total:'',
                 totalPage:'',
                 params:{
@@ -153,6 +148,11 @@
 
         },
         methods: {
+            serach(){//在查询之前首先要把传给后台的page重新置0
+                this.params.page='1';
+                console.log('查询-当前页'+this.params.page);
+                this.getLog();
+            },
             getLog(){
                 this.dataText = ' ';
                 // let r_path = '/userlog';

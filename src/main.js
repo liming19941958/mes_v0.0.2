@@ -1,16 +1,21 @@
 import Vue from 'vue'
-
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './css/index.less'
 import './css/index.css'
 import App from './App.vue'
 import VueRouter from 'vue-router'
+// import axios from 'axios'
+import qs from 'qs'
 import VueResource from 'vue-resource'
 import router from './router.js'
 import 'bootstrap/dist/css/bootstrap.css'
 import ViewUI from 'view-design';
 import 'view-design/dist/styles/iview.css';
+// Vue.prototype.$http = axios;
+Vue.prototype.$qs = qs;
+
+
 // 全局引入echarts
 // import echarts from 'echarts'
 // Vue.prototype.$echarts = echarts
@@ -67,18 +72,9 @@ Vue.http.interceptors.push((request,next)  =>{
 
   var lastname = sessionStorage.getItem("token");
   var path = sessionStorage.getItem("Path");
-
-  console.log(path);
-  var a= true;
-  console.log("mainjs" + lastname);
-  if(a){
     request.headers.set('token',lastname);
     request.headers.set('requestPage',path);
-
-  }
-  console.log(request.headers)
   next((response) => {
-    console.log(response.status)
     return response
   });
 
@@ -86,7 +82,16 @@ Vue.http.interceptors.push((request,next)  =>{
 // 全局配置emulateJSON
 Vue.http.options.emulateJSON = true;
 new Vue({
+  // pathWatch:'',
   render: h => h(App),
-
-    router
+  // watch:{
+  //   $route(to){
+  //     this.pathWatch=to.path;
+  //     console.log(this.pathWatch);
+  //     // console.log(from.path);//从哪来
+  //     // console.log(to.path);//到哪去
+  //   }
+  // },
+  router
 }).$mount('#app');
+

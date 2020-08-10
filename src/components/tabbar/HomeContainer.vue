@@ -46,7 +46,7 @@
                             <router-link to="/userlog">
                                  <el-menu-item index="1-3">日志查询</el-menu-item>
                             </router-link>
-                            <router-link to="/ExceptionLogPage">
+                            <router-link to="/debuglog">
                                  <el-menu-item index="1-4">异常日志</el-menu-item>
                             </router-link>
                             <router-link to="/TopologyManagementPage">
@@ -454,8 +454,7 @@
             };
         },
         created(){
-            let r_path =this.$route.path;
-            sessionStorage.setItem('Path',r_path );
+
         },
         mounted(){
             this.active = this.$route.name;
@@ -483,7 +482,7 @@
                                         message:'修改信息成功，请重新登录！',
                                         type:'success'
                                     });
-                                    this.$router.push('/LoginPage')
+                                    this.$router.push('/login')
                                 }
                                 console.log(response.body);
                             }, response => {
