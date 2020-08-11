@@ -64,20 +64,23 @@
                                 <el-row style="height:7%;width:100%;padding: 12px 5px;font-size: 15px;border-top: 1px solid #d6d6d6;border-bottom: 1px solid #d6d6d6;">
                                     <span>包含用户</span>
                                     <span style="display: inline-block;
+                                    border: none;
                                             float: right;
                                             margin-right: 30px;
                                             text-indent: 15px;
-                                            color: #007aff">
-                                        <el-tooltip popper-class="atooltip" content="添加" placement="bottom">
+                                            color: #007aff"
+                                            v-show="isShowButton">
+                                        <el-tooltip popper-class="atooltip" content="添加" placement="bottom" style="border: none!important;">
                                             <i class="el-icon-plus" @click="addUser" style="cursor: pointer"></i>
                                         </el-tooltip>
                                         <el-tooltip popper-class="atooltip" content="删除" placement="bottom">
-                                             <i class="el-icon-delete" @click="deleteUser" style="cursor: pointer"></i>
+                                             <i class="el-icon-delete" @click="deleteUser" style="cursor: pointer" type="button"></i>
                                         </el-tooltip>
                                         <el-tooltip popper-class="atooltip" content="刷新" placement="bottom">
                                              <i class="el-icon-refresh-right" @click="getRoleUserList" style="cursor: pointer"></i>
                                         </el-tooltip>
                                     </span>
+<!--                                    添加包含用户弹窗-->
                                     <el-dialog width="55%!important" title="用户列表" :visible.sync="dialogFormAddUserInformationVisible">
                                         <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
                                             <el-col style="min-height:42.5px;width:100%;position:
@@ -89,11 +92,16 @@
                                                             style="display: inline-block;width: 20%;min-width: 220px;margin-right: 15px;position: relative;height: 32px;padding: 0 0;float: left">
                                                     </el-input>
                                                 </div>
-                                                <el-button type="primary" style="display: inline-block;float: left;width: 10%;min-width: 40px;height: 32px;position: relative;padding: 0 0;" @click=" getSysDebugLogList">查询</el-button>
+                                                <el-button type="primary"
+                                                           style="display: inline-block;
+                                                           float: left;width: 10%;min-width: 40px;
+                                                           height: 32px;position: relative;padding: 0 0;"
+                                                           @click="addUser">查询
+                                                </el-button>
                                             </el-col>
                                             <el-col style="height: 70%;width:100%;padding: 15px 15px 15px 15px;">
                                                 <el-table
-                                                        @selection-change="handleSelectionChange"
+                                                        @selection-change="handleSelectionChangeAddUserList"
                                                         :empty-text="dataText3"
                                                         v-loading="loading3"
                                                         element-loading-text="拼命加载中"
@@ -161,8 +169,8 @@
                                                      style="position:relative;
                       margin-top: 20px;float: right">
                                                     <el-pagination
-                                                            @size-change="handleSizeChange"
-                                                            @current-change="handleCurrentChange"
+                                                            @size-change="handleSizeChangeAddUserList"
+                                                            @current-change="handleCurrentChangeAddUserList"
                                                             :current-page="params.page2"
                                                             :page-sizes="[10, 20, 30, 40]"
                                                             :page-size="params.size2"
@@ -179,6 +187,7 @@
                                         </div>
                                     </el-dialog>
                                 </el-row>
+<!--                                包含用户列表-->
                                 <el-row style="height:93%;width:100%;overflow: scroll">
                                     <el-table
                                             ref="multipleTable"
@@ -356,6 +365,8 @@
         data(){
             return{
                 isShow:false,
+                isShowButton:false,
+                isShowTip:false,
                 activeName:'first',
                 data:null,
                 dataText:'',
@@ -374,6 +385,7 @@
                 userListShow:[],
                 multipleSelection: [],//表格选中的项的数组
                 arrSelects:[],
+                arrSelectsAddUserLists:[],
                 dialogFormAddUserInformationVisible:false,
                 params:{
                     size:'10',
@@ -385,6 +397,7 @@
                     roleTf:'',
                     parentId: '',
                     addParentId:'',
+                    search:'',
                 },
                 ruleForm: {
                     resource:'',
@@ -433,13 +446,16 @@
                 })
             },
 
-            handleNodeClick(data){//组织架构选择树形控件各分支
+            //组织架构选择树形控件各分支
+            handleNodeClick(data){
                 console.log(data);
                 if (data.roleLeaf){
-                    this.ruleForm.resource='角色'
+                    this.ruleForm.resource='角色';
+                    this.isShowButton=true;
 
                 }else {
                     this.ruleForm.resource='非角色';
+                    this.isShowButton=!this.isShowButton;
                 }
                 this.ruleForm.desc=data.description;
                 this.ruleForm.name=data.name;
@@ -459,7 +475,7 @@
                 this.getRoleUserList();
                 // console.log('用户所属部门'+this.params.orgId);
             },
-
+             //获取角色包含用户列表
             getRoleUserList(){
                 this.$http.get('role/getRoleUserList',{
                     params:{
@@ -484,55 +500,8 @@
                 })
             },
 
-            addUser(){
-                this.dataText3= ' ';
-                this.$http.get('user/getUserList',{
-                    params:{
-                        page:this.params.page2,
-                        size:this.params.size2
-                    }
-                }).then(response=>{
-                    if (response.body.status===200){
-                        this.userListShow=response.body.result.data;
-                        this.total2 = response.body.result.totalCount;
-                        this.totalPage2 = response.body.result.totalPage;
-                        if(this.userListShow.length !==0){
-                            this.loading3 = false;
-                        }else if (this.userListShow.length === 0) {
-                            this.dataText3 = "暂无数据";
-                        }
-                        console.log(this.userListShow);
-                    }
-                }).catch((err)=>{
-                    console.log(err);
-                })
-                this.dialogFormAddUserInformationVisible=true;
 
-            },
-            addUserList(){
-                alert('ok');
-            },
-            deleteUser(){
-                console.log(this.params.orgId);
-                this.$confirm('此操作将永久删除该用户信息, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$http.post('role/deleteRoleUser',JSON.stringify({roleId:this.params.orgId,userIds:this.arrSelects})).then(()=>{
-                        this.getRoleUserList();
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!'
-                        });
-                    })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            },
+            //添加角色
             addRole(){
                 // console.log('父节点id:'+this.params.addParentId);
                 if (this.roleLeaf==null) {
@@ -552,7 +521,7 @@
                     this.ruleForm.resource='角色';
                 }
             },
-
+            //删除角色列表中的用户信息
             deleteList(){
                 this.$confirm('此操作将永久删除该角色信息, 是否继续?', '提示', {
                     confirmButtonText: '确定',
@@ -574,13 +543,73 @@
                 });
             },
 
+            // 角色包含用户添加用户
+            addUser(){
+                this.dataText3= ' ';
+                this.$http.get('user/getUserList',{
+                    params:{
+                        page:this.params.page2,
+                        size:this.params.size2,
+                        search:this.params.search
+                    }
+                }).then(response=>{
+                    if (response.body.status===200){
+                        this.userListShow=response.body.result.data;
+                        this.total2 = response.body.result.totalCount;
+                        this.totalPage2 = response.body.result.totalPage;
+                        if(this.userListShow.length !==0){
+                            this.loading3 = false;
+                        }else if (this.userListShow.length === 0) {
+                            this.dataText3 = "暂无数据";
+                        }
+                        // console.log(this.userListShow);
+                    }
+                }).catch((err)=>{
+                    console.log(err);
+                })
+                this.dialogFormAddUserInformationVisible=true;
+
+            },
+
+            // 选中用户信息后提交表单以添加包含用户
+            addUserList(){
+                alert('ok');
+            },
+
+            //删除包含用户列表信息
+            deleteUser(){
+                console.log(this.params.orgId);
+                this.$confirm('此操作将永久删除该用户信息, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$http.post('role/deleteRoleUser',JSON.stringify({roleId:this.params.orgId,userIds:this.arrSelects})).then(()=>{
+                        this.getRoleUserList();
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+
+           // 包含用户列表分页方法
             indexMethods(index) {
                 return (this.params.page - 1) * this.params.size + index + 1;
             },
+
+            //添加包含用户弹窗中的分页方法
             indexMethods2(index) {
                 return (this.params.page2 - 1) * this.params.size2 + index + 1;
             },
 
+            // 编辑和新增角色信息
             submitForm(formName) {
                 if(this.ruleForm.resource=='角色'){
                     this.params.roleTf='1';
@@ -643,19 +672,42 @@
                 });
             },
 
-            handleSizeChange(val) {
+            handleSizeChangeAddUserList(val) {//添加包含用户(弹窗页面)
+                this.params.size2= `${val}`;
+                this.addUser();
+                console.log(`每页 ${val} 条`);
+            },
+
+            handleCurrentChangeAddUserList(val) {//添加包含用户(弹窗页面)
+                this.params.page2 = `${val}`;
+                this.addUser();
+                console.log(`当前页: ${val}`);
+            },
+
+            handleSelectionChangeAddUserList(val) {
+                this.multipleSelectionAddUserList = val;
+                let array = this.multipleSelectionAddUserList;
+                let arrSelectAddUserList = [];
+                for (var i =0;i<array.length; i++){
+                    let arr= array[i].id;
+                    arrSelectAddUserList.push(arr);
+                }
+                this.arrSelectsAddUserLists=arrSelectAddUserList;
+                console.log(this.arrSelectsAddUserLists);
+            },
+            handleSizeChange(val) {//角色中包含用户的列表页面
                 this.params.size2= `${val}`;
                 this.addUser();
                 this.getRoleUserList();
                 console.log(`每页 ${val} 条`);
             },
-            handleCurrentChange(val) {
+            handleCurrentChange(val) {//角色中包含用户的列表页面
                 this.params.page2 = `${val}`;
                 this.addUser();
                 this.getRoleUserList();
                 console.log(`当前页: ${val}`);
             },
-            handleSelectionChange(val) {
+            handleSelectionChange(val) {//角色中包含用户的列表页面
                 this.multipleSelection = val;
                 let array = this.multipleSelection;
                 let arrSelect = [];
