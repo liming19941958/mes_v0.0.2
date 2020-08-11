@@ -588,7 +588,7 @@
         color: #8f8f94;
     }
     .Home-page{
-        position: absolute;
+        position: relative;
         left: 0;
         right: 0;
         top: 0;

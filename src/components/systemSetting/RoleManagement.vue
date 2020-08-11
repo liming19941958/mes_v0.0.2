@@ -36,202 +36,205 @@
                         </div>
                     </div>
                     <div class="role-table">
-                        <el-container>
-                            <el-header>角色详细信息</el-header>
-                            <el-main>
-                                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
-                                    <el-form-item label="角色名称" prop="name" style="margin-bottom: 10px;">
-                                        <el-input v-model="ruleForm.name"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="节点类型">
-                                        <el-radio-group v-model="ruleForm.resource">
-                                            <el-radio label="角色"></el-radio>
-                                            <el-radio label="非角色"></el-radio>
-                                        </el-radio-group>
-                                    </el-form-item>
-                                    <el-form-item label="排序码" prop="SortCode">
-                                        <el-input v-model="ruleForm.SortCode"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="描述" prop="desc">
-                                        <el-input type="textarea" v-model="ruleForm.desc"></el-input>
-                                    </el-form-item>
-                                    <el-form-item>
-                                        <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
-                                    </el-form-item>
-                                </el-form>
-                            </el-main>
-                            <el-footer style="position: relative;padding: 0 5px">
-                                <el-row style="height:7%;width:100%;padding: 12px 5px;font-size: 15px;border-top: 1px solid #d6d6d6;border-bottom: 1px solid #d6d6d6;">
-                                    <span>包含用户</span>
-                                    <span style="display: inline-block;
-                                    border: none;
-                                            float: right;
-                                            margin-right: 30px;
-                                            text-indent: 15px;
-                                            color: #007aff"
-                                            v-show="isShowButton">
-                                        <el-tooltip popper-class="atooltip" content="添加" placement="bottom" style="border: none!important;">
-                                            <i class="el-icon-plus" @click="addUser" style="cursor: pointer"></i>
-                                        </el-tooltip>
-                                        <el-tooltip popper-class="atooltip" content="删除" placement="bottom">
-                                             <i class="el-icon-delete" @click="deleteUser" style="cursor: pointer" type="button"></i>
-                                        </el-tooltip>
-                                        <el-tooltip popper-class="atooltip" content="刷新" placement="bottom">
-                                             <i class="el-icon-refresh-right" @click="getRoleUserList" style="cursor: pointer"></i>
-                                        </el-tooltip>
-                                    </span>
-<!--                                    添加包含用户弹窗-->
-                                    <el-dialog width="55%!important" title="用户列表" :visible.sync="dialogFormAddUserInformationVisible">
-                                        <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
-                                            <el-col style="min-height:42.5px;width:100%;position:
-                                                 relative;padding: 0 11px 0 11px;
-                                                 float: left">
-                                                <div style="height: 32px;width: 18%;min-width: 236px;float:left;position: relative;display: inline-block;">
-                                                    <el-input
-                                                            size="medium" v-model="params.search" placeholder="请输入查询内容"
-                                                            style="display: inline-block;width: 20%;min-width: 220px;margin-right: 15px;position: relative;height: 32px;padding: 0 0;float: left">
-                                                    </el-input>
-                                                </div>
-                                                <el-button type="primary"
-                                                           style="display: inline-block;
-                                                           float: left;width: 10%;min-width: 40px;
-                                                           height: 32px;position: relative;padding: 0 0;"
-                                                           @click="addUser">查询
-                                                </el-button>
-                                            </el-col>
-                                            <el-col style="height: 70%;width:100%;padding: 15px 15px 15px 15px;">
-                                                <el-table
-                                                        @selection-change="handleSelectionChangeAddUserList"
-                                                        :empty-text="dataText3"
-                                                        v-loading="loading3"
-                                                        element-loading-text="拼命加载中"
-                                                        element-loading-spinner="el-icon-loading"
-                                                        element-loading-background="rgba(0, 0, 0, 0.08)"
-                                                        :data="userListShow"
-                                                        :max-height=410
-                                                        :row-style="{height:'35px'}"
-                                                        :cell-style="{padding:'0px'}"
-                                                        style="width: 100%;height: 75%; position: relative">
-                                                    <el-table-column
-                                                            type="selection"
-                                                            width="55">
-                                                    </el-table-column>
-                                                    <el-table-column
-                                                            label="行号"
-                                                            type="index"
-                                                            :index="indexMethods2">
-                                                    </el-table-column>
+                        <el-header style="height: 5.45%;min-height: 51px">角色详细信息</el-header>
+                        <el-main>
+                            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
+                                <el-form-item label="角色名称" prop="name" style="margin-bottom: 10px;">
+                                    <el-input v-model="ruleForm.name"></el-input>
+                                </el-form-item>
+                                <el-form-item label="节点类型">
+                                    <el-radio-group v-model="ruleForm.resource">
+                                        <el-radio label="角色"></el-radio>
+                                        <el-radio label="非角色"></el-radio>
+                                    </el-radio-group>
+                                </el-form-item>
+                                <el-form-item label="排序码" prop="SortCode">
+                                    <el-input v-model="ruleForm.SortCode"></el-input>
+                                </el-form-item>
+                                <el-form-item label="描述" prop="desc">
+                                    <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-button type="primary" @click="submitForm('ruleForm')">确定</el-button>
+                                </el-form-item>
+                            </el-form>
+                        </el-main>
+                        <el-footer style="position: relative;padding: 0 5px">
+                            <el-row style="min-height:40px;width:100%;
+                                padding: 12px 5px;font-size: 15px;
+                                border-top: 1px solid #d6d6d6;
+                                border-bottom: 1px solid #d6d6d6;">
+                                <span>包含用户</span>
+                                <span style="display: inline-block;
+                                  border: none;
+                                          float: right;
+                                          margin-right: 30px;
+                                          text-indent: 15px;
+                                          color: #007aff"
+                                      v-show="isShowButton">
+                                    <el-tooltip popper-class="atooltip" content="添加" placement="bottom" style="border: none!important;">
+                                        <i class="el-icon-plus" @click="addUser" style="cursor: pointer"></i>
+                                    </el-tooltip>
+                                    <el-tooltip popper-class="atooltip" content="删除" placement="bottom">
+                                        <i class="el-icon-delete" @click="deleteUser" style="cursor: pointer" type="button"></i>
+                                    </el-tooltip>
+                                    <el-tooltip popper-class="atooltip" content="刷新" placement="bottom">
+                                        <i class="el-icon-refresh-right" @click="getRoleUserList" style="cursor: pointer"></i>
+                                    </el-tooltip>
+                                </span>
+<!--                                  添加包含用户弹窗-->
+                                <el-dialog width="55%!important" title="用户列表" :visible.sync="dialogFormAddUserInformationVisible">
+                                    <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
+                                        <el-col style="min-height:42.5px;width:100%;position:
+                                               relative;padding: 0 11px 0 11px;
+                                               float: left">
+                                            <div style="height: 32px;width: 18%;min-width: 236px;float:left;position: relative;display: inline-block;">
+                                                <el-input
+                                                        size="medium" v-model="params.search" placeholder="请输入查询内容"
+                                                        style="display: inline-block;width: 20%;min-width: 220px;margin-right: 15px;position: relative;height: 32px;padding: 0 0;float: left">
+                                                </el-input>
+                                            </div>
+                                            <el-button type="primary"
+                                                       style="display: inline-block;
+                                                         float: left;width: 10%;min-width: 40px;
+                                                         height: 32px;position: relative;padding: 0 0;"
+                                                       @click="addUser">查询
+                                            </el-button>
+                                        </el-col>
+                                        <el-col style="height: 70%;width:100%;padding: 15px 15px 15px 15px;">
+                                            <el-table
+                                                    @selection-change="handleSelectionChangeAddUserList"
+                                                    :empty-text="dataText3"
+                                                    v-loading="loading3"
+                                                    element-loading-text="拼命加载中"
+                                                    element-loading-spinner="el-icon-loading"
+                                                    element-loading-background="rgba(0, 0, 0, 0.08)"
+                                                    :data="userListShow"
+                                                    :max-height=410
+                                                    :row-style="{height:'35px'}"
+                                                    :cell-style="{padding:'0px'}"
+                                                    style="width: 100%;height: 75%; position: relative">
+                                                <el-table-column
+                                                        type="selection"
+                                                        width="55">
+                                                </el-table-column>
+                                                <el-table-column
+                                                        label="行号"
+                                                        type="index"
+                                                        :index="indexMethods2">
+                                                </el-table-column>
 
-                                                    <el-table-column
-                                                            label="用户名">
-                                                        <template slot-scope="scope">
-                                                                <div slot="reference" class="name-wrapper">
-                                                                    <el-tag size="medium">{{ scope.row.userName }}</el-tag>
-                                                                </div>
-                                                        </template>
-                                                    </el-table-column>
-                                                    <el-table-column
-                                                            label="登录名">
-                                                        <template slot-scope="scope">
-                                                                <div slot="reference" class="name-wrapper">
-                                                                    <el-tag size="medium">{{ scope.row.loginName }}</el-tag>
-                                                                </div>
-                                                        </template>
-                                                    </el-table-column>
-                                                    <el-table-column
-                                                            label="手机号码">
-                                                        <template slot-scope="scope">
-                                                                <div slot="reference" class="name-wrapper">
-                                                                    <el-tag size="medium">{{ scope.row.mobileNumber }}</el-tag>
-                                                                </div>
-                                                        </template>
-                                                    </el-table-column>
-                                                    <el-table-column
-                                                            label="邮箱地址">
-                                                        <template slot-scope="scope">
-                                                                <div slot="reference" class="name-wrapper">
-                                                                    <el-tag size="medium">{{ scope.row.emailAddress }}</el-tag>
-                                                                </div>
+                                                <el-table-column
+                                                        label="用户名">
+                                                    <template slot-scope="scope">
+                                                        <div slot="reference" class="name-wrapper">
+                                                            <el-tag size="medium">{{ scope.row.userName }}</el-tag>
+                                                        </div>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column
+                                                        label="登录名">
+                                                    <template slot-scope="scope">
+                                                        <div slot="reference" class="name-wrapper">
+                                                            <el-tag size="medium">{{ scope.row.loginName }}</el-tag>
+                                                        </div>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column
+                                                        label="手机号码">
+                                                    <template slot-scope="scope">
+                                                        <div slot="reference" class="name-wrapper">
+                                                            <el-tag size="medium">{{ scope.row.mobileNumber }}</el-tag>
+                                                        </div>
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column
+                                                        label="邮箱地址">
+                                                    <template slot-scope="scope">
+                                                        <div slot="reference" class="name-wrapper">
+                                                            <el-tag size="medium">{{ scope.row.emailAddress }}</el-tag>
+                                                        </div>
 
-                                                        </template>
-                                                    </el-table-column>
-                                                    <el-table-column
-                                                            label="用户状态">
-                                                        <template slot-scope="scope">
+                                                    </template>
+                                                </el-table-column>
+                                                <el-table-column
+                                                        label="用户状态">
+                                                    <template slot-scope="scope">
 
-                                                                <div slot="reference" class="name-wrapper">
-                                                                    <el-tag size="medium">{{ scope.row.state | userStatus}}</el-tag>
-                                                                </div>
-                                                        </template>
-                                                    </el-table-column>
-                                                </el-table>
-                                                <div class="block"
-                                                     style="position:relative;
-                      margin-top: 20px;float: right">
-                                                    <el-pagination
-                                                            @size-change="handleSizeChangeAddUserList"
-                                                            @current-change="handleCurrentChangeAddUserList"
-                                                            :current-page="params.page2"
-                                                            :page-sizes="[10, 20, 30, 40]"
-                                                            :page-size="params.size2"
-                                                            layout="total,slot,sizes, prev, pager, next, jumper"
-                                                            :total="total2">
-                                                        <span>共{{totalPage2}}页</span>
-                                                    </el-pagination>
-                                                </div>
-                                            </el-col>
-                                        </el-row>
-                                        <div slot="footer" class="dialog-footer">
-                                            <el-button @click="dialogFormAddUserInformationVisible = false">取 消</el-button>
-                                            <el-button type="primary" @click="addUserList">确 定</el-button>
-                                        </div>
-                                    </el-dialog>
-                                </el-row>
-<!--                                包含用户列表-->
-                                <el-row style="height:93%;width:100%;overflow: scroll">
-                                    <el-table
-                                            ref="multipleTable"
-                                            :data="tableData"
-                                            tooltip-effect="dark"
-                                            style="width: 100%;"
-                                            @selection-change="handleSelectionChange">
-                                        <el-table-column type="selection">
-                                        </el-table-column>
-                                        <el-table-column
-                                                label="行号"
-                                                type="index"
-                                                :index="indexMethods">
-                                        </el-table-column>
-                                        <el-table-column
-                                                label="登录名"
-                                                width="840%">
-                                            <template slot-scope="scope">{{ scope.row.loginName }}</template>
-                                        </el-table-column>
-                                        <el-table-column
-                                                prop="name"
-                                                label="用户名"
-                                                >
-                                            <template slot-scope="scope">{{ scope.row.userName }}</template>
-                                        </el-table-column>
-                                    </el-table>
-                                    <div class="block" style="margin-left: 68.2%;margin-top: 30px">
-                                        <el-pagination
-                                                @size-change="handleSizeChange"
-                                                @current-change="handleCurrentChange"
-                                                :current-page="params.page"
-                                                :page-sizes="[10, 20, 30, 40]"
-                                                :page-size="params.size"
-                                                layout="total,slot,sizes, prev, pager, next, jumper"
-                                                :total="total">
-                                            <span>共{{totalPage}}页</span>
-                                        </el-pagination>
+                                                        <div slot="reference" class="name-wrapper">
+                                                            <el-tag size="medium">{{ scope.row.state | userStatus}}</el-tag>
+                                                        </div>
+                                                    </template>
+                                                </el-table-column>
+                                            </el-table>
+                                            <div class="block"
+                                                 style="position:relative;
+                                                   margin-top: 20px;float: right">
+                                                <el-pagination
+                                                        @size-change="handleSizeChangeAddUserList"
+                                                        @current-change="handleCurrentChangeAddUserList"
+                                                        :current-page="params.page2"
+                                                        :page-sizes="[10, 20, 30, 40]"
+                                                        :page-size="params.size2"
+                                                        layout="total,slot,sizes, prev, pager, next, jumper"
+                                                        :total="total2">
+                                                    <span>共{{totalPage2}}页</span>
+                                                </el-pagination>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                    <div slot="footer" class="dialog-footer">
+                                        <el-button @click="dialogFormAddUserInformationVisible = false">取 消</el-button>
+                                        <el-button type="primary" @click="addUserList">确 定</el-button>
                                     </div>
-                                </el-row>
-                            </el-footer>
-                        </el-container>
+                                </el-dialog>
+                            </el-row>
+<!--                              包含用户列表-->
+                            <el-row style="height:60vh;width:100%;">
+                                <el-table
+                                        ref="multipleTable"
+                                        :data="tableData"
+                                        tooltip-effect="dark"
+                                        size="small"
+                                        style="height: 60%;overflow-y: scroll;"
+                                        @selection-change="handleSelectionChange">
+                                    <el-table-column type="selection">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="行号"
+                                            type="index"
+                                            :index="indexMethods">
+                                    </el-table-column>
+                                    <el-table-column
+                                            label="登录名"
+                                    >
+                                        <template slot-scope="scope">{{ scope.row.loginName }}</template>
+                                    </el-table-column>
+                                    <el-table-column
+                                            prop="name"
+                                            label="用户名"
+                                    >
+                                        <template slot-scope="scope">{{ scope.row.userName }}</template>
+                                    </el-table-column>
+                                </el-table>
+                                <div class="block" style="position:relative;margin-right: 30px; float: right;margin-top: 30px">
+                                    <el-pagination
+                                            @size-change="handleSizeChange"
+                                            @current-change="handleCurrentChange"
+                                            :current-page="params.page"
+                                            :page-sizes="[10, 20, 30, 40]"
+                                            :page-size="params.size"
+                                            layout="total,slot,sizes, prev, pager, next, jumper"
+                                            :total="total">
+                                        <span>共{{totalPage}}页</span>
+                                    </el-pagination>
+                                </div>
+                            </el-row>
+                        </el-footer>
                     </div>
                 </div>
             </el-tab-pane>
+
             <el-tab-pane label="PC可操作权限" name="second">
                 <div class="roles-menu-table">
                     <div class="role-menu">
@@ -289,6 +292,7 @@
                     </div>
                 </div>
             </el-tab-pane>
+
             <el-tab-pane label="app可操作权限" name="third">
                 <div class="roles-menu-table">
                     <div class="role-menu">
@@ -733,43 +737,32 @@
         padding-top: 15px;
         border-bottom: 1px solid #d3d3d3;
         color: #333;
-        flex:0.4;
+        height: 10vh;
     }
      .el-footer {
-          /*background-color: #B3C0D1;*/
           color: #333;
-
-         /*height: 100vh;*/
-         flex:7.7;
-
      }
     .el-main {
-        /*padding-right: 800px;*/
-        flex:2.3;
         padding: 15px 0 39px 15px;
     }
     .role-management-page{
-
         position: relative;
-        /*font-size: 50px;*/
-        /*color: red;*/
         width: 100%;
         height: 100%;
         background-color: #effff3;
         .roles-menu-table{
-            /*position: relative;*/
-            display: flex;
-            height: 100vh;
+           display: flex;
+            height: 95vh;
             width: 100%;
-
             .role-menu{
+                position: relative;
+                display: inline-block;
                 float: left;
                 height: 100%;
+                width: 20%;
                 min-width: 200px;
-                flex:1.5;
                 margin-right: 8px;
                 background-color: #ecf3f0;
-
                     .roleList{
                         position: relative;
                         display: inline-block;
@@ -802,10 +795,12 @@
 
             }
             .role-table{
-                display: flex;
-                float: left;
-                height: 100%;
-                flex:8.5;
+                overflow: scroll;
+                position: relative;
+                display: inline-block;
+                float: right;
+                width: 80%;
+                height: 100vh;
                 background-color: #ecf3f0;
 
             }
