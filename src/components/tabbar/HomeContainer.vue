@@ -332,11 +332,9 @@
                     </el-breadcrumb>
                 </div>
                 <div class="main-content-table" style="">
-                    <div class="home-content-table">
                      <transition mode="out-in">
                         <router-view></router-view>
                      </transition>
-                    </div>
                 </div>
             </div>
 
@@ -588,7 +586,7 @@
         color: #8f8f94;
     }
     .Home-page{
-        position: relative;
+        position: absolute;
         left: 0;
         right: 0;
         top: 0;
@@ -610,8 +608,6 @@
             .main-content-table{
                 width: 100%;
                 height: 100%;
-                overflow: hidden;
-                background-color: #effff3;
             }
         }
         .main-contain-box-active{

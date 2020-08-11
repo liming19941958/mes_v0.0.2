@@ -163,7 +163,7 @@
        width: 35% !important;
    }
    .el-dialog__body {
-       padding: 30px 30px;
+       padding: 30px 30px 30px 50px;
    }
    .el-select-dropdown__item {
         overflow: visible;
@@ -207,4 +207,7 @@
    .el-table th {
        color: #474747;
        text-align: center;
+   }
+   .el-dialog__header {
+       padding: 20px 20px 0 35px!important;
    }

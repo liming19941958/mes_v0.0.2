@@ -10,14 +10,28 @@
                                 <el-tooltip popper-class="atooltip" content="添加" placement="bottom">
                                      <i class="el-icon-plus" @click="addRole"></i>
                                 </el-tooltip>
-                                <el-tooltip popper-class="atooltip" content="删除" placement="bottom">
-                                    <i class="el-icon-delete" v-show="isShow" @click="deleteList"></i>
+                                <el-tooltip popper-class="atooltip" v-show="isShow" content="删除" placement="bottom">
+                                    <i class="el-icon-delete" @click="deleteRoleWindow"></i>
                                 </el-tooltip>
                                 <el-tooltip popper-class="atooltip" content="刷新" placement="bottom">
                                     <i class="el-icon-refresh-right" @click="show" style="cursor: pointer"></i>
                                 </el-tooltip>
                             </span>
+
                         </div>
+<!--                        删除角色警告框-->
+                        <el-dialog
+                                title="提示"
+                                :visible.sync="dialogRloeVisible"
+                                width="20%!important" class="dialog1">
+                            <i class="el-icon-question" style="color:#ffdc72;font-size:25px;position: absolute;top:19px;left:8px"></i>
+                            <span style="font-size: 16px">确定删除？</span>
+                            <span slot="footer" class="dialog-footer">
+                                        <el-button @click="dialogRloeVisible = false">取 消</el-button>
+                                        <el-button type="primary" @click="deleteList">确 定</el-button>
+                                    </span>
+                        </el-dialog>
+
                         <div class="roleNameMenu">
                             <el-tree
                                     v-loading="loading"
@@ -65,8 +79,8 @@
                                 border-top: 1px solid #d6d6d6;
                                 border-bottom: 1px solid #d6d6d6;">
                                 <span>包含用户</span>
-                                <span style="display: inline-block;
-                                  border: none;
+
+                                <span style="
                                           float: right;
                                           margin-right: 30px;
                                           text-indent: 15px;
@@ -75,13 +89,25 @@
                                     <el-tooltip popper-class="atooltip" content="添加" placement="bottom" style="border: none!important;">
                                         <i class="el-icon-plus" @click="addUser" style="cursor: pointer"></i>
                                     </el-tooltip>
+
                                     <el-tooltip popper-class="atooltip" content="删除" placement="bottom">
-                                        <i class="el-icon-delete" @click="deleteUser" style="cursor: pointer" type="button"></i>
+                                       <i class="el-icon-delete" @click="deleteUserWindow" style="cursor: pointer"></i>
                                     </el-tooltip>
                                     <el-tooltip popper-class="atooltip" content="刷新" placement="bottom">
-                                        <i class="el-icon-refresh-right" @click="getRoleUserList" style="cursor: pointer"></i>
+                                        <span> <i class="el-icon-refresh-right" @click="getRoleUserList" style="cursor: pointer"></i></span>
                                     </el-tooltip>
                                 </span>
+                                <el-dialog
+                                        title="提示"
+                                        :visible.sync="dialogVisible"
+                                        width="20%!important" class="dialog1">
+                                    <i class="el-icon-question" style="color:#ffdc72;font-size:25px;position: absolute;top:19px;left:8px"></i>
+                                    <span style="font-size: 16px">确定删除？</span>
+                                    <span slot="footer" class="dialog-footer">
+                                        <el-button @click="dialogVisible = false">取 消</el-button>
+                                        <el-button type="primary" @click="deleteUser">确 定</el-button>
+                                    </span>
+                                </el-dialog>
 <!--                                  添加包含用户弹窗-->
                                 <el-dialog width="55%!important" title="用户列表" :visible.sync="dialogFormAddUserInformationVisible">
                                     <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
@@ -241,50 +267,25 @@
                         <div class="roleList">
                             <span>角色列表</span>
                             <span>
-                                <i class="el-icon-plus"></i>
+
                                  <i class="el-icon-refresh-right"></i>
                             </span>
                         </div>
                         <div class="roleNameMenu">
-                            <el-menu
-                                    default-active="2"
-                                    class="el-menu-vertical-demo"
-                                    @open="handleOpen"
-                                    @close="handleClose"
-                                    background-color="#EFFFF3"
-                                    text-color="#000000"
-                                    active-text-color="#389DFF">
-                                <el-submenu index="1">
-                                    <template slot="title">
-                                        <i class="el-icon-location"></i>
-                                        <span>壕玮集团</span>
-                                    </template>
-                                    <el-menu-item-group>
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
-
-                                        <el-menu-item index="1-6">主管</el-menu-item>
-                                        <el-menu-item index="1-7">组员</el-menu-item>
-                                        <el-menu-item index="1-8">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-9">客户1</el-menu-item>
-                                        <el-menu-item index="1-10">客户2</el-menu-item>
-
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
-                                    </el-menu-item-group>
-                                </el-submenu>
-                            </el-menu>
+                            <el-tree
+                                    v-loading="loading"
+                                    element-loading-text="拼命加载中"
+                                    element-loading-spinner="el-icon-loading"
+                                    element-loading-background="rgba(0, 0, 0, 0.001)"
+                                    :empty-text="dataText"
+                                    :data="data"
+                                    :props="defaultProps"
+                                    default-expand-all
+                                    highlight-current=true
+                                    :expand-on-click-node="false"
+                                    @node-click="handleNodeClick"
+                                    style="background-color: #ecf3f0;width: 100%;">
+                            </el-tree>
                         </div>
                     </div>
                     <div class="role-table">
@@ -391,6 +392,8 @@
                 arrSelects:[],
                 arrSelectsAddUserLists:[],
                 dialogFormAddUserInformationVisible:false,
+                dialogVisible:false,
+                dialogRloeVisible:false,
                 params:{
                     size:'10',
                     size2:'10',
@@ -459,7 +462,7 @@
 
                 }else {
                     this.ruleForm.resource='非角色';
-                    this.isShowButton=!this.isShowButton;
+                    this.isShowButton=false;
                 }
                 this.ruleForm.desc=data.description;
                 this.ruleForm.name=data.name;
@@ -504,7 +507,6 @@
                 })
             },
 
-
             //添加角色
             addRole(){
                 // console.log('父节点id:'+this.params.addParentId);
@@ -527,27 +529,24 @@
             },
             //删除角色列表中的用户信息
             deleteList(){
-                this.$confirm('此操作将永久删除该角色信息, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$http.post('role/deleteList',{ids:this.params.orgId}).then(()=>{
-                        this.show();
+                this.dialogRloeVisible=false;
+                    this.$http.post('role/deleteList',{ids:this.params.orgId}).then(response=>{
+                        if (response.body.status===200){
+                            this.show();
+                            this.$message({
+                                type: 'success',
+                                message: response.body.result
+                            });
+                        }
+                    }).catch((err)=>{
                         this.$message({
-                            type: 'success',
-                            message: '删除成功!'
+                            type: 'error',
+                            message: err
                         });
                     })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            },
+                },
 
-            // 角色包含用户添加用户
+            // 角色包含用户添加用户获取用户列表信息
             addUser(){
                 this.dataText3= ' ';
                 this.$http.get('user/getUserList',{
@@ -577,31 +576,71 @@
 
             // 选中用户信息后提交表单以添加包含用户
             addUserList(){
-                alert('ok');
+                if (this.arrSelectsAddUserLists.length===0){
+                    this.$message({
+                        type:"warning",
+                        message:"请选择一条数据！"
+                    })
+                }else {
+                    this.$http.post('role/saveRoleUser',JSON.stringify(
+                        {
+                            roleId:this.params.orgId,
+                            userIds:this.arrSelectsAddUserLists,
+                        }
+                    )).then(response=>{
+                        if (response.body.status===200){
+                            this.dialogFormAddUserInformationVisible=false;
+                            this.getRoleUserList();
+                            this.$message({
+                                type:"success",
+                                message:"添加成功！"
+                            })
+
+                        }
+
+                    }).catch((err)=>{
+                        this.$message({
+                            type:"error",
+                            message:err
+                        })
+                    })
+                }
+
             },
 
+            deleteRoleWindow(){
+              this.dialogRloeVisible=true;
+            },
+            deleteUserWindow(){
+                if (this.arrSelects.length===0){
+                    this.$message({
+                        type: 'warning',
+                        message: '请选择要删除的数据!'
+                    });
+                }else {
+                    this.dialogVisible = true
+                }
+            },
             //删除包含用户列表信息
             deleteUser(){
-                console.log(this.params.orgId);
-                this.$confirm('此操作将永久删除该用户信息, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$http.post('role/deleteRoleUser',JSON.stringify({roleId:this.params.orgId,userIds:this.arrSelects})).then(()=>{
-                        this.getRoleUserList();
+                    this.$http.post('role/deleteRoleUser',
+                        JSON.stringify({roleId:this.params.orgId,userIds:this.arrSelects}
+                        )).then(response=>{
+                            if (response.body.status===200) {
+                                this.getRoleUserList();
+                                this.dialogVisible = false;
+                                this.$message({
+                                    type: 'success',
+                                    message: '删除成功!'
+                                });
+                            }
+                    }).catch((err)=>{
                         this.$message({
-                            type: 'success',
-                            message: '删除成功!'
+                            type: 'error',
+                            message: err
                         });
                     })
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });
-                });
-            },
+                },
 
            // 包含用户列表分页方法
             indexMethods(index) {
@@ -700,14 +739,12 @@
                 console.log(this.arrSelectsAddUserLists);
             },
             handleSizeChange(val) {//角色中包含用户的列表页面
-                this.params.size2= `${val}`;
-                this.addUser();
+                this.params.size= `${val}`;
                 this.getRoleUserList();
                 console.log(`每页 ${val} 条`);
             },
             handleCurrentChange(val) {//角色中包含用户的列表页面
-                this.params.page2 = `${val}`;
-                this.addUser();
+                this.params.page = `${val}`;
                 this.getRoleUserList();
                 console.log(`当前页: ${val}`);
             },
@@ -728,6 +765,9 @@
     }
 </script>
 <style lang="scss">
+    .el-tabs__item {
+        color: #515A6E;
+    }
 
 </style>
 <style scoped lang="scss">
@@ -750,6 +790,7 @@
         width: 100%;
         height: 100%;
         background-color: #effff3;
+
         .roles-menu-table{
            display: flex;
             height: 95vh;
@@ -759,7 +800,7 @@
                 display: inline-block;
                 float: left;
                 height: 100%;
-                width: 20%;
+                width: 15%;
                 min-width: 200px;
                 margin-right: 8px;
                 background-color: #ecf3f0;
@@ -799,7 +840,7 @@
                 position: relative;
                 display: inline-block;
                 float: right;
-                width: 80%;
+                width: 100%;
                 height: 100vh;
                 background-color: #ecf3f0;
 
