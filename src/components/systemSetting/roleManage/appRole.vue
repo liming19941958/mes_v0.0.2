@@ -76,61 +76,61 @@
         height: 100%;
         background-color: #effff3;
 
-    .roles-menu-table{
-        display: flex;
-        height: 95vh;
-        width: 100%;
-    .role-menu{
-        position: relative;
-        display: inline-block;
-        float: left;
-        height: 100%;
-        width: 15%;
-        min-width: 200px;
-        margin-right: 8px;
-        background-color: #ecf3f0;
-    .roleList{
-        position: relative;
-        display: inline-block;
-        width: 100%;
-        border-bottom: 1px solid #d5d5d5;
-        line-height: 50px;
-    span:nth-child(1){
-        float: left;
-        display: inline-block;
-        margin-left: 30px;
-    }
-    span:nth-child(2){
-        position: relative;
-        color:  #007aff !important;
-    i:hover{
-        cursor: pointer;
-    }
-    display: inline-block;
-    float: right;
-    margin-right: 30px;
-    text-indent: 10px;
-    }
-    }
-    .roleNameMenu{
-        float: left;
-        width: 100%;
-        padding: 20px 0 0 20px;
-        height: 100%;
-        overflow: scroll;
-    }
+        .roles-menu-table{
+            display: flex;
+            height: 95vh;
+            width: 100%;
+            .role-menu{
+                position: relative;
+                display: inline-block;
+                float: left;
+                height: 100%;
+                width: 15%;
+                min-width: 200px;
+                margin-right: 8px;
+                background-color: #ecf3f0;
+                .roleList{
+                    position: relative;
+                    display: inline-block;
+                    width: 100%;
+                    border-bottom: 1px solid #d5d5d5;
+                    line-height: 50px;
+                    span:nth-child(1){
+                        float: left;
+                        display: inline-block;
+                        margin-left: 30px;
+                    }
+                    span:nth-child(2){
+                        position: relative;
+                        color:  #007aff !important;
+                        i:hover{
+                            cursor: pointer;
+                        }
+                        display: inline-block;
+                        float: right;
+                        margin-right: 30px;
+                        text-indent: 10px;
+                    }
+                }
+                .roleNameMenu{
+                    float: left;
+                    width: 100%;
+                    padding: 20px 0 0 20px;
+                    height: 100%;
+                    overflow: scroll;
+                }
 
-    }
-    .role-table{
-        overflow: scroll;
-        position: relative;
-        display: inline-block;
-        float: right;
-        width: 100%;
-        height: 100vh;
-        background-color: #ecf3f0;
+            }
+            .role-table{
+                overflow: scroll;
+                position: relative;
+                display: inline-block;
+                float: right;
+                width: 100%;
+                height: 100vh;
+                background-color: #ecf3f0;
 
-    }
-    }
+            }
+        }
     }
 </style>

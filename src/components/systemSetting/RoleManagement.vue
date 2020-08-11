@@ -262,100 +262,20 @@
             </el-tab-pane>
 
             <el-tab-pane label="PC可操作权限" name="second">
-                <div class="roles-menu-table">
-                    <div class="role-menu">
-                        <div class="roleList">
-                            <span>角色列表</span>
-                            <span>
-
-                                 <i class="el-icon-refresh-right"></i>
-                            </span>
-                        </div>
-                        <div class="roleNameMenu">
-                            <el-tree
-                                    v-loading="loading"
-                                    element-loading-text="拼命加载中"
-                                    element-loading-spinner="el-icon-loading"
-                                    element-loading-background="rgba(0, 0, 0, 0.001)"
-                                    :empty-text="dataText"
-                                    :data="data"
-                                    :props="defaultProps"
-                                    default-expand-all
-                                    highlight-current=true
-                                    :expand-on-click-node="false"
-                                    @node-click="handleNodeClick"
-                                    style="background-color: #ecf3f0;width: 100%;">
-                            </el-tree>
-                        </div>
-                    </div>
-                    <div class="role-table">
-
-                    </div>
-                </div>
+<!--                :is等号后面的双引号里面需要加  '' -->
+                <component :is="'pc'"></component>
             </el-tab-pane>
 
             <el-tab-pane label="app可操作权限" name="third">
-                <div class="roles-menu-table">
-                    <div class="role-menu">
-                        <div class="roleList">
-                            <span>角色列表</span>
-                            <span>
-                                <i class="el-icon-plus"></i>
-                                 <i class="el-icon-refresh-right"></i>
-                            </span>
-                        </div>
-                        <div class="roleNameMenu">
-                            <el-menu
-                                    default-active="2"
-                                    class="el-menu-vertical-demo"
-                                    @open="handleOpen"
-                                    @close="handleClose"
-                                    background-color="#EFFFF3"
-                                    text-color="#000000"
-                                    active-text-color="#389DFF">
-                                <el-submenu index="1">
-                                    <template slot="title">
-                                        <i class="el-icon-location"></i>
-                                        <span>壕玮集团</span>
-                                    </template>
-                                    <el-menu-item-group>
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户3</el-menu-item>
-
-                                        <el-menu-item index="1-6">主管</el-menu-item>
-                                        <el-menu-item index="1-7">组员</el-menu-item>
-                                        <el-menu-item index="1-8">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-9">客户1</el-menu-item>
-                                        <el-menu-item index="1-10">客户2</el-menu-item>
-
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
-                                        <el-menu-item index="1-1">主管</el-menu-item>
-                                        <el-menu-item index="1-2">组员</el-menu-item>
-                                        <el-menu-item index="1-3">客户管理员</el-menu-item>
-                                        <el-menu-item index="1-4">客户1</el-menu-item>
-                                        <el-menu-item index="1-5">客户2</el-menu-item>
-                                    </el-menu-item-group>
-                                </el-submenu>
-                            </el-menu>
-                        </div>
-                    </div>
-                    <div class="role-table">
-
-                    </div>
-                </div>
+                <component :is="'app'"></component>
             </el-tab-pane>
         </el-tabs>
 </div>
 </template>
 
 <script>
+    import pc from './roleManage/pcRole'
+    import app from './roleManage/appRole'
     export default {
         name: "RoleManagement",
         filters:{
@@ -433,6 +353,10 @@
         },
         created(){
             this.show();
+        },
+        components:{
+            pc,
+            app
         },
         methods: {
             //获取组织架构树
