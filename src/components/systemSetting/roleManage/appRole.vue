@@ -85,7 +85,7 @@
                 display: inline-block;
                 float: left;
                 height: 100%;
-                width: 15%;
+                width: 28%;
                 min-width: 200px;
                 margin-right: 8px;
                 background-color: #ecf3f0;

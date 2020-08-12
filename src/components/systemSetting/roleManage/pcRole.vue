@@ -4,9 +4,11 @@
             <div class="role-menu">
                 <div class="roleList">
                     <span>角色列表</span>
+                    <el-tooltip popper-class="atooltip" content="刷新" placement="bottom">
                     <span>
-                                 <i class="el-icon-refresh-right"></i>
+                                 <i class="el-icon-refresh-right" @click="show"></i>
                     </span>
+                    </el-tooltip>
                 </div>
                 <div class="roleNameMenu">
                     <el-tree
@@ -26,7 +28,34 @@
                 </div>
             </div>
             <div class="role-table">
-
+                <el-table
+                        :data="tableData"
+                        style="width: 100%;margin-bottom: 20px;"
+                        row-key="id"
+                        border
+                        default-expand-all
+                        :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+                    <el-table-column
+                            type="selection"
+                            width="55">
+                    </el-table-column>
+                    <el-table-column
+                            prop="date"
+                            label="日期"
+                            sortable
+                            width="190">
+                    </el-table-column>
+                    <el-table-column
+                            prop="name"
+                            label="姓名"
+                            sortable
+                            width="180">
+                    </el-table-column>
+                    <el-table-column
+                            prop="address"
+                            label="地址">
+                    </el-table-column>
+                </el-table>
             </div>
         </div>
     </div>
@@ -42,6 +71,44 @@
                     children: 'Subdirectory',
                     label: 'name'
                 },
+                params:{
+                   page:'1',
+                    size:'10',
+                    roleId:'',
+                    menuType:'',
+                },
+                tableData: [{
+                    id: 1,
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    id: 2,
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1517 弄'
+                }, {
+                    id: 3,
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1519 弄',
+                    children: [{
+                        id: 31,
+                        date: '2016-05-01',
+                        name: '陈勇',
+                        address: '上海市普陀区金沙江路 1519 弄'
+                    }, {
+                        id: 32,
+                        date: '2016-05-01',
+                        name: '林素间',
+                        address: '上海市普陀区金沙江路 1519 弄'
+                    }]
+                }, {
+                    id: 4,
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1516 弄'
+                }],
             }
         },
         created(){
@@ -65,16 +132,69 @@
                     }
                 })
             },
+            //组织架构选择树形控件各分支
+            handleNodeClick(data){
+                this.params.roleId=data.id;
+                this.getMenuList();
+                console.log(this.params.roleId);
+            },
+            getMenuList(){
+                this.$http.get('menu/getMenuList',{
+                    params: {
+                        page:this.params.page,
+                        size: this.params.size
+                    }
+                }).then(response=>{
+                    if (response.body.status===200){
+                        this.$message({
+                            message:'操作成功!',
+                            type:'success',
+                        });
+                        console.log(response)
+                    }
+                })
+            },
         }
     }
 </script>
 
 <style scoped lang="scss">
+
     .role-management{
         position: relative;
         width: 100%;
         height: 100%;
         background-color: #effff3;
+
+        //有子节点 且未展开
+        .el-table ::v-deep .el-icon-arrow-right:before {
+            content: '+';
+            display: inline-block;
+            margin-right: 3px;
+            width: 16px;
+            height: 16px;
+            line-height: 12px;
+            font-size: 16px;
+            border: 1px solid #999999;
+        }
+        //有子节点 且已展开
+        .el-table ::v-deep .el-table__expand-icon--expanded {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+            .el-icon-arrow-right:before {
+                content: '-';
+                display: inline-block;
+                width: 16px;
+                height: 16px;
+                margin-right: 3px;
+                line-height: 10px;
+                font-size: 18px;
+                border: 1px solid #999999;
+            }
+        }
+
+
+
 
     .roles-menu-table{
         display: flex;
@@ -85,7 +205,7 @@
         display: inline-block;
         float: left;
         height: 100%;
-        width: 15%;
+        width: 28%;
         min-width: 200px;
         margin-right: 8px;
         background-color: #ecf3f0;
