@@ -1,5 +1,6 @@
 <template>
     <div class="role-management">
+
         <div class="roles-menu-table">
             <div class="role-menu">
                 <div class="roleList">
@@ -27,38 +28,47 @@
                     </el-tree>
                 </div>
             </div>
+
             <div class="role-table">
+
                 <el-table
                         :data="tableData"
-                        style="width: 100%;margin-bottom: 20px;"
+                        style="width: 100%;"
                         row-key="id"
+                        :indent="20"
                         border
-                        default-expand-all
-                        :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+                        max-height="650"
+                        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+                        :header-cell-style="{
+                            // 'background-color': '#ecf3f0',
+                            'color': '#303133',
+                            'font-weight': '800',
+                            'font-size': '16px',
+                            'line-height': '10px',
+                            'text-align': 'center',
+                        }">
                     <el-table-column
                             type="selection"
-                            width="55">
+                            min-width="55">
                     </el-table-column>
                     <el-table-column
-                            prop="date"
-                            label="日期"
+                            prop="menuName"
+                            label="菜单名称"
                             sortable
-                            width="190">
+                            width="250px">
                     </el-table-column>
                     <el-table-column
-                            prop="name"
-                            label="姓名"
-                            sortable
-                            width="180">
-                    </el-table-column>
-                    <el-table-column
-                            prop="address"
-                            label="地址">
+                            prop=""
+                            label="模块列表">
                     </el-table-column>
                 </el-table>
+
             </div>
+
         </div>
+
     </div>
+
 </template>
 
 <script>
@@ -77,38 +87,7 @@
                     roleId:'',
                     menuType:'',
                 },
-                tableData: [{
-                    id: 1,
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    id: 2,
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    id: 3,
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    children: [{
-                        id: 31,
-                        date: '2016-05-01',
-                        name: '陈勇',
-                        address: '上海市普陀区金沙江路 1519 弄'
-                    }, {
-                        id: 32,
-                        date: '2016-05-01',
-                        name: '林素间',
-                        address: '上海市普陀区金沙江路 1519 弄'
-                    }]
-                }, {
-                    id: 4,
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }],
+                tableData: null,
             }
         },
         created(){
@@ -150,7 +129,32 @@
                             message:'操作成功!',
                             type:'success',
                         });
-                        console.log(response)
+                        this.tableData=response.data.result.data;
+                        for (var i =0;i<this.tableData.length;i++){
+                            let array = this.tableData[i].children.length;
+                          if (array===0){
+                              // let mode1 =Object.keys(this.tableData[0].modulesMaps)[0];
+                              // console.log('第一级：'+ mode1);
+                          }else{
+                              let mode2 =this.tableData[i].children;
+                              for (var j =0;j<mode2.length;j++){
+                                  let modeContents = mode2[j];
+                                  if (modeContents.children.length===0){
+                                      let modeContent =Object.keys(modeContents.modulesMaps);
+                                      console.log("第二级："+ modeContent);
+                                  }else {
+                                      // let mode3 =modeContents.children;
+                                      // console.log(mode3);
+                                  }
+
+
+                              }
+                          }
+
+                        }
+
+
+                        // console.log(this.tableData)
                     }
                 })
             },
@@ -159,12 +163,19 @@
 </script>
 
 <style scoped lang="scss">
-
     .role-management{
         position: relative;
         width: 100%;
         height: 100%;
         background-color: #effff3;
+        ::v-deep .el-table th {
+            padding:8px 0;
+        }
+        .el-table ::v-deep td{
+            text-align: left;
+            padding-left: 8px;
+            min-width: 67px;
+        }
 
         //有子节点 且未展开
         .el-table ::v-deep .el-icon-arrow-right:before {

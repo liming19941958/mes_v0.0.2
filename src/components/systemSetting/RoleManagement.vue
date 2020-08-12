@@ -263,7 +263,9 @@
 
             <el-tab-pane label="PC可操作权限" name="second">
 <!--                :is等号后面的双引号里面需要加  '' -->
-                <component :is="'pc'"></component>
+                <transition>
+                   <component :is="'pc'"></component>
+                    </transition>
             </el-tab-pane>
 
             <el-tab-pane label="app可操作权限" name="third">
@@ -687,13 +689,22 @@
     }
 </script>
 <style lang="scss">
+
     .el-tabs__item {
         color: #515A6E;
     }
 
 </style>
 <style scoped lang="scss">
-
+    .v-enter,
+    .v-leave-to{
+        transform: translateY(80px);
+        opacity: 0;
+    }
+    .v-enter-active,
+    .v-leave-active{
+        transition: all 0.4s ease-in-out;
+    }
     .el-header{
         padding-left: 20px;
         padding-top: 15px;
