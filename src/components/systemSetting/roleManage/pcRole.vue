@@ -58,8 +58,20 @@
                             width="250px">
                     </el-table-column>
                     <el-table-column
-                            prop=""
+                            prop="dataFirstNoChildren"
                             label="模块列表">
+<!--                        <template slot-scope="scope">-->
+<!--                            <div v-for='item in scope.row.dataFirstNoChildren' :key="item.index">{{item}}</div>-->
+<!--                        </template>-->
+                        <template slot-scope="scope">
+<!--                            <span>{{scope.$index}}</span>-->
+                            <span>{{scope.row.modulesMaps | userStatus | userLists}}</span>
+                        </template>
+<!--                        <template>-->
+<!--                            <div v-for="k in dataFirstNoChildren" :key="k.index">-->
+<!--                                    <span>{{k}}</span>-->
+<!--                            </div>-->
+<!--                        </template>-->
                     </el-table-column>
                 </el-table>
 
@@ -72,8 +84,27 @@
 </template>
 
 <script>
+
     export default {
         name: "pcRole",
+        filters: {
+            userStatus: function (modulesMaps) {
+                let arrayList = Object.keys(modulesMaps);
+                return arrayList;
+            },
+            userLists: function (arrayList) {
+                var arr1='';
+                // const text = `<input type="checkbox" name="like"/>`
+                for (var s=0;s<arrayList.length;s++){
+                    arr1 +=  arrayList[s];
+                }
+
+                return arr1;
+
+
+            }
+
+        },
         data(){
             return{
                 data:null,
@@ -88,12 +119,17 @@
                     menuType:'',
                 },
                 tableData: null,
+                dataFirstNoChildren:null,
             }
         },
         created(){
             this.show();
         },
         methods:{
+
+            // showIndex(item){
+            //     console.log(item)
+            // },
             //获取组织架构树
             show(){
                 this.dataText = ' ';
@@ -116,6 +152,7 @@
                 this.params.roleId=data.id;
                 this.getMenuList();
                 console.log(this.params.roleId);
+
             },
             getMenuList(){
                 this.$http.get('menu/getMenuList',{
@@ -130,31 +167,51 @@
                             type:'success',
                         });
                         this.tableData=response.data.result.data;
-                        for (var i =0;i<this.tableData.length;i++){
-                            let array = this.tableData[i].children.length;
-                          if (array===0){
-                              // let mode1 =Object.keys(this.tableData[0].modulesMaps)[0];
-                              // console.log('第一级：'+ mode1);
-                          }else{
-                              let mode2 =this.tableData[i].children;
-                              for (var j =0;j<mode2.length;j++){
-                                  let modeContents = mode2[j];
-                                  if (modeContents.children.length===0){
-                                      let modeContent =Object.keys(modeContents.modulesMaps);
-                                      console.log("第二级："+ modeContent);
-                                  }else {
-                                      // let mode3 =modeContents.children;
-                                      // console.log(mode3);
-                                  }
-
-
-                              }
-                          }
-
+                        var data1=this.tableData;
+                        let List =[];
+                        for (var i= 0;i<data1.length;i++){
+                            let length1 = data1[i].children.length;
+                            if (length1===0) {
+                                let mode = data1[0].modulesMaps;
+                                List =Object.keys(mode);
+                            }
+                            // console.log(Object.keys(Data1[0].modulesMaps))
                         }
-
-
-                        // console.log(this.tableData)
+                        this.dataFirstNoChildren=List;
+                        console.log(this.dataFirstNoChildren);
+                        // for (var i =0;i<this.tableData.length;i++){
+                        //     let array = this.tableData[0];
+                        //     // console.log(array)
+                        //   if (array===0){
+                        //       let mode1 =Object.keys(this.tableData[0].modulesMaps);
+                        //       modeList1.push(mode1);
+                        //       // console.log('第一层：'+ modeList1);
+                        //       return modeList1;
+                        //   }else if (array>0) {
+                        //       let modeList2=[];
+                        //       let mode2 =this.tableData[i].children;
+                        //       // console.log(mode2);
+                        //       for (var j =0;j<mode2.length;j++){
+                        //           let mode2Contents = mode2[j];
+                        //           if (mode2Contents.children.length===0){
+                        //               let mode2Content =Object.keys(mode2Contents.modulesMaps);
+                        //               modeList2.push(mode2Content);
+                        //               // console.log("第二级："+ mode2Content);
+                        //               // console.log('第二层：'+ modeList2);
+                        //               return modeList2;
+                        //           }else {
+                        //               let mode3 =mode2Contents.children;
+                        //               for (var k =0;k<mode3.length;k++){
+                        //                   let mode3Content = Object.keys(mode3[k].modulesMaps);
+                        //                   modeList1.push(mode3Content);
+                        //               }
+                        //
+                        //           }
+                        //           return modeList1;
+                        //       }
+                        //       return modeList1;
+                        //   }
+                        // }
                     }
                 })
             },

@@ -722,7 +722,7 @@
         position: relative;
         width: 100%;
         height: 100%;
-        background-color: #effff3;
+        /*background-color: #effff3;*/
 
         .roles-menu-table{
            display: flex;

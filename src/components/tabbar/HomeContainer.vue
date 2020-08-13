@@ -591,7 +591,7 @@
         right: 0;
         top: 0;
         bottom: 0;
-        background-color: #f3f3f3;
+        /*background-color: #f3f3f3;*/
 
         .main-contain-box{
             position: absolute;
