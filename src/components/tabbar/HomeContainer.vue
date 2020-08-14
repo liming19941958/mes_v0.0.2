@@ -49,7 +49,7 @@
                             <router-link to="/debuglog">
                                  <el-menu-item index="1-4">异常日志</el-menu-item>
                             </router-link>
-                            <router-link to="/TopologyManagementPage">
+                            <router-link to="/topology">
                                  <el-menu-item index="1-5">拓扑管理</el-menu-item>
                             </router-link>
                             <router-link to="/KanbanConfigurationPage">

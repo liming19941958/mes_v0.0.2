@@ -6,7 +6,7 @@ import RoleManagementPage from './components/systemSetting/RoleManagement'
 import organization from './components/systemSetting/UserManagement'//系统设置-用户管理
 import userlog from './components/systemSetting/LogQuery'
 import ExceptionLogPage from './components/systemSetting/ExceptionLog'
-import TopologyManagementPage from './components/systemSetting/TopologyManagement'
+import topology from './components/systemSetting/TopologyManagement'
 import KanbanConfigurationPage from './components/systemSetting/KanbanConfiguration'
 import HomePageConfigurationPage from './components/systemSetting/HomePageConfiguration'
 import CustomerInformationPage from './components/BasicInformation/CustomerInformation'
@@ -71,7 +71,7 @@ var router = new VueRouter({
                 {path:'/organization',component:organization,name:'1-2',},//用户管理
                 {path:'/userlog',component:userlog,name:'1-3'},//日志查询
                 {path:'/debuglog',component:ExceptionLogPage,name:'1-4'},//异常日志
-                {path:'/TopologyManagementPage',component:TopologyManagementPage,name:'1-5'},
+                {path:'/topology',component:topology,name:'1-5'},
                 {path:'/KanbanConfigurationPage',component:KanbanConfigurationPage,name:'1-6'},
                 {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage,name:'1-7'},
                 {path:'/CustomerInformationPage',component:CustomerInformationPage,name:'2-1'},

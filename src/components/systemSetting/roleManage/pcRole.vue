@@ -60,18 +60,12 @@
                     <el-table-column
                             prop="dataFirstNoChildren"
                             label="模块列表">
-<!--                        <template slot-scope="scope">-->
-<!--                            <div v-for='item in scope.row.dataFirstNoChildren' :key="item.index">{{item}}</div>-->
-<!--                        </template>-->
                         <template slot-scope="scope">
-<!--                            <span>{{scope.$index}}</span>-->
+                            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
+                                <el-checkbox v-for="city in scope.row.modulesMaps" :label="city" :key="city">{{city}}</el-checkbox>
+                            </el-checkbox-group>
                             <span>{{scope.row.modulesMaps | userStatus | userLists}}</span>
                         </template>
-<!--                        <template>-->
-<!--                            <div v-for="k in dataFirstNoChildren" :key="k.index">-->
-<!--                                    <span>{{k}}</span>-->
-<!--                            </div>-->
-<!--                        </template>-->
                     </el-table-column>
                 </el-table>
 
@@ -93,17 +87,13 @@
                 return arrayList;
             },
             userLists: function (arrayList) {
-                var arr1='';
+                var arr1 = '';
                 // const text = `<input type="checkbox" name="like"/>`
-                for (var s=0;s<arrayList.length;s++){
-                    arr1 +=  arrayList[s];
+                for (var s = 0; s < arrayList.length; s++) {
+                    arr1 += arrayList[s];
                 }
-
                 return arr1;
-
-
             }
-
         },
         data(){
             return{
@@ -167,51 +157,7 @@
                             type:'success',
                         });
                         this.tableData=response.data.result.data;
-                        var data1=this.tableData;
-                        let List =[];
-                        for (var i= 0;i<data1.length;i++){
-                            let length1 = data1[i].children.length;
-                            if (length1===0) {
-                                let mode = data1[0].modulesMaps;
-                                List =Object.keys(mode);
-                            }
-                            // console.log(Object.keys(Data1[0].modulesMaps))
-                        }
-                        this.dataFirstNoChildren=List;
-                        console.log(this.dataFirstNoChildren);
-                        // for (var i =0;i<this.tableData.length;i++){
-                        //     let array = this.tableData[0];
-                        //     // console.log(array)
-                        //   if (array===0){
-                        //       let mode1 =Object.keys(this.tableData[0].modulesMaps);
-                        //       modeList1.push(mode1);
-                        //       // console.log('第一层：'+ modeList1);
-                        //       return modeList1;
-                        //   }else if (array>0) {
-                        //       let modeList2=[];
-                        //       let mode2 =this.tableData[i].children;
-                        //       // console.log(mode2);
-                        //       for (var j =0;j<mode2.length;j++){
-                        //           let mode2Contents = mode2[j];
-                        //           if (mode2Contents.children.length===0){
-                        //               let mode2Content =Object.keys(mode2Contents.modulesMaps);
-                        //               modeList2.push(mode2Content);
-                        //               // console.log("第二级："+ mode2Content);
-                        //               // console.log('第二层：'+ modeList2);
-                        //               return modeList2;
-                        //           }else {
-                        //               let mode3 =mode2Contents.children;
-                        //               for (var k =0;k<mode3.length;k++){
-                        //                   let mode3Content = Object.keys(mode3[k].modulesMaps);
-                        //                   modeList1.push(mode3Content);
-                        //               }
-                        //
-                        //           }
-                        //           return modeList1;
-                        //       }
-                        //       return modeList1;
-                        //   }
-                        // }
+
                     }
                 })
             },

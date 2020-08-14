@@ -1,6 +1,8 @@
 <template>
     <div class="role-management-page">
+
         <el-tabs v-model="activeName" @tab-click="handleClick">
+
             <el-tab-pane label="角色基础信息" name="first">
                 <div class="roles-menu-table">
                     <div class="role-menu">
@@ -263,15 +265,15 @@
 
             <el-tab-pane label="PC可操作权限" name="second">
 <!--                :is等号后面的双引号里面需要加  '' -->
-                <transition>
                    <component :is="'pc'"></component>
-                    </transition>
             </el-tab-pane>
 
             <el-tab-pane label="app可操作权限" name="third">
                 <component :is="'app'"></component>
             </el-tab-pane>
+
         </el-tabs>
+
 </div>
 </template>
 
@@ -308,6 +310,7 @@
                     children: 'Subdirectory',
                     label: 'name'
                 },
+
                 tableData: [],
                 userListShow:[],
                 multipleSelection: [],//表格选中的项的数组
@@ -690,21 +693,15 @@
 </script>
 <style lang="scss">
 
+
     .el-tabs__item {
         color: #515A6E;
     }
 
 </style>
 <style scoped lang="scss">
-    .v-enter,
-    .v-leave-to{
-        transform: translateY(80px);
-        opacity: 0;
-    }
-    .v-enter-active,
-    .v-leave-active{
-        transition: all 0.4s ease-in-out;
-    }
+
+
     .el-header{
         padding-left: 20px;
         padding-top: 15px;
@@ -728,6 +725,8 @@
            display: flex;
             height: 95vh;
             width: 100%;
+
+
             .role-menu{
                 position: relative;
                 display: inline-block;
@@ -776,6 +775,8 @@
                 width: 100%;
                 height: 100vh;
                 background-color: #ecf3f0;
+
+
 
             }
         }
