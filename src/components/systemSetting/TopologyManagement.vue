@@ -27,11 +27,12 @@
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(0, 0, 0, 0.001)"
                         node-key="id"
-                        :icon-class="iconClass"
+
                         ref="tree"
                         :empty-text="dataText"
                         :data="data"
                         :props="defaultProps"
+                        :icon-class="iconClass"
                         default-expand-all
                         highlight-current=true
                         :expand-on-click-node="false"
@@ -43,7 +44,7 @@
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
                             <span v-if="data.uuid==='0'" class="el-icon-s-unfold" alt></span>
-                             <span v-if="data.nodeType" class="el-icon-video-play" style="color: #8f8f8f" alt></span>
+                             <span v-if="data.nodeType" class="el-icon-video-play" style="color: #0f7bff" alt></span>
                             <span v-if="data.uuid !=='0' && !data.nodeType" class="el-icon-menu" style="color: #8f8f8f" alt></span>
                           {{ node.label }}
                         </span>
@@ -114,8 +115,7 @@
         name: "home-contain",
         data(){
           return{
-              deviceStatus:false,
-              isOpenClose:true,
+              isOpenClose:false,
               loading:true,
               data:null,
               dataDevice:null,
@@ -133,13 +133,10 @@
         },
         computed:{
             iconClass(){
-                console.log(this.isOpenClose);
                 if (this.isOpenClose){
                     return'el-icon-remove-outline'
-                }else {
-                    return 'el-icon-circle-plus-outline'
                 }
-
+                    return 'el-icon-circle-plus-outline'
             }
         },
         created(){
@@ -226,16 +223,16 @@
 </script>
 
 <style scoped lang="scss">
+
     .topology-management-page{
         width: 100%;
         height: 100%;
-            /*.row1{*/
-            /*    .el-icon-plus,*/
-            /*    .el-icon-minus{*/
-            /*        border: 1px solid red!important;*/
-            /*        color: #323232!important;*/
-            /*    }*/
-            /*}*/
+
+            .row1{
+                /*.el-icon-video-play{*/
+                /*    color: #267ce1;*/
+                /*}*/
+            }
 
         .row2{
             ::v-deep {
