@@ -1,6 +1,6 @@
 <template>
     <div class="topology-management-page" style="display: flex;width: 100%;height: 100%;">
-<!--        row为横向布局-->
+        <!--        row为横向布局-->
         <el-row style="flex: 4;min-width: 310px;">
             <el-col style="padding: 25px 0 15px 0;
             position:relative;font-size:15px;
@@ -27,7 +27,6 @@
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(0, 0, 0, 0.001)"
                         node-key="id"
-                        :icon-class="iconClass"
                         ref="tree"
                         :empty-text="dataText"
                         :data="data"
@@ -36,18 +35,14 @@
                         highlight-current=true
                         :expand-on-click-node="false"
                         @node-click="handleNodeClick"
-                        @node-expand="handleNodeClickOpen"
-                        @node-collapse="handleNodeClickClose"
-
                         style="width: 100%;">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
-                        <span>
-                            <span v-if="data.uuid==='0'" class="el-icon-s-unfold" alt></span>
-                             <span v-if="data.nodeType" class="el-icon-video-play" style="color: #8f8f8f" alt></span>
-                            <span v-if="data.uuid !=='0' && !data.nodeType" class="el-icon-menu" style="color: #8f8f8f" alt></span>
-                          {{ node.label }}
-                        </span>
-                   </span>
+                    <span>
+                        <span v-if="data.uuid==0" class="el-icon-s-unfold" alt></span>
+                        <span v-else class="el-icon-menu" style="color: #8f8f8f" alt></span>
+                      {{ node.label }}
+                    </span>
+      </span>
                 </el-tree>
             </el-col>
         </el-row>
@@ -83,27 +78,20 @@
                 </div>
             </el-col>
             <el-col style="width: 100%;height: 90%;padding: 15px 0 100px 25px; overflow-y: scroll">
-            <el-tree
-                    v-loading="loading"
-                    element-loading-text="拼命加载中"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.001)"
-                    :empty-text="dataText"
-                    :data="dataDevice"
-                    :props="defaultProps2"
-                    default-expand-all
-                    highlight-current=true
-                    :expand-on-click-node="false"
-                    @node-click="handleNodeClick"
-                    style="width: 100%;">
-                   <span class="custom-tree-node" slot-scope="{ node, data }">
-                        <span>
-                            <span v-if="data.type==='0001'" class="el-icon-s-unfold" alt></span>
-                             <span v-else class="el-icon-video-play" style="color: #8f8f8f" alt></span>
-                          {{ node.label }}
-                        </span>
-                   </span>
-            </el-tree>
+                <el-tree
+                        v-loading="loading"
+                        element-loading-text="拼命加载中"
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-background="rgba(0, 0, 0, 0.001)"
+                        :empty-text="dataText"
+                        :data="data2"
+                        :props="defaultProps2"
+                        default-expand-all
+                        highlight-current=true
+                        :expand-on-click-node="false"
+                        @node-click="handleNodeClick"
+                        style="width: 100%;">
+                </el-tree>
             </el-col>
         </el-row>
     </div>
@@ -113,129 +101,142 @@
     export default {
         name: "home-contain",
         data(){
-          return{
-              deviceStatus:false,
-              isOpenClose:true,
-              loading:true,
-              data:null,
-              dataDevice:null,
-              bind:null,
-              dataText:'',
-              defaultProps: {
-                  children: 'Subdirectory',
-                  label: 'propertytyName'
-              },
-              defaultProps2: {
-                  children: 'children',
-                  label: 'macAddress'
-              },
-          }
-        },
-        computed:{
-            iconClass(){
-                console.log(this.isOpenClose);
-                if (this.isOpenClose){
-                    return'el-icon-remove-outline'
-                }else {
-                    return 'el-icon-circle-plus-outline'
-                }
-
+            return{
+                loading:true,
+                data:null,
+                data2:null,
+                bind:null,
+                dataText:'',
+                defaultProps: {
+                    children: 'Subdirectory',
+                    label: 'propertytyName'
+                },
+                defaultProps2: {
+                    children: 'children',
+                    label: 'macAddress'
+                },
             }
         },
         created(){
+            this.getallbinds();
             this.getDeviceNodeTree();
         },
+
         methods:{
-            getallbinds(act2){
+            getallbinds(){
                 this.$http.get('organddevicenode/getallbinds', {}).then(response => {
                     if (response.body.status === 200) {
-                        let bind= response.body.result;
-                        this.show(bind,act2);
+                        let bindArr= response.body.result;
+                        this.show(bindArr);
                     }
                 })
             },
-            show(bind,act2){
+            show(bindArr){
                 this.dataText = ' ';
                 this.$http.post(('propertyty/show'),{}).then(response=>{
                     if (response.status===200){
-                        let treeData = JSON.parse(response.body.result);
-                        this.findNode(treeData,bind,act2);
-                        this.data = treeData;
-                        // console.log(this.data)
-                        if(treeData.length !==0){
+                        let showArr = JSON.parse(response.body.result);
+                        this.findNode(showArr,bindArr);
+                        this.data = showArr;
+                        if(showArr.length !==0){
                             this.loading = false;
-                        }else if (treeData.length === 0) {
+                        }else if (showArr.length === 0) {
                             this.dataText = "暂无数据";
                         }
                     }
                 })
+
             },
-            findNode(treeData,bind,act2){
-                    treeData.forEach(item => {
-                        let arr =[];
-                        bind.forEach(bindItem=> {
-                        if (item.uuid && item.uuid === bindItem.orgId) {
-                            let dd = Object.assign({}, bindItem);
-
-                            if (dd.nodeType){
-                                let device = act2[0].children;
-                                device.forEach(deviceItem=>{
-                                    deviceItem['sing'] ='0040';
-                                });
-                            }
-                            dd['propertytyName'] = dd.deviceMacAddress;
-                            arr.push(dd);
-                            // console.log(item)
+            findNode(showArr, bindArr){
+                showArr.forEach(item => {
+                    let arr = []
+                    bindArr.forEach(subItem => {
+                        if(item.uuid && item.uuid === subItem.orgId){
+                            let bb = Object.assign({}, subItem)
+                            bb["propertytyName"] = bb.deviceMacAddress
+                            arr.push(bb)
                         }
-
                     });
-                        if (item.Subdirectory && item.Subdirectory.length > 0){
-                            item.Subdirectory = item.Subdirectory.concat(arr);
-                            this.findNode(item.Subdirectory,bind,act2);
-                        }else{
-                            item['Subdirectory'] =arr;
-                        }
-                });
+                    if(item.Subdirectory && item.Subdirectory.length>0){
+                        let arr1 =  item.Subdirectory;
+                        arr.forEach(arrItem=>{
+                            arr1.push(arrItem)
+                        });
+                        // item.Subdirectory = item.Subdirectory.concat(arr);
+                        //concat() 方法用于连接两个或多个数组,该方法不会改变现有的数组，而仅仅会返回被连接数组的一个副本。
+                        this.findNode(item.Subdirectory, bindArr);
+                    }else{
+                        item["Subdirectory"] = arr
+                    }
+                })
             },
+            // findNode(showArr, bindArr){
+            //     showArr.forEach(item => {
+            //         let arr = []
+            //         bindArr.forEach(subItem => {
+            //             if(item.uuid && item.uuid === subItem.orgId){
+            //                 let bb = Object.assign({}, subItem)
+            //                 bb["propertytyName"] = bb.deviceMacAddress
+            //                 arr.push(bb)
+            //             }
+            //         });
+            //         if(item.Subdirectory && item.Subdirectory.length>0){
+            //             item.Subdirectory.concat(arr)
+            //             this.findNode(item.Subdirectory, bindArr)
+            //         }else{
+            //             item["Subdirectory"] = arr
+            //         }
+            //     })
+            // },
+            // findNode(act,it){
+            //     let arr =[];
+            //     act.forEach(item => {
+            //         if (item.uuid === it.orgId){
+            //             let dd = Object.assign({},it);
+            //             dd['propertytyName'] = dd.deviceMacAddress;
+            //             arr.push(dd);
+            //             item['Subdirectory'] = arr;
+            //             // console.log(item);
+            //             return
+            //         }else {
+            //             if (Object.prototype.hasOwnProperty.call(item, "Subdirectory")){
+            //                 this.findNode(item.Subdirectory,it)
+            //             }
+            //         }
+            //     });
+            // },
             getDeviceNodeTree(){
                 this.dataText = ' ';
                 this.$http.get(('devicenode/getDeviceNodeTree'),{}).then(response=>{
                     if (response.status===200){
                         let act2 = response.body.result;
-                        // console.log( act2)
-                        this.getallbinds(act2);
-                        this.dataDevice=act2;
-
-                        if(this.dataDevice.length !==0){
+                        this.data2=act2;
+                        if(this.data2.length !==0){
                             this.loading = false;
-                        }else if (this.dataDevice.length === 0) {
+                        }else if (this.data2.length === 0) {
                             this.dataText = "暂无数据";
                         }
                     }
                 })
             }
-        },
-        handleNodeClickOpen(){
-            this.isOpenClose = true;
-        },
-        handleNodeClickClose(){
-            this.isOpenClose = false;
         }
 
     }
 </script>
 
 <style scoped lang="scss">
+
     .topology-management-page{
         width: 100%;
         height: 100%;
-            /*.row1{*/
-            /*    .el-icon-plus,*/
-            /*    .el-icon-minus{*/
-            /*        border: 1px solid red!important;*/
-            /*        color: #323232!important;*/
-            /*    }*/
-            /*}*/
+
+        /*.row1{*/
+        /*    ::v-deep{*/
+        /*        .el-icon-caret-right:before {*/
+        /*            content: "--";*/
+        /*        }*/
+        /*    }*/
+        /*}*/
 
         .row2{
             ::v-deep {
