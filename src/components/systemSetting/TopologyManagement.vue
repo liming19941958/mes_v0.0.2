@@ -27,29 +27,39 @@
                         element-loading-spinner="el-icon-loading"
                         element-loading-background="rgba(0, 0, 0, 0.001)"
                         node-key="id"
-
                         ref="tree"
                         :empty-text="dataText"
                         :data="data"
                         :props="defaultProps"
-                        :icon-class="iconClass"
+
                         default-expand-all
                         highlight-current=true
                         :expand-on-click-node="false"
                         @node-click="handleNodeClick"
                         @node-expand="handleNodeClickOpen"
                         @node-collapse="handleNodeClickClose"
-
                         style="width: 100%;">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
-                            <span v-if="data.uuid==='0'" class="el-icon-s-unfold" alt></span>
-                             <span v-if="data.nodeType" class="el-icon-video-play" style="color: #0f7bff" alt></span>
-                            <span v-if="data.uuid !=='0' && !data.nodeType" class="el-icon-menu" style="color: #8f8f8f" alt></span>
+                            <span v-if="data.uuid==='0'"  :icon-class="iconClass" class="el-icon-s-unfold" alt></span>
+                             <span v-if="data.nodeType" style="color: #26abff" alt><a-icon type="right-circle" /></span>
+                            <span v-if="data.uuid !=='0' && !data.nodeType" style="color: #5a5a5a" alt><a-icon type="appstore" /></span>
                           {{ node.label }}
                         </span>
                    </span>
                 </el-tree>
+<!--                <a-tree-->
+<!--                        v-if="data.length > 0"-->
+<!--                        showIcon-->
+<!--                        defaultExpandAll-->
+<!--                        showLine-->
+<!--                        :treeData="data"-->
+<!--                        :replaceFields="defaultProps"-->
+<!--                        :default-expanded-keys="['0-0-0', '0-0-1', '0-0-2']"-->
+<!--                        @select="onSelect"-->
+<!--                >-->
+
+<!--                </a-tree>-->
             </el-col>
         </el-row>
 
@@ -99,8 +109,9 @@
                     style="width: 100%;">
                    <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
-                            <span v-if="data.type==='0001'" class="el-icon-s-unfold" alt></span>
-                             <span v-else class="el-icon-video-play" style="color: #8f8f8f" alt></span>
+<!--                            <span v-if="data.type==='0001'" class="el-icon-s-unfold" alt></span>-->
+<!--                            <span v-if="data.type ==='100'" style="color: #26abff" alt><a-icon type="left-circle" /></span>-->
+                            <span :class="data.name" style="color: #787878;margin-right: 5px;"></span>
                           {{ node.label }}
                         </span>
                    </span>
@@ -115,7 +126,11 @@
         name: "home-contain",
         data(){
           return{
-              isOpenClose:false,
+              titleIcon:"el-icon-menu",
+              showLine:true,
+              showIcon:true,
+              hasChildren:null,
+              isOpenClose:true,
               loading:true,
               data:null,
               dataDevice:null,
@@ -123,7 +138,8 @@
               dataText:'',
               defaultProps: {
                   children: 'Subdirectory',
-                  label: 'propertytyName'
+                  label:'propertytyName',
+                  // key:'id'
               },
               defaultProps2: {
                   children: 'children',
@@ -135,8 +151,9 @@
             iconClass(){
                 if (this.isOpenClose){
                     return'el-icon-remove-outline'
-                }
+                }else{
                     return 'el-icon-circle-plus-outline'
+                }
             }
         },
         created(){
@@ -172,14 +189,16 @@
                         let arr =[];
                         bind.forEach(bindItem=> {
                         if (item.uuid && item.uuid === bindItem.orgId) {
+                            // console.log(bindItem)
                             let dd = Object.assign({}, bindItem);
-
-                            if (dd.nodeType){
                                 let device = act2[0].children;
+
                                 device.forEach(deviceItem=>{
-                                    deviceItem['sing'] ='0040';
+                                    if (bindItem.deviceMacAddress=== deviceItem.macAddress) {
+                                        deviceItem['name'] = 'el-icon-video-play';
+                                        console.log(deviceItem)
+                                    }
                                 });
-                            }
                             dd['propertytyName'] = dd.deviceMacAddress;
                             arr.push(dd);
                             // console.log(item)
@@ -187,9 +206,11 @@
 
                     });
                         if (item.Subdirectory && item.Subdirectory.length > 0){
+                            this.hasChildren = true;
                             item.Subdirectory = item.Subdirectory.concat(arr);
                             this.findNode(item.Subdirectory,bind,act2);
                         }else{
+                            this.hasChildren=false;
                             item['Subdirectory'] =arr;
                         }
                 });
@@ -199,10 +220,10 @@
                 this.$http.get(('devicenode/getDeviceNodeTree'),{}).then(response=>{
                     if (response.status===200){
                         let act2 = response.body.result;
-                        // console.log( act2)
+
                         this.getallbinds(act2);
                         this.dataDevice=act2;
-
+                        console.log(this.dataDevice)
                         if(this.dataDevice.length !==0){
                             this.loading = false;
                         }else if (this.dataDevice.length === 0) {
@@ -210,14 +231,15 @@
                         }
                     }
                 })
-            }
+            },
+            // handleNodeClickOpen(){
+            //     this.isOpenClose = true;
+            // },
+            // handleNodeClickClose(){
+            //     this.isOpenClose = false;
+            // }
         },
-        handleNodeClickOpen(){
-            this.isOpenClose = true;
-        },
-        handleNodeClickClose(){
-            this.isOpenClose = false;
-        }
+
 
     }
 </script>
@@ -229,34 +251,39 @@
         height: 100%;
 
             .row1{
-                /*.el-icon-video-play{*/
-                /*    color: #267ce1;*/
-                /*}*/
-            }
+                ::v-deep {
+                    /*/ /默认图旋转90度 动画取消*/
 
-        .row2{
-            ::v-deep {
-                .el-tree-node__expand-icon+span::before {
-                    display: inline-block;
-                    vertical-align: bottom;
-                    margin-bottom: -3px;
-                    width:15px;
-                }
-                .el-tree-node__content{
-                    .el-tree-node__expand-icon+span::before {
-                        content:url("../../images/mechine.png");
-                        margin-right: 5px;
-                    }
-                }
-                .el-tree-node__children{
-                    .el-tree-node__expand-icon+span::before {
-                        content:url("../../images/mechine.png");
+                .el-tree-node__expand-icon.expanded {
 
-                        margin-right: 5px;
+                        -webkit-transform: rotate(0deg);
+
+                        transform: rotate(0deg);
+
                     }
+
+                    /*/ / 收起*/
+
+                .el-tree-node__expand-icon.el-icon-caret-right:before {
+                    content: "\e542"; /*具体的图标*/
+
+                    }
+                    /*/ / 展开*/
+                 .el-tree-node__expand-icon.expanded.el-icon-caret-right:before {
+                     content: "";
+                     display: inline-block;
+                     width: 14px;
+                     height: 14px;
+                     background: url("../../images/closetree.png");
+                     background-size:100%;
+
+                 }
+
                 }
-            }
-        }
+                }
+
+
+
 
     }
 </style>

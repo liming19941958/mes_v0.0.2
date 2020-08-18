@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import Antd from 'ant-design-vue';
+import 'ant-design-vue/dist/antd.css';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './css/index.less'
@@ -19,6 +21,7 @@ Vue.prototype.$qs = qs;
 // 全局引入echarts
 // import echarts from 'echarts'
 // Vue.prototype.$echarts = echarts
+Vue.use(Antd);
 Vue.config.productionTip = false;
 // Vue.use(echarts);
 Vue.use(VueRouter);
