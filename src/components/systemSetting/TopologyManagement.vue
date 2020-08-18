@@ -210,7 +210,6 @@
                             item.Subdirectory = item.Subdirectory.concat(arr);
                             this.findNode(item.Subdirectory,bind,act2);
                         }else{
-                            this.hasChildren=false;
                             item['Subdirectory'] =arr;
                         }
                 });
@@ -251,6 +250,7 @@
         height: 100%;
 
             .row1{
+
                 ::v-deep {
                     /*/ /默认图旋转90度 动画取消*/
 
@@ -263,10 +263,13 @@
                     }
 
                     /*/ / 收起*/
-
                 .el-tree-node__expand-icon.el-icon-caret-right:before {
-                    content: "\e542"; /*具体的图标*/
-
+                    content: ""; /*具体的图标*/
+                    background: url("../../images/opentree.png");
+                    background-size: 100%;
+                    display: inline-block;
+                    width: 14px;
+                    height: 14px;
                     }
                     /*/ / 展开*/
                  .el-tree-node__expand-icon.expanded.el-icon-caret-right:before {
