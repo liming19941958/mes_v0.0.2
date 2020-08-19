@@ -71,6 +71,15 @@
                         </span>
                    </span>
                 </el-tree>
+                <el-popover
+                        placement="right"
+                        width="200"
+                        trigger="click"
+                       >
+                    <div>777</div>
+                    <div>888</div>
+                    <el-button slot="reference">click 激活</el-button>
+                </el-popover>
 <!--                <a-tree-->
 <!--                        v-if="data.length > 0"-->
 <!--                        showIcon-->
@@ -279,8 +288,9 @@
             handleNodeClick(data){
                 console.log(data)
             },
-            handleNodeContextmenu(val){
-                console.log(val)
+            handleNodeContextmenu(val,data){
+                this.parentNode = data.id
+                console.log(this.parentNode);
             },
             // handleNodeClickOpen(){
             //     this.isOpenClose = true;
