@@ -42,21 +42,21 @@
 <!--                    添加用户-->
                     <el-dialog width="30%" title="添加用户"  :visible.sync="dialogFormAddInformationVisible">
                         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
-                            <el-form-item label="用户姓名" prop="username" style="margin-bottom: 15px;">
+                            <el-form-item label="用户姓名:" prop="username" style="margin-bottom: 15px;">
 <!--                                prop的值要与 v-model的值相同-->
                                 <el-input v-model="ruleForm.username"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="登录名" prop="login_name" style="margin-bottom: 15px;">
+                            <el-form-item label="登录名：" prop="login_name" style="margin-bottom: 15px;">
                                 <el-input v-model="ruleForm.login_name"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户密码" prop="user_password" style="margin-bottom: 15px;">
+                            <el-form-item label="用户密码：" prop="user_password" style="margin-bottom: 15px;">
                                 <el-input v-model="ruleForm.user_password" type="password" @input="changePwd"></el-input>
                             </el-form-item>
-                            <el-form-item label="重复密码" prop="repeat_password" style="margin-bottom: 15px;">
+                            <el-form-item label="重复密码：" prop="repeat_password" style="margin-bottom: 15px;">
                                 <el-input v-model="ruleForm.repeat_password" type="password" @input="changePwd"></el-input>
                             </el-form-item>
-                            <el-form-item label="手机号码" prop="mobile_number" style="margin-bottom: 15px;width: 40%;">
+                            <el-form-item label="手机号码：" prop="mobile_number" style="margin-bottom: 15px;width: 40%;">
                                 <el-input
                                         type="text"
                                         placeholder="请输入手机号码"
@@ -66,13 +66,13 @@
                                 >
                                 </el-input>
                             </el-form-item>
-                            <el-form-item label="邮箱地址" style="margin-bottom: 15px;">
+                            <el-form-item label="邮箱地址：" style="margin-bottom: 15px;">
                                 <el-input placeholder="请输入邮箱地址" v-model="ruleForm.email" type="password"></el-input>
                             </el-form-item>
-                            <el-form-item label="显示顺序" prop="order" style="margin-bottom: 15px;width: 25%;">
+                            <el-form-item label="显示顺序：" prop="order" style="margin-bottom: 15px;width: 25%;">
                                 <el-input v-model="ruleForm.order" style="min-width: 70px"></el-input>
                             </el-form-item>
-                            <el-form-item label="所属部门" prop="department">
+                            <el-form-item label="所属部门：" prop="department">
                                 <el-select ref= "mySelect" v-model="ruleForm.department" placeholder="请选择所属部门">
                                     <el-option style="display: inline-block;">
                                         <el-tree :data="data"
@@ -85,7 +85,7 @@
                                 </el-select>
 
                             </el-form-item>
-                            <el-form-item label="用户状态" prop="user_status">
+                            <el-form-item label="用户状态：" prop="user_status">
                                 <el-select v-model="ruleForm.user_status" placeholder="请选择用户状态">
                                     <el-option label="正常" value="1"></el-option>
                                     <el-option label="禁用" value="2"></el-option>
@@ -105,21 +105,21 @@
 <!--                    修改用户-->
                     <el-dialog width="30%" title="修改用户"  :visible.sync="dialogFormEditInformationVisible">
                         <el-form :model="editForm" :rules="rules" ref="editForm" label-width="100px" class="demo-editForm" >
-                            <el-form-item label="用户姓名" prop="username" style="margin-bottom: 15px;">
+                            <el-form-item label="用户姓名：" prop="username" style="margin-bottom: 15px;">
                                 <!--                                prop的值要与 v-model的值相同-->
                                 <el-input v-model="editForm.username"></el-input>
                             </el-form-item>
 
-                            <el-form-item label="登录名" prop="login_name" style="margin-bottom: 15px;">
+                            <el-form-item label="登录名：" prop="login_name" style="margin-bottom: 15px;">
                                 <el-input v-model="editForm.login_name"></el-input>
                             </el-form-item>
-                            <el-form-item label="用户密码" style="margin-bottom: 15px;">
+                            <el-form-item label="用户密码：" style="margin-bottom: 15px;">
                                 <el-input v-model="editForm.user_password" type="password" @input="changePwd"></el-input>
                             </el-form-item>
-                            <el-form-item label="重复密码" style="margin-bottom: 15px;">
+                            <el-form-item label="重复密码：" style="margin-bottom: 15px;">
                                 <el-input v-model="editForm.repeat_password" type="password" @input="editChangePwd"></el-input>
                             </el-form-item>
-                            <el-form-item label="手机号码" prop="mobile_number" style="margin-bottom: 15px;width: 40%;">
+                            <el-form-item label="手机号码：" prop="mobile_number" style="margin-bottom: 15px;width: 40%;">
                                 <el-input
                                         type="text"
                                         placeholder="请输入手机号码"
@@ -129,13 +129,13 @@
                                 >
                                 </el-input>
                             </el-form-item>
-                            <el-form-item label="邮箱地址" style="margin-bottom: 15px;">
+                            <el-form-item label="邮箱地址：" style="margin-bottom: 15px;">
                                 <el-input placeholder="请输入邮箱地址" v-model="editForm.email"></el-input>
                             </el-form-item>
-                            <el-form-item label="显示顺序" prop="order" style="margin-bottom: 15px;width: 25%;">
+                            <el-form-item label="显示顺序：" prop="order" style="margin-bottom: 15px;width: 25%;">
                                 <el-input v-model="editForm.order" style="min-width: 70px"></el-input>
                             </el-form-item>
-                            <el-form-item label="所属部门" prop="department">
+                            <el-form-item label="所属部门：" prop="department">
                                 <el-select ref= "mySelect" v-model="editForm.department" placeholder="请选择所属部门">
                                     <el-option style="display: inline-block; ">
                                         <el-tree :data="data"
@@ -148,7 +148,7 @@
                                 </el-select>
 
                             </el-form-item>
-                            <el-form-item label="用户状态" prop="user_status">
+                            <el-form-item label="用户状态：" prop="user_status">
                                 <el-select v-model="editForm.user_status" placeholder="请选择用户状态">
                                     <el-option label="正常" value="1"></el-option>
                                     <el-option label="禁用" value="2"></el-option>
@@ -345,7 +345,7 @@
                         { required: true, message: '请输入所属部门', trigger: 'blur' },
                     ],
                     order: [
-                        { required: true, message: '请输入手机号', trigger: 'blur' },
+                        { required: true, message: '请输入显示顺序', trigger: 'blur' },
                     ]
                 },
                 formLabelWidth: '120px',

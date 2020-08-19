@@ -15,8 +15,32 @@
                                 width: 100px;
                                 height: 30px;
                                 line-height: 5px;
-                                position: relative">+ 添加节点
+                                position: relative"
+                               @click="AddPropertyNode"
+                                >+ 添加节点
                     </el-button>
+                    <el-dialog width="30%" title="添加物业节点"  :visible.sync="dialogFormAddPropertyNodeVisible">
+                        <el-form :model="addPropertyForm" :rules="rules" ref="addPropertyForm" label-width="100px" class="demo-addPropertyForm" >
+                            <el-form-item label="父节点：" prop="parentNode" style="margin-bottom: 25px;">
+                                <!--                                prop的值要与 v-model的值相同-->
+                                <el-input :disabled="true" v-model="addPropertyForm.parentNode"></el-input>
+                            </el-form-item>
+
+                            <el-form-item label="节点名称：" prop="nodeName" style="margin-bottom: 25px;">
+                                <el-input v-model="addPropertyForm.nodeName"></el-input>
+                            </el-form-item>
+                            <el-form-item label="备注：" prop="Remarks" style="margin-bottom: 25px;">
+                                <el-input v-model="addPropertyForm.Remarks" type="textarea"></el-input>
+                            </el-form-item>
+                            <el-form-item label="排序：" prop="order" style="margin-bottom: 25px;">
+                                <el-input v-model="addPropertyForm.order" style="margin-bottom: 15px;width: 25%;"></el-input>
+                            </el-form-item>
+                        </el-form>
+                        <div slot="footer" class="dialog-footer">
+                            <el-button @click="dialogFormAddPropertyNodeVisible = false">取 消</el-button>
+                            <el-button type="primary" @click="addPropertyNodeSubmit('addPropertyForm')">确 定</el-button>
+                        </div>
+                    </el-dialog>
                 </div>
 
             </el-col>
@@ -36,8 +60,7 @@
                         highlight-current=true
                         :expand-on-click-node="false"
                         @node-click="handleNodeClick"
-                        @node-expand="handleNodeClickOpen"
-                        @node-collapse="handleNodeClickClose"
+                        @node-contextmenu="handleNodeContextmenu"
                         style="width: 100%;">
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
@@ -110,8 +133,8 @@
                    <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
 <!--                            <span v-if="data.type==='0001'" class="el-icon-s-unfold" alt></span>-->
-<!--                            <span v-if="data.type ==='100'" style="color: #26abff" alt><a-icon type="left-circle" /></span>-->
-                            <span :class="data.name" style="color: #787878;margin-right: 5px;"></span>
+                            <span v-if="!data.name" style="color: #383838" alt><a-icon type="cluster" /></span>
+                            <span v-if="data.name" style="color: #26abff" alt><a-icon type="left-circle" /></span>
                           {{ node.label }}
                         </span>
                    </span>
@@ -126,16 +149,27 @@
         name: "home-contain",
         data(){
           return{
-              titleIcon:"el-icon-menu",
+              rootNode:false,
+              dialogFormAddPropertyNodeVisible:false,
               showLine:true,
               showIcon:true,
-              hasChildren:null,
-              isOpenClose:true,
               loading:true,
               data:null,
               dataDevice:null,
               bind:null,
               dataText:'',
+              addPropertyForm:{
+                  order:'999',
+                  parentNode:"",
+                  nodeName:"",
+                  Remarks:"",
+              },
+              rules: {
+                  // 定义是否必填项
+                  nodeName: [
+                      { required: true, message: '请输入节点名称', trigger: 'blur' },
+                  ],
+              },
               defaultProps: {
                   children: 'Subdirectory',
                   label:'propertytyName',
@@ -147,15 +181,15 @@
               },
           }
         },
-        computed:{
-            iconClass(){
-                if (this.isOpenClose){
-                    return'el-icon-remove-outline'
-                }else{
-                    return 'el-icon-circle-plus-outline'
-                }
-            }
-        },
+        // computed:{
+        //     iconClass(){
+        //         if (this.isOpenClose){
+        //             return'el-icon-remove-outline'
+        //         }else{
+        //             return 'el-icon-circle-plus-outline'
+        //         }
+        //     }
+        // },
         created(){
             this.getDeviceNodeTree();
         },
@@ -192,21 +226,17 @@
                             // console.log(bindItem)
                             let dd = Object.assign({}, bindItem);
                                 let device = act2[0].children;
-
                                 device.forEach(deviceItem=>{
                                     if (bindItem.deviceMacAddress=== deviceItem.macAddress) {
-                                        deviceItem['name'] = 'el-icon-video-play';
-                                        console.log(deviceItem)
+                                        deviceItem['name'] = true;
                                     }
                                 });
                             dd['propertytyName'] = dd.deviceMacAddress;
                             arr.push(dd);
                             // console.log(item)
                         }
-
                     });
                         if (item.Subdirectory && item.Subdirectory.length > 0){
-                            this.hasChildren = true;
                             item.Subdirectory = item.Subdirectory.concat(arr);
                             this.findNode(item.Subdirectory,bind,act2);
                         }else{
@@ -219,10 +249,9 @@
                 this.$http.get(('devicenode/getDeviceNodeTree'),{}).then(response=>{
                     if (response.status===200){
                         let act2 = response.body.result;
-
                         this.getallbinds(act2);
                         this.dataDevice=act2;
-                        console.log(this.dataDevice)
+                        // console.log(this.dataDevice)
                         if(this.dataDevice.length !==0){
                             this.loading = false;
                         }else if (this.dataDevice.length === 0) {
@@ -231,6 +260,28 @@
                     }
                 })
             },
+            AddPropertyNode(){
+                this.dialogFormAddPropertyNodeVisible= true;
+                this.rootNode = true;
+            },
+            addPropertyNodeSubmit(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        if (this.rootNode){
+                            alert('单纯添加根节点')
+                        }
+                    }else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                })
+            },
+            handleNodeClick(data){
+                console.log(data)
+            },
+            handleNodeContextmenu(val){
+                console.log(val)
+            },
             // handleNodeClickOpen(){
             //     this.isOpenClose = true;
             // },
@@ -238,55 +289,35 @@
             //     this.isOpenClose = false;
             // }
         },
-
-
     }
 </script>
 
 <style scoped lang="scss">
-
     .topology-management-page{
         width: 100%;
         height: 100%;
-
-            .row1{
-
-                ::v-deep {
-                    /*/ /默认图旋转90度 动画取消*/
-
-                .el-tree-node__expand-icon.expanded {
-
-                        -webkit-transform: rotate(0deg);
-
-                        transform: rotate(0deg);
-
-                    }
-
-                    /*/ / 收起*/
-                .el-tree-node__expand-icon.el-icon-caret-right:before {
-                    content: ""; /*具体的图标*/
-                    background: url("../../images/opentree.png");
-                    background-size: 100%;
-                    display: inline-block;
-                    width: 14px;
-                    height: 14px;
-                    }
-                    /*/ / 展开*/
-                 .el-tree-node__expand-icon.expanded.el-icon-caret-right:before {
-                     content: "";
-                     display: inline-block;
-                     width: 14px;
-                     height: 14px;
-                     background: url("../../images/closetree.png");
-                     background-size:100%;
-
-                 }
-
-                }
-                }
-
-
-
-
+        ::v-deep {
+            /*/ /默认图旋转90度 动画取消*/
+            .el-tree-node__expand-icon.expanded {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+            }
+            /*取消无孩子的节点展开折叠图标显示*/
+            .el-tree-node__expand-icon.is-leaf:before{
+                margin-right: 5px;
+                content:"";
+                /*content:url("../../images/fileicon.png");*/
+            }
+            /*/ / 收起*/
+            .el-tree-node__expand-icon:before {
+                content:url("../../images/opentree.png") ; /*具体的图标*/
+                margin-right: 5px;
+            }
+            /*/ / 展开*/
+            .el-tree-node__expand-icon.expanded.el-icon-caret-right:before {
+                content: url("../../images/closetree.png");
+                margin-right: 5px;
+            }
+        }
     }
 </style>
