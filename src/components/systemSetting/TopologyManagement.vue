@@ -19,7 +19,7 @@
                                @click="AddPropertyNode"
                                 >+ 添加节点
                     </el-button>
-                    <el-dialog width="30%" title="添加物业节点"  :visible.sync="dialogFormAddPropertyNodeVisible">
+                    <el-dialog width="30%" :title="titleType"  :visible.sync="dialogFormAddPropertyNodeVisible">
                         <el-form :model="addPropertyForm" :rules="rules" ref="addPropertyForm" label-width="100px" class="demo-addPropertyForm" >
                             <el-form-item label="父节点：" prop="parentNode" style="margin-bottom: 25px;">
                                 <!--                                prop的值要与 v-model的值相同-->
@@ -33,7 +33,7 @@
                                 <el-input v-model="addPropertyForm.Remarks" type="textarea"></el-input>
                             </el-form-item>
                             <el-form-item label="排序：" prop="order" style="margin-bottom: 25px;">
-                                <el-input v-model="addPropertyForm.order" style="margin-bottom: 15px;width: 25%;"></el-input>
+                                <el-input v-model="addPropertyForm.order" style="margin-bottom: 15px;width: 25%;min-width: 70px"></el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
@@ -44,24 +44,25 @@
                 </div>
 
             </el-col>
-            <el-col style="width: 100%;height: 90%;padding: 15px 0 100px 25px; overflow-y: scroll" class="row1">
-                <el-tree
-                        v-loading="loading"
-                        element-loading-text="拼命加载中"
-                        element-loading-spinner="el-icon-loading"
-                        element-loading-background="rgba(0, 0, 0, 0.001)"
-                        node-key="id"
-                        ref="tree"
-                        :empty-text="dataText"
-                        :data="data"
-                        :props="defaultProps"
+            <el-col style="width: 100%;height: 90%;padding: 15px 0 100px 25px; overflow-y: scroll"
+                    class="row1"  v-loading="loading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(0, 0, 0, 0.001)">
+                    <el-tree
 
-                        default-expand-all
-                        highlight-current=true
-                        :expand-on-click-node="false"
-                        @node-click="handleNodeClick"
-                        @node-contextmenu="handleNodeContextmenu"
-                        style="width: 100%;">
+                            node-key="id"
+                            ref="tree"
+                            :empty-text="dataText"
+                            :data="data"
+                            :props="defaultProps"
+                            default-expand-all
+                            highlight-current=true
+                            :expand-on-click-node="false"
+                            @node-click="handleNodeClick"
+                            @node-contextmenu="handleNodeContextmenu"
+                            style="display: inline-block"
+                            >
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
                             <span v-if="data.uuid==='0'"  :icon-class="iconClass" class="el-icon-s-unfold" alt></span>
@@ -70,16 +71,14 @@
                           {{ node.label }}
                         </span>
                    </span>
-                </el-tree>
-                <el-popover
-                        placement="right"
-                        width="200"
-                        trigger="click"
-                       >
-                    <div>777</div>
-                    <div>888</div>
-                    <el-button slot="reference">click 激活</el-button>
-                </el-popover>
+                    </el-tree>
+                    <div class="rightClickMenu" id="right" ref="rightClick" v-show="isRightClick" @contextmenu.prevent="showDiv">
+                        <ul style="list-style: none">
+                            <li @click="addNode"><i class="el-icon-plus"></i> 添加子节点</li>
+                            <li @click="editNode"><i class="el-icon-edit"></i> 修改节点</li>
+                            <li><i class="el-icon-delete"></i> 删除节点</li>
+                        </ul>
+                    </div>
 <!--                <a-tree-->
 <!--                        v-if="data.length > 0"-->
 <!--                        showIcon-->
@@ -125,12 +124,13 @@
                     <span style="line-height:30px;display:inline-block;width: 100px;height: 30px;">设备管理</span>
                 </div>
             </el-col>
-            <el-col style="width: 100%;height: 90%;padding: 15px 0 100px 25px; overflow-y: scroll">
-            <el-tree
+            <el-col style="width: 100%;height: 90%;padding: 15px 0 100px 25px; overflow-y: scroll"
                     v-loading="loading"
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(0, 0, 0, 0.001)"
+                    element-loading-background="rgba(0, 0, 0, 0.001)">
+            <el-tree
+
                     :empty-text="dataText"
                     :data="dataDevice"
                     :props="defaultProps2"
@@ -154,10 +154,19 @@
 </template>
 
 <script>
+    document.oncontextmenu = function(){
+      var right = document.getElementById('right');
+        right.style.display = "none"
+    };
+    document.onclick = function(){
+        var right = document.getElementById('right');
+        right.style.display = "none"
+    };
     export default {
         name: "home-contain",
         data(){
           return{
+              isRightClick:false,
               rootNode:false,
               dialogFormAddPropertyNodeVisible:false,
               showLine:true,
@@ -167,9 +176,14 @@
               dataDevice:null,
               bind:null,
               dataText:'',
+              titleType:'',
+              isAddNode:null,
+              isEditNode:null,
               addPropertyForm:{
                   order:'999',
                   parentNode:"",
+                  addNodeParentNode:'',
+                  editNodeParentNode:'',
                   nodeName:"",
                   Remarks:"",
               },
@@ -203,6 +217,9 @@
             this.getDeviceNodeTree();
         },
         methods:{
+            showDiv(){
+                this.$refs.rightClick.style.display="block"
+            },
             getallbinds(act2){
                 this.$http.get('organddevicenode/getallbinds', {}).then(response => {
                     if (response.body.status === 200) {
@@ -270,14 +287,42 @@
                 })
             },
             AddPropertyNode(){
+                this.titleType = '添加物业节点';
+                this.addPropertyForm.parentNode = null;
                 this.dialogFormAddPropertyNodeVisible= true;
+                this.isAddNode = false;
+                this.isEditNode = false;
                 this.rootNode = true;
+            },
+            addNode(){
+                this.titleType = '添加物业节点';
+                this.addPropertyForm.parentNode = this.addPropertyForm.addNodeParentNode;
+                this.isAddNode = true;
+                this.isEditNode = false;
+                this.rootNode = false;
+                this.dialogFormAddPropertyNodeVisible= true;
+            },
+            editNode(){
+                this.titleType = '修改物业节点';
+                this.addPropertyForm.parentNode = this.addPropertyForm.editNodeParentNode;
+                this.isEditNode = true;
+                this.isAddNode = false;
+                this.rootNode = false;
+                this.dialogFormAddPropertyNodeVisible= true;
             },
             addPropertyNodeSubmit(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        if (this.rootNode){
-                            alert('单纯添加根节点')
+                        if (this.rootNode){// 单纯添加根节点
+                            this.dialogFormAddPropertyNodeVisible= false;
+                            this.rootNode = false;
+                        }else{
+                            if (this.isAddNode){
+                               console.log('添加树节点')
+                            }else if (this.isEditNode){
+                                console.log('修改树节点')
+                            }
+                            this.dialogFormAddPropertyNodeVisible= false;
                         }
                     }else {
                         console.log('error submit!!');
@@ -286,18 +331,23 @@
                 })
             },
             handleNodeClick(data){
+                this.isRightClick = false;
                 console.log(data)
             },
-            handleNodeContextmenu(val,data){
-                this.parentNode = data.id
-                console.log(this.parentNode);
+            handleNodeContextmenu(val,data,nodes){
+                // console.log(data);
+                if (data.id){
+                    this.addPropertyForm.addNodeParentNode = data.propertytyName;
+                    console.log(this.addPropertyForm.addNodeParentNode)
+                    this.addPropertyForm.editNodeParentNode = nodes.parent.data.propertytyName;
+                    this.$refs.rightClick.style.display="block";
+                    this.isRightClick = true;
+                }else if (!data.id){
+                    this.isRightClick = false;
+                }
+                this.$refs.rightClick.style.left = val.x - 200 +'px';
+                this.$refs.rightClick.style.top = val.y - 44 +'px';
             },
-            // handleNodeClickOpen(){
-            //     this.isOpenClose = true;
-            // },
-            // handleNodeClickClose(){
-            //     this.isOpenClose = false;
-            // }
         },
     }
 </script>
@@ -306,7 +356,23 @@
     .topology-management-page{
         width: 100%;
         height: 100%;
+        .rightClickMenu{
+            width: 120px;
+            box-shadow: 2px 1px 5px 1px rgb(149, 149, 149);
+            position: absolute;
+            background-color: #fff;
+            z-index: 991999;
+            li{
+                padding: 8px 0 8px 10px;
+            }
+            li:hover{
+                background-color: rgba(61,131,255,0.17);
+            }
+        }
         ::v-deep {
+            .custom-tree-node{
+
+            }
             /*/ /默认图旋转90度 动画取消*/
             .el-tree-node__expand-icon.expanded {
                 -webkit-transform: rotate(0deg);
@@ -314,7 +380,7 @@
             }
             /*取消无孩子的节点展开折叠图标显示*/
             .el-tree-node__expand-icon.is-leaf:before{
-                margin-right: 5px;
+                margin-right: 20px;
                 content:"";
                 /*content:url("../../images/fileicon.png");*/
             }
