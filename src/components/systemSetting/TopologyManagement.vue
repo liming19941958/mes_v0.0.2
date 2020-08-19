@@ -277,7 +277,6 @@
                         let act2 = response.body.result;
                         this.getallbinds(act2);
                         this.dataDevice=act2;
-                        // console.log(this.dataDevice)
                         if(this.dataDevice.length !==0){
                             this.loading = false;
                         }else if (this.dataDevice.length === 0) {
