@@ -27,13 +27,13 @@
                             </el-form-item>
 
                             <el-form-item label="节点名称：" prop="nodeName" style="margin-bottom: 25px;">
-                                <el-input v-model="addPropertyForm.nodeName"></el-input>
+                                <el-input v-model="addPropertyForm.nodeName" placeholder="请输入节点名称"></el-input>
                             </el-form-item>
-                            <el-form-item label="备注：" prop="Remarks" style="margin-bottom: 25px;">
-                                <el-input v-model="addPropertyForm.Remarks" type="textarea"></el-input>
+                            <el-form-item label="备注：" style="margin-bottom: 25px;">
+                                <el-input v-model="addPropertyForm.remarks" type="textarea" placeholder="请输入备注信息"></el-input>
                             </el-form-item>
-                            <el-form-item label="排序：" prop="order" style="margin-bottom: 25px;">
-                                <el-input v-model="addPropertyForm.order" style="margin-bottom: 15px;width: 25%;min-width: 70px"></el-input>
+                            <el-form-item label="排序：" prop="sortNumber" style="margin-bottom: 25px;">
+                                <el-input v-model="addPropertyForm.sortNumber" style="margin-bottom: 15px;width: 25%;min-width: 70px"></el-input>
                             </el-form-item>
                         </el-form>
                         <div slot="footer" class="dialog-footer">
@@ -57,7 +57,7 @@
                             :data="data"
                             :props="defaultProps"
                             default-expand-all
-                            highlight-current=true
+                            :highlight-current="true"
                             :expand-on-click-node="false"
                             @node-click="handleNodeClick"
                             @node-contextmenu="handleNodeContextmenu"
@@ -65,7 +65,7 @@
                             >
                     <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
-                            <span v-if="data.uuid==='0'"  :icon-class="iconClass" class="el-icon-s-unfold" alt></span>
+                            <span v-if="data.uuid==='0'"  class="el-icon-s-unfold" alt></span>
                              <span v-if="data.nodeType" style="color: #26abff" alt><a-icon type="right-circle" /></span>
                             <span v-if="data.uuid !=='0' && !data.nodeType" style="color: #5a5a5a" alt><a-icon type="appstore" /></span>
                           {{ node.label }}
@@ -76,7 +76,7 @@
                         <ul style="list-style: none">
                             <li @click="addNode"><i class="el-icon-plus"></i> 添加子节点</li>
                             <li @click="editNode"><i class="el-icon-edit"></i> 修改节点</li>
-                            <li><i class="el-icon-delete"></i> 删除节点</li>
+                            <li v-show="isShowDeleteNode" @click="deleteNode"><i class="el-icon-delete"></i> 删除节点</li>
                         </ul>
                     </div>
 <!--                <a-tree-->
@@ -96,18 +96,55 @@
 
         <el-row style="flex: 2;min-width: 120px;background-color: #ecf3f0;display:flex; justify-content:center; align-items:center;">
             <div style="width: 80px;height: 70%;">
-                <div style="margin-bottom:120%;width: 80px;height: 35px;border:1px solid #b1b1b1;background-color: #ffffff;line-height: 35px;text-align: center">
-                    <i class="el-icon-back" style="margin-right: 10px;"></i>
+                <el-button
+                    disabled
+                    style="margin-bottom:120%;
+                    width: 80px;height: 35px;
+                    border:1px solid #b1b1b1;"
+                >
+                    <i class="el-icon-back"></i>
                     绑定
-                </div>
-                <div style="margin-bottom:120%;width: 80px;height: 35px;border:1px solid #b1b1b1;background-color: #ffffff;line-height: 35px;text-align: center">
+                </el-button>
+
+                    <el-button
+                        :disabled="isDisabled"
+                        style="margin-bottom:120%;
+                        width: 80px;height: 35px;
+                        border:1px solid #b1b1b1;
+                        margin-left: -1px;"
+                        :class="{'unbind':isUnbind}"
+                        @click="unbind"
+                    >
+                        <i class="el-icon-right"></i>
                     解绑
-                    <i class="el-icon-right" style="margin-left: 10px;"></i>
-                </div>
-                <div style="color:#ffffff;margin-bottom:120%;width: 80px;height: 35px;border:1px solid #b1b1b1;background-color: #1890ff;line-height: 35px;text-align: center">
+                </el-button>
+
+
+                <div
+                    class="property"
+                    style="transition: all 0.3s ease;
+                    cursor: pointer;color:#ffffff;
+                    margin-bottom:120%;width: 80px;
+                    height: 35px;
+                    border:1px solid #b1b1b1;
+                    background-color: #1890ff;
+                    line-height: 35px;
+                    text-align: center"
+                >
                     物业关联
                 </div>
-                <div style="color:#ffffff;margin-bottom:120%;width: 80px;height: 35px;border:1px solid #b1b1b1;background-color: #1890ff;line-height: 35px;text-align: center">
+                <div
+                   class="machine"
+                   style="transition: all 0.3s ease;
+                   cursor: pointer;
+                   color:#ffffff;
+                   margin-bottom:120%;
+                   width: 80px;
+                   height: 35px;
+                   border:1px solid #b1b1b1;
+                   background-color: #1890ff;
+                   line-height: 35px;
+                   text-align: center">
                     设备关联
                 </div>
             </div>
@@ -135,10 +172,10 @@
                     :data="dataDevice"
                     :props="defaultProps2"
                     default-expand-all
-                    highlight-current=true
+                    :highlight-current="true"
                     :expand-on-click-node="false"
                     @node-click="handleNodeClick"
-                    style="width: 100%;">
+                    style="display: inline-block">
                    <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
 <!--                            <span v-if="data.type==='0001'" class="el-icon-s-unfold" alt></span>-->
@@ -166,8 +203,11 @@
         name: "home-contain",
         data(){
           return{
+              isDisabled:true,
+              isUnbind:false,
               isRightClick:false,
               rootNode:false,
+              isShowDeleteNode:true,
               dialogFormAddPropertyNodeVisible:false,
               showLine:true,
               showIcon:true,
@@ -177,20 +217,34 @@
               bind:null,
               dataText:'',
               titleType:'',
-              isAddNode:null,
-              isEditNode:null,
+              isAddNode:false,
+              isEditNode:false,
               addPropertyForm:{
-                  order:'999',
+                  isNodeType:false,
+                  sortNumber:'',
                   parentNode:"",
+                  parentNodeNumber:'',
+                  nodeName:"",
+                  remarks:"",
+                  uuid:'',
+                  orgId:'',
+                  deviceNodeId:'',
+                  addParentNodeNumber:"",
+                  editParentNodeNumber:"",
                   addNodeParentNode:'',
                   editNodeParentNode:'',
-                  nodeName:"",
-                  Remarks:"",
+                  addNodeName:'',
+                  editNodeName:'',
+                  editNodeRemarks:'',
+                  editNodeSortNumber:'',
               },
               rules: {
                   // 定义是否必填项
                   nodeName: [
                       { required: true, message: '请输入节点名称', trigger: 'blur' },
+                  ],
+                  sortNumber: [
+                      { required: true, message: '排序数字不能为空', trigger: 'blur' },
                   ],
               },
               defaultProps: {
@@ -235,7 +289,7 @@
                         let treeData = JSON.parse(response.body.result);
                         this.findNode(treeData,bind,act2);
                         this.data = treeData;
-                        // console.log(this.data)
+                        console.log(this.data)
                         if(treeData.length !==0){
                             this.loading = false;
                         }else if (treeData.length === 0) {
@@ -258,7 +312,7 @@
                                     }
                                 });
                             dd['propertytyName'] = dd.deviceMacAddress;
-                            arr.push(dd);
+                            arr.unshift(dd);
                             // console.log(item)
                         }
                     });
@@ -288,7 +342,10 @@
             AddPropertyNode(){
                 this.titleType = '添加物业节点';
                 this.addPropertyForm.parentNode = null;
+                this.addPropertyForm.remarks = null;
+                this.addPropertyForm.nodeName = null;
                 this.dialogFormAddPropertyNodeVisible= true;
+                this.addPropertyForm.sortNumber = '999';
                 this.isAddNode = false;
                 this.isEditNode = false;
                 this.rootNode = true;
@@ -296,6 +353,10 @@
             addNode(){
                 this.titleType = '添加物业节点';
                 this.addPropertyForm.parentNode = this.addPropertyForm.addNodeParentNode;
+                this.addPropertyForm.parentNodeNumber = this.addPropertyForm.addParentNodeNumber;
+                this.addPropertyForm.remarks = null;
+                this.addPropertyForm.nodeName = null;
+                this.addPropertyForm.sortNumber = '999';
                 this.isAddNode = true;
                 this.isEditNode = false;
                 this.rootNode = false;
@@ -304,6 +365,10 @@
             editNode(){
                 this.titleType = '修改物业节点';
                 this.addPropertyForm.parentNode = this.addPropertyForm.editNodeParentNode;
+                this.addPropertyForm.parentNodeNumber = this.addPropertyForm.editParentNodeNumber;
+                this.addPropertyForm.nodeName = this.addPropertyForm.editNodeName;
+                this.addPropertyForm.remarks = this.addPropertyForm.editNodeRemarks;
+                this.addPropertyForm.sortNumber = this.addPropertyForm.editNodeSortNumber;
                 this.isEditNode = true;
                 this.isAddNode = false;
                 this.rootNode = false;
@@ -313,13 +378,67 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         if (this.rootNode){// 单纯添加根节点
+                            this.$http.post('propertyty/save',{
+                                propertytyName: this.addPropertyForm.nodeName,
+                                remarks: this.addPropertyForm.remarks,
+                                sortNumber:this.addPropertyForm.sortNumber,
+                            }).then(response=>{
+                                if (response.body.status === 200){
+                                    this.getDeviceNodeTree();
+                                    this.$message({
+                                        message:'添加成功！',
+                                        type:'success'
+                                    });
+                                }
+                            }).catch((err)=>{
+                                this.$message({
+                                    message:err,
+                                    type:'error'
+                                });
+                            });
                             this.dialogFormAddPropertyNodeVisible= false;
-                            this.rootNode = false;
                         }else{
-                            if (this.isAddNode){
-                               console.log('添加树节点')
-                            }else if (this.isEditNode){
-                                console.log('修改树节点')
+                            if (this.isAddNode){//添加树节点
+                                this.$http.post('propertyty/save',{
+                                    propertytyName: this.addPropertyForm.nodeName,
+                                    remarks: this.addPropertyForm.remarks,
+                                    sortNumber:this.addPropertyForm.sortNumber,
+                                    parentNode:this.addPropertyForm.parentNodeNumber
+                                }).then(response=>{
+                                    if (response.body.status === 200){
+                                        this.getDeviceNodeTree();
+                                        this.$message({
+                                            message:'添加成功！',
+                                            type:'success'
+                                        });
+                                    }
+                                }).catch((err)=>{
+                                    this.$message({
+                                        message:err,
+                                        type:'error'
+                                    });
+                                });
+                            }else if (this.isEditNode){//修改树节点
+                                this.$http.post('propertyty/update',{
+                                    propertytyName: this.addPropertyForm.nodeName,
+                                    remarks: this.addPropertyForm.remarks,
+                                    sortNumber:this.addPropertyForm.sortNumber,
+                                    id:this.addPropertyForm.parentNodeNumber,
+                                    parentNode:this.addPropertyForm.editNodeParentNode,
+                                }).then(response=>{
+                                    if (response.body.status === 200){
+                                        this.getDeviceNodeTree();
+                                        this.$message({
+                                            message:'修改成功！',
+                                            type:'success'
+                                        });
+                                    }
+                                }).catch((err)=>{
+                                    this.$message({
+                                        message:err,
+                                        type:'error'
+                                    });
+                                });
                             }
                             this.dialogFormAddPropertyNodeVisible= false;
                         }
@@ -329,23 +448,170 @@
                     }
                 })
             },
+            deleteNode() {
+                this.$confirm('确定删除?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$http.get('base/baseMachine/isMachineandDepartment',{
+                        params:{
+                           uuid:this.addPropertyForm.uuid
+                        }
+                    }).then(response=>{
+                        if (response.body.result){
+                            this.$http.post('propertyty/delete',{
+                                uuid:this.addPropertyForm.uuid
+                            }).then(response=>{
+                                if (response.body.status === 200){
+                                    this.getDeviceNodeTree();
+                                    this.$message({
+                                        type: 'success',
+                                        message: '删除成功!'
+                                    });
+                                }
+                            }).catch((err)=>{
+                                this.$message({
+                                    type: 'error',
+                                    message: err
+                                });
+                            })
+                        }
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
             handleNodeClick(data){
                 this.isRightClick = false;
-                console.log(data)
+                let childrenNode = data.Subdirectory;
+                if (data.nodeType){//使解绑按钮可用
+                    this.addPropertyForm.isNodeType = true;
+                    this.addPropertyForm.orgId = data.orgId;
+                    this.addPropertyForm.deviceNodeId = data.deviceNodeId;
+                    console.log(data)
+                    this.isDisabled = false;
+                    this.isUnbind = true;
+                }else if (childrenNode.length >0) {
+                    childrenNode.forEach(item=>{
+                        if ( item.nodeType){//使解绑按钮可用
+                            this.addPropertyForm.isNodeType =false;
+                            this.addPropertyForm.orgId = item.orgId;
+                            console.log(item+'点击父节点');
+                            this.isDisabled = false;
+                            this.isUnbind = true;
+                        }else {//使解绑按钮不可用
+                            console.log('没设备')
+                            this.isDisabled = true;
+                            this.isUnbind = false;
+                        }
+                    });
+                }else {
+                    console.log('没孩子')
+                    this.isDisabled = true;
+                    this.isUnbind = false;
+                }
+
+            },
+            // 解绑设备
+            unbind(){
+                if (this.addPropertyForm.isNodeType){
+                    this.$http.post('organddevicenode/unbind',{
+                        orgId:this.addPropertyForm.orgId ,
+                        deviceNodeId:this.addPropertyForm.deviceNodeId,
+                    }).then(response=>{
+                        if (response.body.status === 200){
+                            this.isDisabled = true;
+                            this.isUnbind = false;
+                            this.getDeviceNodeTree();
+                            this.$message({
+                                message:'解绑成功！',
+                                type:'success'
+                            });
+                        }
+                    }).catch((err)=>{
+                        this.$message({
+                            message:err,
+                            type:'error'
+                        });
+                    })
+                }else {
+                    this.$http.post('organddevicenode/unbind',{
+                        orgId:this.addPropertyForm.orgId
+                    }).then(response=>{
+                        if (response.body.status === 200){
+                            this.isDisabled = true;
+                            this.isUnbind = false;
+                            this.getDeviceNodeTree();
+                            this.$message({
+                                message:'解绑成功！',
+                                type:'success'
+                            });
+                        }
+                    }).catch((err)=>{
+                        this.$message({
+                            message:err,
+                            type:'error'
+                        });
+                    })
+                }
             },
             handleNodeContextmenu(val,data,nodes){
-                // console.log(data);
-                if (data.id){
+                console.log(data);
+
+                if (data.id){//判断是否为非设备节点
+                    this.addPropertyForm.uuid = data.uuid;
                     this.addPropertyForm.addNodeParentNode = data.propertytyName;
-                    console.log(this.addPropertyForm.addNodeParentNode)
                     this.addPropertyForm.editNodeParentNode = nodes.parent.data.propertytyName;
+                    this.addPropertyForm.addParentNodeNumber = data.id;
+                    this.addPropertyForm.editParentNodeNumber = nodes.parent.data.id;
+                    this.addPropertyForm.editNodeName = data.propertytyName;
+                    this.addPropertyForm.editNodeRemarks = data.remarks;
+                    this.addPropertyForm.editNodeSortNumber = data.sortNumber;
                     this.$refs.rightClick.style.display="block";
                     this.isRightClick = true;
-                }else if (!data.id){
+                    let ChildrenNode = data.Subdirectory;
+                    console.log(ChildrenNode.length)
+                    if (ChildrenNode.length === 1){
+                        ChildrenNode.forEach(childrenItem=>{
+                            // console.log(childrenItem.nodeType)
+                            if (childrenItem.nodeType !=='0040'){
+                                // console.log(childrenItem.nodeType);
+                                this.isShowDeleteNode = false;
+                            }else if (childrenItem.nodeType ==='0040'){
+                                console.log(childrenItem.nodeType);
+                                this.isShowDeleteNode = true;
+                            }
+                        })
+                    }else if (ChildrenNode.length > 1){
+                        this.isShowDeleteNode = false;
+                    }else if (ChildrenNode.length ===0 ){
+                        this.isShowDeleteNode = true;
+                    }
+                }else if (!data.id){//已绑定设备节点
+                    // this.$refs.rightClick.style.display="none";
                     this.isRightClick = false;
+
                 }
                 this.$refs.rightClick.style.left = val.x - 200 +'px';
                 this.$refs.rightClick.style.top = val.y - 44 +'px';
+                const boxPosition = this.$refs.rightClick.getBoundingClientRect();
+                const boxPositionTop = boxPosition.bottom;
+                this.getScreenSize(val,boxPositionTop);
+                if (data.parentNode ===0) {
+                    this.addPropertyForm.editNodeParentNode = '根节点';
+                    this.addPropertyForm.editParentNodeNumber = data.id;
+                }
+            },
+            getScreenSize(val,boxPositionTop) {
+                var count= document.body.offsetHeight;
+                var countY = count - boxPositionTop;
+                if (countY <20){
+                    this.$refs.rightClick.style.top = val.y - 150 +'px';
+                }
             },
         },
     }
@@ -355,6 +621,27 @@
     .topology-management-page{
         width: 100%;
         height: 100%;
+        ::v-deep .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+            background-color: #cfdeef;
+        }
+        .unbind{
+            background-color: #1890ff;
+            color:#ffffff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .unbind:hover{
+            background-color: rgba(24, 144, 255, 0.82) !important;
+            transition: all 0.3s ease;
+        }
+        .machine:hover{
+            background-color: rgba(24, 144, 255, 0.82) !important;
+            transition: all 0.3s ease;
+        }
+        .property:hover{
+            background-color: rgba(24, 144, 255, 0.82) !important;
+            transition: all 0.3s ease;
+        }
         .rightClickMenu{
             width: 120px;
             box-shadow: 2px 1px 5px 1px rgb(149, 149, 149);
@@ -362,6 +649,7 @@
             background-color: #fff;
             z-index: 991999;
             li{
+                cursor: pointer;
                 padding: 8px 0 8px 10px;
             }
             li:hover{
