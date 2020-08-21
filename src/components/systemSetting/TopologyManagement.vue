@@ -72,7 +72,8 @@
                         </span>
                    </span>
                     </el-tree>
-                    <div class="rightClickMenu" id="right" ref="rightClick" v-show="isRightClick" @contextmenu.prevent="showDiv">
+
+                    <div :class="{'rightClickMenu':isRightClick}" id="right" ref="rightClick" v-show="isRightClick"  transiton="fade" @contextmenu.prevent="showDiv">
                         <ul style="list-style: none">
                             <li @click="addNode"><i class="el-icon-plus"></i> 添加子节点</li>
                             <li @click="editNode"><i class="el-icon-edit"></i> 修改节点</li>
@@ -167,14 +168,15 @@
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.001)">
             <el-tree
-
+                    ref="rightTree"
+                    node-key = "macAddress"
                     :empty-text="dataText"
                     :data="dataDevice"
                     :props="defaultProps2"
                     default-expand-all
                     :highlight-current="true"
                     :expand-on-click-node="false"
-                    @node-click="handleNodeClick"
+                    @node-click="handleDeviceNodeClick"
                     style="display: inline-block">
                    <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
@@ -220,6 +222,7 @@
               isAddNode:false,
               isEditNode:false,
               addPropertyForm:{
+                  deviceMacAddress:'',
                   isNodeType:false,
                   sortNumber:'',
                   parentNode:"",
@@ -289,7 +292,7 @@
                         let treeData = JSON.parse(response.body.result);
                         this.findNode(treeData,bind,act2);
                         this.data = treeData;
-                        console.log(this.data)
+                        // console.log(this.data)
                         if(treeData.length !==0){
                             this.loading = false;
                         }else if (treeData.length === 0) {
@@ -312,12 +315,12 @@
                                     }
                                 });
                             dd['propertytyName'] = dd.deviceMacAddress;
-                            arr.unshift(dd);
+                            arr.push(dd);
                             // console.log(item)
                         }
                     });
                         if (item.Subdirectory && item.Subdirectory.length > 0){
-                            item.Subdirectory = item.Subdirectory.concat(arr);
+                            item.Subdirectory = arr.concat(item.Subdirectory);
                             this.findNode(item.Subdirectory,bind,act2);
                         }else{
                             item['Subdirectory'] =arr;
@@ -476,6 +479,11 @@
                                     message: err
                                 });
                             })
+                        }else{
+                            this.$message({
+                                type: 'warning',
+                                message: '删除失败，请联系管理员！'
+                            })
                         }
                     })
                 }).catch(() => {
@@ -486,29 +494,60 @@
                 });
             },
             handleNodeClick(data){
+                console.log(data)
                 this.isRightClick = false;
                 let childrenNode = data.Subdirectory;
                 if (data.nodeType){//使解绑按钮可用
                     this.addPropertyForm.isNodeType = true;
                     this.addPropertyForm.orgId = data.orgId;
                     this.addPropertyForm.deviceNodeId = data.deviceNodeId;
-                    console.log(data)
+                    this.addPropertyForm.deviceMacAddress = data.deviceMacAddress;
+                    let deviceNumber = this.dataDevice;
+                    // console.log(deviceNumber)
+                    deviceNumber.forEach(itemDevice =>{
+                        let itemDeviceChildren = itemDevice.children;
+                        itemDeviceChildren.forEach(deviceChildren=>{
+                            if (deviceChildren.macAddress === data.deviceMacAddress ) {
+                                // this.$refs.rightTree.setCurrentKey()
+                                console.log('找到了'+ deviceChildren.macAddress)
+                            }
+                        })
+
+                    });
+                    // console.log(deviceNumber);
+                    // console.log(data.deviceMacAddress)
                     this.isDisabled = false;
                     this.isUnbind = true;
+
                 }else if (childrenNode.length >0) {
-                    childrenNode.forEach(item=>{
-                        if ( item.nodeType){//使解绑按钮可用
+                    for (var t=0;t<childrenNode.length;t++){
+                        let item = childrenNode[0];
+                        if (item.nodeType){//使解绑按钮可用
+                            console.log('kkk')
                             this.addPropertyForm.isNodeType =false;
                             this.addPropertyForm.orgId = item.orgId;
-                            console.log(item+'点击父节点');
                             this.isDisabled = false;
                             this.isUnbind = true;
-                        }else {//使解绑按钮不可用
+                        } else{
                             console.log('没设备')
                             this.isDisabled = true;
                             this.isUnbind = false;
                         }
-                    });
+                    }
+                    // childrenNode.forEach(item=>{
+                    //     console.log(item);
+                    //     if ( item.nodeType ==='0040'){//使解绑按钮可用
+                    //         console.log('kkk')
+                    //         this.addPropertyForm.isNodeType =false;
+                    //         this.addPropertyForm.orgId = item.orgId;
+                    //         this.isDisabled = false;
+                    //         this.isUnbind = true;
+                    //     }else {//使解绑按钮不可用
+                    //         console.log('没设备')
+                    //         this.isDisabled = true;
+                    //         this.isUnbind = false;
+                    //     }
+                    // });
                 }else {
                     console.log('没孩子')
                     this.isDisabled = true;
@@ -567,7 +606,7 @@
                     this.addPropertyForm.addNodeParentNode = data.propertytyName;
                     this.addPropertyForm.editNodeParentNode = nodes.parent.data.propertytyName;
                     this.addPropertyForm.addParentNodeNumber = data.id;
-                    this.addPropertyForm.editParentNodeNumber = nodes.parent.data.id;
+                    this.addPropertyForm.editParentNodeNumber = data.id;
                     this.addPropertyForm.editNodeName = data.propertytyName;
                     this.addPropertyForm.editNodeRemarks = data.remarks;
                     this.addPropertyForm.editNodeSortNumber = data.sortNumber;
@@ -613,10 +652,16 @@
                     this.$refs.rightClick.style.top = val.y - 150 +'px';
                 }
             },
+            handleDeviceNodeClick(data){
+                console.log(data)
+                // alert('陈勇股神')
+            },
         },
     }
 </script>
+<style>
 
+</style>
 <style scoped lang="scss">
     .topology-management-page{
         width: 100%;
