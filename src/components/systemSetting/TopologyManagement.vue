@@ -169,7 +169,7 @@
                     element-loading-background="rgba(0, 0, 0, 0.001)">
             <el-tree
                     ref="rightTree"
-                    node-key = "macAddress"
+                    node-key = "id"
                     :empty-text="dataText"
                     :data="dataDevice"
                     :props="defaultProps2"
@@ -509,7 +509,7 @@
                         let itemDeviceChildren = itemDevice.children;
                         itemDeviceChildren.forEach(deviceChildren=>{
                             if (deviceChildren.macAddress === data.deviceMacAddress ) {
-                                this.$refs.rightTree.setCurrentKey(deviceChildren.macAddress)
+                                this.$refs.rightTree.setCurrentKey(deviceChildren.id)
                                 console.log('找到了'+ deviceChildren.macAddress)
                             }
                         })
@@ -526,7 +526,6 @@
                     for (var t=0;t<childrenNode.length;t++){
                         let item = childrenNode[0];
                         if (item.nodeType){//使解绑按钮可用
-                            console.log('kkk')
                             this.addPropertyForm.isNodeType =false;
                             this.addPropertyForm.orgId = item.orgId;
                             this.isDisabled = false;
