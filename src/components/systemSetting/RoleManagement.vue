@@ -1,8 +1,6 @@
 <template>
     <div class="role-management-page">
-
         <el-tabs v-model="activeName" @tab-click="handleClick">
-
             <el-tab-pane label="角色基础信息" name="first">
                 <div class="roles-menu-table">
                     <div class="role-menu">
@@ -45,7 +43,7 @@
                                     :props="defaultProps"
                                     default-expand-all
                                     highlight-current=true
-                                    :expand-on-click-node="false"
+                                    expand-on-click-node="false"
                                     @node-click="handleNodeClick"
                                     style="background-color: #ecf3f0;width: 100%;">
                             </el-tree>

@@ -60,12 +60,12 @@
                     <el-table-column
                             prop="dataFirstNoChildren"
                             label="模块列表">
-                        <template slot-scope="scope">
-                            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="city in scope.row.modulesMaps" :label="city" :key="city">{{city}}</el-checkbox>
-                            </el-checkbox-group>
-                            <span>{{scope.row.modulesMaps | userStatus | userLists}}</span>
-                        </template>
+<!--                        <template slot-scope="scope">-->
+<!--                            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">-->
+<!--                                <el-checkbox v-for="city in scope.row.modulesMaps" :label="city" :key="city">{{city}}</el-checkbox>-->
+<!--                            </el-checkbox-group>-->
+<!--                            <span>{{scope.row.modulesMaps | userStatus | userLists}}</span>-->
+<!--                        </template>-->
                     </el-table-column>
                 </el-table>
 
@@ -81,20 +81,20 @@
 
     export default {
         name: "pcRole",
-        filters: {
-            userStatus: function (modulesMaps) {
-                let arrayList = Object.keys(modulesMaps);
-                return arrayList;
-            },
-            userLists: function (arrayList) {
-                var arr1 = '';
-                // const text = `<input type="checkbox" name="like"/>`
-                for (var s = 0; s < arrayList.length; s++) {
-                    arr1 += arrayList[s];
-                }
-                return arr1;
-            }
-        },
+        // filters: {
+        //     userStatus: function (modulesMaps) {
+        //         let arrayList = Object.keys(modulesMaps);
+        //         return arrayList;
+        //     },
+        //     userLists: function (arrayList) {
+        //         var arr1 = '';
+        //         // const text = `<input type="checkbox" name="like"/>`
+        //         for (var s = 0; s < arrayList.length; s++) {
+        //             arr1 += arrayList[s];
+        //         }
+        //         return arr1;
+        //     }
+        // },
         data(){
             return{
                 data:null,

@@ -50,9 +50,8 @@
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(0, 0, 0, 0.001)">
                     <el-tree
-
-                            node-key="id"
-                            ref="tree"
+                            ref="leftTree"
+                            node-key="uuid"
                             :empty-text="dataText"
                             :data="data"
                             :props="defaultProps"
@@ -99,6 +98,8 @@
             <div style="width: 80px;height: 70%;">
                 <el-button
                         :disabled="isDisabledBind"
+                        :class="{'bindBtn':isbind}"
+                        @click="bingDevice"
                     style="margin-bottom:120%;
                     width: 80px;height: 35px;
                     border:1px solid #b1b1b1;"
@@ -131,9 +132,32 @@
                     background-color: #1890ff;
                     line-height: 35px;
                     text-align: center"
+                    @click="PropertyNodeEquipmentAssociation"
                 >
                     物业关联
                 </div>
+<!--                //物业关联弹窗-->
+                <el-dialog width="45%!important" title="物业节点设备关联" :visible.sync="dialogFormPropertyNodeEquipmentAssociationVisible">
+                    <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
+                        <el-col style="height: 80%;width:100%;padding: 15px 15px 15px 15px;">
+                            <el-table
+                                    :data="data"
+                                    max-height=410
+                                    :row-style="{height:'35px'}"
+                                    :cell-style="{padding:'0px'}"
+                                    style="width: 100%;height: 75%; position: relative">
+                                <el-table-column
+                                        label="物业节点名称">
+                                </el-table-column>
+
+                                <el-table-column
+                                        label="关联设备">
+
+                                </el-table-column>
+                            </el-table>
+                        </el-col>
+                    </el-row>
+                </el-dialog>
                 <div
                    class="machine"
                    style="transition: all 0.3s ease;
@@ -145,9 +169,35 @@
                    border:1px solid #b1b1b1;
                    background-color: #1890ff;
                    line-height: 35px;
-                   text-align: center">
+                   text-align: center"
+                @click="DeviceAssociation"
+                >
                     设备关联
                 </div>
+<!--                 设备关联弹窗-->
+                <el-dialog width="45%!important" title="设备关联物业节点" :visible.sync="dialogFormDeviceAssociationVisible">
+                    <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
+                        <el-col style="height: 80%;width:100%;padding: 15px 15px 15px 15px;">
+                            <el-table
+                                    :data="data"
+                                    max-height=410
+                                    :row-style="{height:'35px'}"
+                                    :cell-style="{padding:'0px'}"
+                                    style="width: 100%;height: 75%; position: relative">
+                                <el-table-column
+                                        label="设备名称">
+
+
+                                </el-table-column>
+
+                                <el-table-column
+                                        label="关联物业节点">
+
+                                </el-table-column>
+                            </el-table>
+                        </el-col>
+                    </el-row>
+                </el-dialog>
             </div>
 
         </el-row>
@@ -177,7 +227,7 @@
                     :highlight-current="true"
                     :expand-on-click-node="false"
                     @node-click="handleDeviceNodeClick"
-                    style="display: inline-block">
+                    style="width: 245px;">
                    <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
 <!--                            <span v-if="data.type==='0001'" class="el-icon-s-unfold" alt></span>-->
@@ -193,19 +243,14 @@
 </template>
 
 <script>
-    document.oncontextmenu = function(){
-      var right = document.getElementById('right');
-        right.style.display = "none"
-    };
-    document.onclick = function(){
-        var right = document.getElementById('right');
-        right.style.display = "none"
-    };
     export default {
         name: "home-contain",
         data(){
           return{
+              dialogFormPropertyNodeEquipmentAssociationVisible:false,
+              dialogFormDeviceAssociationVisible:false,
               isDisabledBind:true,
+              isbind:false,
               isDisabled:true,
               isUnbind:false,
               isRightClick:false,
@@ -223,6 +268,10 @@
               isAddNode:false,
               isEditNode:false,
               addPropertyForm:{
+                  bingForm:{
+                      orgIds:'',
+                      deviceNodeIds:'',
+                  },
                   deviceMacAddress:'',
                   isNodeType:false,
                   sortNumber:'',
@@ -273,8 +322,25 @@
         // },
         created(){
             this.getDeviceNodeTree();
+            document.oncontextmenu = function(){
+                var right = document.getElementById('right');
+                right.style.display = "none"
+            };
+            document.onclick = function(){
+                var right = document.getElementById('right');
+                right.style.display = "none"
+            };
         },
         methods:{
+            // 物业关联弹窗
+            PropertyNodeEquipmentAssociation(){
+                this.dialogFormPropertyNodeEquipmentAssociationVisible = true;
+                console.log(this.data);
+            },
+            // 设备关联弹窗
+            DeviceAssociation(){
+                this.dialogFormDeviceAssociationVisible = true;
+            },
             showDiv(){
                 this.$refs.rightClick.style.display="block"
             },
@@ -521,8 +587,16 @@
                     this.isUnbind = true;
 
                 }else if (childrenNode.length >0) {
-                    let currentdata = this.$refs.rightTree.getCurrentNode;
-                    console.log(currentdata)
+                    let currentKey = this.$refs.rightTree.getCurrentKey();
+                    console.log('右边id：'+ currentKey);
+                    if (currentKey != null){
+                        this.addPropertyForm.bingForm.deviceNodeIds = currentKey;
+                        console.log('点击左边终于找到了右边的设备id:'+ this.addPropertyForm.bingForm.deviceNodeIds)
+                        this.addPropertyForm.bingForm.orgIds = data.uuid;
+                        console.log('点击左边终于找到了左边的uuid:'+ this.addPropertyForm.bingForm.orgIds)
+                        this.isDisabledBind = false;
+                        this.isbind = true;
+                    }
                     for (var t=0;t<childrenNode.length;t++){
                         let item = childrenNode[0];
                         if (item.nodeType){//使解绑按钮可用
@@ -551,6 +625,16 @@
                     //     }
                     // });
                 }else {
+                    let currentKey = this.$refs.rightTree.getCurrentKey();
+                    console.log('右边id：'+ currentKey);
+                    if (currentKey != null){
+                        this.addPropertyForm.bingForm.deviceNodeIds = currentKey;
+                        console.log('点击左边终于找到了右边的设备id:'+ this.addPropertyForm.bingForm.deviceNodeIds)
+                        this.addPropertyForm.bingForm.orgIds = data.uuid;
+                        console.log('点击左边终于找到了左边的uuid:'+ this.addPropertyForm.bingForm.orgIds)
+                        this.isDisabledBind = false;
+                        this.isbind = true;
+                    }
                     console.log('没孩子')
                     this.isDisabled = true;
                     this.isUnbind = false;
@@ -655,9 +739,40 @@
                 }
             },
             handleDeviceNodeClick(data){
+                let currentLeftKey = this.$refs.leftTree.getCurrentKey();
+
+                console.log('左边uuid：'+ currentLeftKey);
+                if (currentLeftKey != null){
+                    this.addPropertyForm.bingForm.deviceNodeIds = data.id;
+                    this.addPropertyForm.bingForm.orgIds = currentLeftKey;
+                    this.isDisabledBind = false;
+                    this.isbind = true;
+                }
                 console.log(data)
                 // alert('陈勇股神')
             },
+            bingDevice(){
+                if (this.isbind){
+                    this.$http.post('organddevicenode/bind',{
+                        orgIds: this.addPropertyForm.bingForm.orgIds,
+                        deviceNodeIds: this.addPropertyForm.bingForm.deviceNodeIds
+                    }).then(response=>{
+                        if (response.body.status === 200){
+                            this.getDeviceNodeTree();
+                            this.$message({
+                                type: 'success',
+                                message: '绑定成功!'
+                            });
+                        }
+                    }).catch((err)=>{
+                        this.$message({
+                            type: 'error',
+                            message: err
+                        });
+                    })
+                }
+            },
+
         },
     }
 </script>
@@ -670,6 +785,16 @@
         height: 100%;
         ::v-deep .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
             background-color: #cfdeef;
+        }
+        .bindBtn{
+            background-color: #1890ff;
+            color:#ffffff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .bindBtn:hover{
+            background-color: rgba(24, 144, 255, 0.82) !important;
+            transition: all 0.3s ease;
         }
         .unbind{
             background-color: #1890ff;
