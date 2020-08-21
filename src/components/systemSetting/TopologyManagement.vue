@@ -98,7 +98,7 @@
         <el-row style="flex: 2;min-width: 120px;background-color: #ecf3f0;display:flex; justify-content:center; align-items:center;">
             <div style="width: 80px;height: 70%;">
                 <el-button
-                    disabled
+                        :disabled="isDisabledBind"
                     style="margin-bottom:120%;
                     width: 80px;height: 35px;
                     border:1px solid #b1b1b1;"
@@ -205,6 +205,7 @@
         name: "home-contain",
         data(){
           return{
+              isDisabledBind:true,
               isDisabled:true,
               isUnbind:false,
               isRightClick:false,
@@ -508,7 +509,7 @@
                         let itemDeviceChildren = itemDevice.children;
                         itemDeviceChildren.forEach(deviceChildren=>{
                             if (deviceChildren.macAddress === data.deviceMacAddress ) {
-                                // this.$refs.rightTree.setCurrentKey()
+                                this.$refs.rightTree.setCurrentKey(deviceChildren.macAddress)
                                 console.log('找到了'+ deviceChildren.macAddress)
                             }
                         })
@@ -520,6 +521,8 @@
                     this.isUnbind = true;
 
                 }else if (childrenNode.length >0) {
+                    let currentdata = this.$refs.rightTree.getCurrentNode;
+                    console.log(currentdata)
                     for (var t=0;t<childrenNode.length;t++){
                         let item = childrenNode[0];
                         if (item.nodeType){//使解绑按钮可用
@@ -598,9 +601,9 @@
                     })
                 }
             },
+            // 右键点击物业树节点
             handleNodeContextmenu(val,data,nodes){
                 console.log(data);
-
                 if (data.id){//判断是否为非设备节点
                     this.addPropertyForm.uuid = data.uuid;
                     this.addPropertyForm.addNodeParentNode = data.propertytyName;
@@ -613,7 +616,6 @@
                     this.$refs.rightClick.style.display="block";
                     this.isRightClick = true;
                     let ChildrenNode = data.Subdirectory;
-                    console.log(ChildrenNode.length)
                     if (ChildrenNode.length === 1){
                         ChildrenNode.forEach(childrenItem=>{
                             // console.log(childrenItem.nodeType)
@@ -645,6 +647,7 @@
                     this.addPropertyForm.editParentNodeNumber = data.id;
                 }
             },
+            //获取body高度以及设置元素在页面中的位置
             getScreenSize(val,boxPositionTop) {
                 var count= document.body.offsetHeight;
                 var countY = count - boxPositionTop;
