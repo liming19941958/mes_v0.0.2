@@ -137,26 +137,38 @@
                     物业关联
                 </div>
 <!--                //物业关联弹窗-->
-                <el-dialog width="45%!important" title="物业节点设备关联" :visible.sync="dialogFormPropertyNodeEquipmentAssociationVisible">
-                    <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
+                <el-dialog width="50%!important" top="5vh" title="物业节点设备关联" :visible.sync="dialogFormPropertyNodeEquipmentAssociationVisible">
+                    <el-row style="width: 100%;height: 100%;position: relative">
                         <el-col style="height: 80%;width:100%;padding: 15px 15px 15px 15px;">
                             <el-table
-                                    :data="data"
-                                    max-height=410
+                                    :data="addPropertyForm.PropertyNodeEquipmentAssociation.PropertyNodeEquipmentAssociationData"
+                                    max-height=650
                                     :row-style="{height:'35px'}"
                                     :cell-style="{padding:'0px'}"
-                                    style="width: 100%;height: 75%; position: relative">
+                                    >
                                 <el-table-column
                                         label="物业节点名称">
+                                    <template slot-scope="scope">
+                                        <div slot="reference" class="name-wrapper">
+                                            <el-tag size="medium">{{ scope.row.propertytyName }}</el-tag>
+                                        </div>
+                                    </template>
                                 </el-table-column>
 
                                 <el-table-column
                                         label="关联设备">
-
+                                    <template slot-scope="scope">
+                                        <div slot="reference" class="name-wrapper">
+                                            <el-tag size="medium">{{ scope.row.deviceAddress }}</el-tag>
+                                        </div>
+                                    </template>
                                 </el-table-column>
                             </el-table>
                         </el-col>
                     </el-row>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="dialogFormPropertyNodeEquipmentAssociationVisible = false">取 消</el-button>
+                    </div>
                 </el-dialog>
                 <div
                    class="machine"
@@ -175,15 +187,15 @@
                     设备关联
                 </div>
 <!--                 设备关联弹窗-->
-                <el-dialog width="45%!important" title="设备关联物业节点" :visible.sync="dialogFormDeviceAssociationVisible">
-                    <el-row style="width: 100%;overflow: scroll;height: 100%;position: relative">
+                <el-dialog width="50%!important" top="5vh" title="设备关联物业节点" :visible.sync="dialogFormDeviceAssociationVisible">
+                    <el-row style="width: 100%;height: 100%;position: relative">
                         <el-col style="height: 80%;width:100%;padding: 15px 15px 15px 15px;">
                             <el-table
                                     :data="data"
-                                    max-height=410
+                                    max-height=650
                                     :row-style="{height:'35px'}"
                                     :cell-style="{padding:'0px'}"
-                                    style="width: 100%;height: 75%; position: relative">
+                            >
                                 <el-table-column
                                         label="设备名称">
 
@@ -197,6 +209,9 @@
                             </el-table>
                         </el-col>
                     </el-row>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button type="primary" @click="dialogFormDeviceAssociationVisible = false">取 消</el-button>
+                    </div>
                 </el-dialog>
             </div>
 
@@ -231,8 +246,9 @@
                    <span class="custom-tree-node" slot-scope="{ node, data }">
                         <span>
 <!--                            <span v-if="data.type==='0001'" class="el-icon-s-unfold" alt></span>-->
-                            <span v-if="!data.name" style="color: #383838" alt><a-icon type="cluster" /></span>
-                            <span v-if="data.name" style="color: #26abff" alt><a-icon type="left-circle" /></span>
+
+                            <span v-if="data.name==='10'" style="color: #26abff" alt><a-icon type="left-circle" /></span>
+                             <span v-else style="color: #383838" alt><a-icon type="cluster" /></span>
                           {{ node.label }}
                         </span>
                    </span>
@@ -261,8 +277,9 @@
               showIcon:true,
               loading:true,
               data:null,
+              showData:null,
               dataDevice:null,
-              bind:null,
+              bindData:null,
               dataText:'',
               titleType:'',
               isAddNode:false,
@@ -271,6 +288,10 @@
                   bingForm:{
                       orgIds:'',
                       deviceNodeIds:'',
+                  },
+                  PropertyNodeEquipmentAssociation:{
+                      PropertyNodeEquipmentAssociationData:null,
+                      DeviceAssociationData:null,
                   },
                   deviceMacAddress:'',
                   isNodeType:false,
@@ -335,12 +356,77 @@
             // 物业关联弹窗
             PropertyNodeEquipmentAssociation(){
                 this.dialogFormPropertyNodeEquipmentAssociationVisible = true;
-                console.log(this.data);
+                let addressData =  this.data;
+                // console.log(addressData)
+                let arrList = [];
+                this.findAddress( arrList,addressData);
+                this.addPropertyForm.PropertyNodeEquipmentAssociation.PropertyNodeEquipmentAssociationData = arrList;
+            },
+            findAddress(arrList,addressData){//物业关联弹窗递归方法
+                addressData.forEach(itemChild=>{
+                    // table数据要的是对象数组
+                    if (itemChild.Subdirectory &&itemChild.Subdirectory.length >0 ){
+                        let itemChilds = itemChild.Subdirectory;
+                        let obj = {};
+                        arrList.push(obj);
+                        for (var s = 0;s<itemChilds.length;s++){
+                            let firstNode = itemChilds[0];
+                            if (!firstNode.nodeType){
+                                obj['propertytyName'] = itemChild.propertytyName;
+                                obj['deviceAddress'] = null;
+                            }
+                        }
+                        itemChilds.forEach(childs =>{
+                            if (childs.nodeType){
+                                obj['propertytyName'] = itemChild.propertytyName;
+                                obj['deviceAddress'] = childs.deviceMacAddress;
+                            }
+                        });
+                        this.findAddress(arrList,itemChild.Subdirectory)
+                    }else if (itemChild.uuid) {
+                        let obj = {};
+                        obj['propertytyName'] = itemChild.propertytyName;
+                        obj['deviceAddress'] = null;
+                        arrList.push(obj);
+                    }
+
+                })
             },
             // 设备关联弹窗
             DeviceAssociation(){
                 this.dialogFormDeviceAssociationVisible = true;
+                let DeviceData =  this.data;
+                console.log(DeviceData)
+                // let arrDeviceList = [];
+                // this.findDeviceList( arrDeviceList,DeviceData);
+                // this.addPropertyForm.PropertyNodeEquipmentAssociation.DeviceAssociationData = arrDeviceList;
             },
+            // findDeviceList( arrDeviceList,DeviceData){
+            //     treeData.forEach(item => {
+            //         let arr =[];
+            //         bind.forEach(bindItem=> {
+            //             if (item.uuid && item.uuid === bindItem.orgId) {
+            //                 // console.log(bindItem)
+            //                 let dd = Object.assign({}, bindItem);
+            //                 let device = act2[0].children;
+            //                 device.forEach(deviceItem=>{
+            //                     if (bindItem.deviceMacAddress=== deviceItem.macAddress) {
+            //                         deviceItem['name'] = true;
+            //                     }
+            //                 });
+            //                 dd['propertytyName'] = dd.deviceMacAddress;
+            //                 arr.push(dd);
+            //                 // console.log(item)
+            //             }
+            //         });
+            //         if (item.Subdirectory && item.Subdirectory.length > 0){
+            //             item.Subdirectory = arr.concat(item.Subdirectory);
+            //             this.findNode(item.Subdirectory,bind,act2);
+            //         }else{
+            //             item['Subdirectory'] =arr;
+            //         }
+            //     });
+            // },
             showDiv(){
                 this.$refs.rightClick.style.display="block"
             },
@@ -348,6 +434,8 @@
                 this.$http.get('organddevicenode/getallbinds', {}).then(response => {
                     if (response.body.status === 200) {
                         let bind= response.body.result;
+                        this.bindData = bind;
+                        // console.log(this.bindData)
                         this.show(bind,act2);
                     }
                 })
@@ -357,6 +445,8 @@
                 this.$http.post(('propertyty/show'),{}).then(response=>{
                     if (response.status===200){
                         let treeData = JSON.parse(response.body.result);
+                        this.showData = treeData;
+                        console.log(this.showData)
                         this.findNode(treeData,bind,act2);
                         this.data = treeData;
                         // console.log(this.data)
@@ -377,8 +467,10 @@
                             let dd = Object.assign({}, bindItem);
                                 let device = act2[0].children;
                                 device.forEach(deviceItem=>{
+                                    // console.log(deviceItem)
                                     if (bindItem.deviceMacAddress=== deviceItem.macAddress) {
-                                        deviceItem['name'] = true;
+                                        // console.log(deviceItem.macAddress)
+                                        deviceItem['name'] = '10';
                                     }
                                 });
                             dd['propertytyName'] = dd.deviceMacAddress;

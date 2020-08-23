@@ -413,6 +413,7 @@
                     }).then(result=>{
                     if (result.status === 200) {
                         let userListData = result.body.result.data;
+                        console.log(userListData)
                         this.userList = userListData;
                         // console.log(this.userList);
                         this.total = result.body.result.totalCount;
