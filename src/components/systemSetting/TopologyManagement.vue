@@ -368,7 +368,7 @@
                     if (itemChild.Subdirectory &&itemChild.Subdirectory.length >0 ){
                         let itemChilds = itemChild.Subdirectory;
                         let obj = {};
-                        arrList.push(obj);
+
                         for (var s = 0;s<itemChilds.length;s++){
                             let firstNode = itemChilds[0];
                             if (!firstNode.nodeType){
@@ -382,6 +382,7 @@
                                 obj['deviceAddress'] = childs.deviceMacAddress;
                             }
                         });
+                        arrList.push(obj);
                         this.findAddress(arrList,itemChild.Subdirectory)
                     }else if (itemChild.uuid) {
                         let obj = {};
@@ -395,38 +396,29 @@
             // 设备关联弹窗
             DeviceAssociation(){
                 this.dialogFormDeviceAssociationVisible = true;
-                let DeviceData =  this.data;
-                console.log(DeviceData)
-                // let arrDeviceList = [];
+                // let DeviceData =  this.data;
+                // console.log(DeviceData)
+                let arrDeviceList = [];
                 // this.findDeviceList( arrDeviceList,DeviceData);
-                // this.addPropertyForm.PropertyNodeEquipmentAssociation.DeviceAssociationData = arrDeviceList;
+                this.addPropertyForm.PropertyNodeEquipmentAssociation.DeviceAssociationData = arrDeviceList;
             },
-            // findDeviceList( arrDeviceList,DeviceData){
-            //     treeData.forEach(item => {
-            //         let arr =[];
-            //         bind.forEach(bindItem=> {
-            //             if (item.uuid && item.uuid === bindItem.orgId) {
-            //                 // console.log(bindItem)
-            //                 let dd = Object.assign({}, bindItem);
-            //                 let device = act2[0].children;
-            //                 device.forEach(deviceItem=>{
-            //                     if (bindItem.deviceMacAddress=== deviceItem.macAddress) {
-            //                         deviceItem['name'] = true;
-            //                     }
-            //                 });
-            //                 dd['propertytyName'] = dd.deviceMacAddress;
-            //                 arr.push(dd);
-            //                 // console.log(item)
-            //             }
-            //         });
-            //         if (item.Subdirectory && item.Subdirectory.length > 0){
-            //             item.Subdirectory = arr.concat(item.Subdirectory);
-            //             this.findNode(item.Subdirectory,bind,act2);
-            //         }else{
-            //             item['Subdirectory'] =arr;
-            //         }
-            //     });
-            // },
+            findDeviceList(myMap){
+                console.log(myMap)
+                // console.log(arrDe)
+                // arrDe.forEach(itemDevice=>{
+                //     let deviceObject ={};
+                //     bind.forEach(itemBind=>{
+                //         if (itemBind.deviceMacAddress === itemDevice.deviceAddress ){
+                //             deviceObject['deviceNum'] = itemDevice.deviceAddress;
+                //             deviceObject['devicePropertytyName'] = itemDevice.devicePropertytyName
+                //             arrayDe.push(deviceObject)
+                //             // console.log(itemBind.deviceMacAddress+'---'+itemDevice.devicePropertytyName)
+                //         }
+                //     })
+                //     // console.log(itemDevice)
+                // })
+
+            },
             showDiv(){
                 this.$refs.rightClick.style.display="block"
             },
@@ -446,10 +438,13 @@
                     if (response.status===200){
                         let treeData = JSON.parse(response.body.result);
                         this.showData = treeData;
-                        console.log(this.showData)
-                        this.findNode(treeData,bind,act2);
+                        // console.log(this.showData)
+                        // let arrDe = [];
+                        var myMap = new Map();
+                        this.findNode(myMap,treeData,bind,act2);
+
+                        this.findDeviceList(myMap);
                         this.data = treeData;
-                        // console.log(this.data)
                         if(treeData.length !==0){
                             this.loading = false;
                         }else if (treeData.length === 0) {
@@ -458,12 +453,13 @@
                     }
                 })
             },
-            findNode(treeData,bind,act2){
+            findNode(myMap,treeData,bind,act2){
                     treeData.forEach(item => {
                         let arr =[];
+                        // let deviceObj = {};
+
                         bind.forEach(bindItem=> {
                         if (item.uuid && item.uuid === bindItem.orgId) {
-                            // console.log(bindItem)
                             let dd = Object.assign({}, bindItem);
                                 let device = act2[0].children;
                                 device.forEach(deviceItem=>{
@@ -475,12 +471,17 @@
                                 });
                             dd['propertytyName'] = dd.deviceMacAddress;
                             arr.push(dd);
-                            // console.log(item)
+                            myMap.set(bindItem.deviceMacAddress,item.propertytyName)
+                            // deviceObj['deviceAddress'] = bindItem.deviceMacAddress;
+                            // deviceObj['devicePropertytyName'] = item.propertytyName;
+                            // arrDe.push(deviceObj);
+
+                            console.log(bindItem.deviceMacAddress + '---'+item.propertytyName)
                         }
                     });
                         if (item.Subdirectory && item.Subdirectory.length > 0){
                             item.Subdirectory = arr.concat(item.Subdirectory);
-                            this.findNode(item.Subdirectory,bind,act2);
+                            this.findNode(myMap,item.Subdirectory,bind,act2);
                         }else{
                             item['Subdirectory'] =arr;
                         }

@@ -1,5 +1,5 @@
 <template>
-    <div>money</div>
+    <div>操蛋了，帮我啊！</div>
 </template>
 
 <script>
