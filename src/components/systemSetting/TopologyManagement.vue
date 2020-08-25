@@ -72,7 +72,7 @@
                    </span>
                     </el-tree>
 
-                    <div :class="{'rightClickMenu':isRightClick}" id="right" ref="rightClick" v-show="isRightClick"  transiton="fade" @contextmenu.prevent="showDiv">
+                    <div :class="{'rightClickMenu':isRightClick}" id="right" ref="rightClick" v-show="isRightClick"  transiton="fade">
                         <ul style="list-style: none">
                             <li @click="addNode"><i class="el-icon-plus"></i> 添加子节点</li>
                             <li @click="editNode"><i class="el-icon-edit"></i> 修改节点</li>
@@ -191,20 +191,32 @@
                     <el-row style="width: 100%;height: 100%;position: relative">
                         <el-col style="height: 80%;width:100%;padding: 15px 15px 15px 15px;">
                             <el-table
-                                    :data="data"
+                                    :data="deviceData"
                                     max-height=650
                                     :row-style="{height:'35px'}"
                                     :cell-style="{padding:'0px'}"
                             >
                                 <el-table-column
                                         label="设备名称">
-
+                                    <template slot-scope="scope">
+                                        <div slot="reference" class="name-wrapper">
+                                            <el-tag size="medium">{{ scope.row.deviceMacAddress }}</el-tag>
+                                        </div>
+                                    </template>
 
                                 </el-table-column>
 
                                 <el-table-column
                                         label="关联物业节点">
-
+                                    <span v-for="item in deviceData" :key="item.index">
+                                        <span>{{item.node}}</span>
+                                    </span>
+<!--                                    <template>-->
+<!--                                        <div slot="reference" class="name-wrapper">-->
+<!--                                            888-->
+<!--                                            <el-tag size="medium">{{ scope.row.node }}</el-tag>-->
+<!--                                        </div>-->
+<!--                                    </template>-->
                                 </el-table-column>
                             </el-table>
                         </el-col>
@@ -259,6 +271,7 @@
 </template>
 
 <script>
+    // noinspection UnterminatedStatementJS
     export default {
         name: "home-contain",
         data(){
@@ -277,7 +290,7 @@
               showIcon:true,
               loading:true,
               data:null,
-              showData:null,
+              deviceData:[],
               dataDevice:null,
               bindData:null,
               dataText:'',
@@ -357,7 +370,6 @@
             PropertyNodeEquipmentAssociation(){
                 this.dialogFormPropertyNodeEquipmentAssociationVisible = true;
                 let addressData =  this.data;
-                // console.log(addressData)
                 let arrList = [];
                 this.findAddress( arrList,addressData);
                 this.addPropertyForm.PropertyNodeEquipmentAssociation.PropertyNodeEquipmentAssociationData = arrList;
@@ -395,39 +407,59 @@
             },
             // 设备关联弹窗
             DeviceAssociation(){
+                this.deviceData = this.findDeviceList();
                 this.dialogFormDeviceAssociationVisible = true;
-                // let DeviceData =  this.data;
-                // console.log(DeviceData)
-                let arrDeviceList = [];
-                // this.findDeviceList( arrDeviceList,DeviceData);
-                this.addPropertyForm.PropertyNodeEquipmentAssociation.DeviceAssociationData = arrDeviceList;
             },
-            findDeviceList(myMap){
-                console.log(myMap)
-                // console.log(arrDe)
-                // arrDe.forEach(itemDevice=>{
-                //     let deviceObject ={};
-                //     bind.forEach(itemBind=>{
-                //         if (itemBind.deviceMacAddress === itemDevice.deviceAddress ){
-                //             deviceObject['deviceNum'] = itemDevice.deviceAddress;
-                //             deviceObject['devicePropertytyName'] = itemDevice.devicePropertytyName
-                //             arrayDe.push(deviceObject)
-                //             // console.log(itemBind.deviceMacAddress+'---'+itemDevice.devicePropertytyName)
-                //         }
-                //     })
-                //     // console.log(itemDevice)
-                // })
+            findDeviceList(){
+                let map = new Map()
 
-            },
-            showDiv(){
-                this.$refs.rightClick.style.display="block"
+                this.bindData.forEach(item=>{
+                    let tempArr =[];
+                    let tempNodeStr = '';
+                    if (map.get(item.deviceMacAddress)){//以下一个item中的键在上一个map中查找是否有相同的键
+                        let  temp = map.get(item.deviceMacAddress)// 返回 下一个item.deviceMacAddress 键对应的上一个map对应的value（找相同键的值）
+                      for (var i=0;i<temp.node.length;i++){
+                          tempNodeStr +=  temp.node[i];
+                          if (!tempNodeStr.includes(item.node)){
+                              //找到相同键的值后，如果在上一个map中的value中的node值中不包含下一个item中的node值，
+                              //则把上一个map中的value中的node值与下一个item中的node值拼接起来
+                              // temp.node += '   |    '+item.node
+                              temp.node.push(item.node);
+                          }
+                      }
+
+                    }else {
+                        tempArr.push(item.node);
+                        item.node = tempArr;
+                        map.set(item.deviceMacAddress,item)
+                    }
+                })
+                let arr =[]
+                // for (let item of map.values()) {
+                //     arr.push(item)
+                //
+                // }
+                //遍历map中的value
+                map.forEach(value=>{
+                    arr.push(value)
+                });
+                return arr
             },
             getallbinds(act2){
                 this.$http.get('organddevicenode/getallbinds', {}).then(response => {
                     if (response.body.status === 200) {
                         let bind= response.body.result;
+
                         this.bindData = bind;
-                        // console.log(this.bindData)
+                        // console.log(bind)
+                        let device = act2[0].children;
+                        device.forEach(deviceItem=>{
+                            bind.forEach(itemBinds=>{
+                                if (itemBinds.deviceMacAddress=== deviceItem.macAddress) {
+                                    deviceItem['name'] = '10';
+                                }
+                            })
+                        });
                         this.show(bind,act2);
                     }
                 })
@@ -437,13 +469,7 @@
                 this.$http.post(('propertyty/show'),{}).then(response=>{
                     if (response.status===200){
                         let treeData = JSON.parse(response.body.result);
-                        this.showData = treeData;
-                        // console.log(this.showData)
-                        // let arrDe = [];
-                        var myMap = new Map();
-                        this.findNode(myMap,treeData,bind,act2);
-
-                        this.findDeviceList(myMap);
+                        this.findNode(treeData,bind,act2);
                         this.data = treeData;
                         if(treeData.length !==0){
                             this.loading = false;
@@ -453,35 +479,20 @@
                     }
                 })
             },
-            findNode(myMap,treeData,bind,act2){
+            findNode(treeData,bind,act2){
                     treeData.forEach(item => {
                         let arr =[];
-                        // let deviceObj = {};
-
                         bind.forEach(bindItem=> {
                         if (item.uuid && item.uuid === bindItem.orgId) {
                             let dd = Object.assign({}, bindItem);
-                                let device = act2[0].children;
-                                device.forEach(deviceItem=>{
-                                    // console.log(deviceItem)
-                                    if (bindItem.deviceMacAddress=== deviceItem.macAddress) {
-                                        // console.log(deviceItem.macAddress)
-                                        deviceItem['name'] = '10';
-                                    }
-                                });
                             dd['propertytyName'] = dd.deviceMacAddress;
                             arr.push(dd);
-                            myMap.set(bindItem.deviceMacAddress,item.propertytyName)
-                            // deviceObj['deviceAddress'] = bindItem.deviceMacAddress;
-                            // deviceObj['devicePropertytyName'] = item.propertytyName;
-                            // arrDe.push(deviceObj);
-
-                            console.log(bindItem.deviceMacAddress + '---'+item.propertytyName)
+                            bindItem.node = item.propertytyName
                         }
                     });
                         if (item.Subdirectory && item.Subdirectory.length > 0){
                             item.Subdirectory = arr.concat(item.Subdirectory);
-                            this.findNode(myMap,item.Subdirectory,bind,act2);
+                            this.findNode(item.Subdirectory,bind,act2);
                         }else{
                             item['Subdirectory'] =arr;
                         }
