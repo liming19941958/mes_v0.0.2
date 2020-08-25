@@ -208,15 +208,11 @@
 
                                 <el-table-column
                                         label="关联物业节点">
-                                    <span v-for="item in deviceData" :key="item.index">
-                                        <span>{{item.node}}</span>
-                                    </span>
-<!--                                    <template>-->
-<!--                                        <div slot="reference" class="name-wrapper">-->
-<!--                                            888-->
-<!--                                            <el-tag size="medium">{{ scope.row.node }}</el-tag>-->
-<!--                                        </div>-->
-<!--                                    </template>-->
+                                    <template slot-scope="scope">
+                                        <div v-for="(item,index) in scope.row.node" :key="index" class="name-wrapper">
+                                            <span style="display: inline-block">{{item}}</span>
+                                        </div>
+                                    </template>
                                 </el-table-column>
                             </el-table>
                         </el-col>
@@ -370,6 +366,7 @@
             PropertyNodeEquipmentAssociation(){
                 this.dialogFormPropertyNodeEquipmentAssociationVisible = true;
                 let addressData =  this.data;
+                // console.log(addressData)
                 let arrList = [];
                 this.findAddress( arrList,addressData);
                 this.addPropertyForm.PropertyNodeEquipmentAssociation.PropertyNodeEquipmentAssociationData = arrList;
@@ -412,22 +409,22 @@
             },
             findDeviceList(){
                 let map = new Map()
-
                 this.bindData.forEach(item=>{
+                    console.log(item)
                     let tempArr =[];
                     let tempNodeStr = '';
                     if (map.get(item.deviceMacAddress)){//以下一个item中的键在上一个map中查找是否有相同的键
                         let  temp = map.get(item.deviceMacAddress)// 返回 下一个item.deviceMacAddress 键对应的上一个map对应的value（找相同键的值）
                       for (var i=0;i<temp.node.length;i++){
                           tempNodeStr +=  temp.node[i];
-                          if (!tempNodeStr.includes(item.node)){
-                              //找到相同键的值后，如果在上一个map中的value中的node值中不包含下一个item中的node值，
-                              //则把上一个map中的value中的node值与下一个item中的node值拼接起来
-                              // temp.node += '   |    '+item.node
-                              temp.node.push(item.node);
-                          }
-                      }
 
+                      }
+                        if (!tempNodeStr.includes(item.node)){
+                            //找到相同键的值后，如果在上一个map中的value中的node值中不包含下一个item中的node值，
+                            //则把上一个map中的value中的node值与下一个item中的node值拼接起来
+                            // temp.node += '   |    '+item.node
+                            temp.node.push(item.node);
+                    }
                     }else {
                         tempArr.push(item.node);
                         item.node = tempArr;
@@ -435,14 +432,16 @@
                     }
                 })
                 let arr =[]
-                // for (let item of map.values()) {
-                //     arr.push(item)
-                //
-                // }
+                for (let item of map.values()) {
+                    arr.push(item)
+
+                }
                 //遍历map中的value
-                map.forEach(value=>{
-                    arr.push(value)
-                });
+                // map.forEach(value=>{
+                //     // console.log(key)
+                //     arr.push(value)
+                    console.log(arr)
+                // });
                 return arr
             },
             getallbinds(act2){
