@@ -209,9 +209,10 @@
                                 <el-table-column
                                         label="关联物业节点">
                                     <template slot-scope="scope">
-                                        <div v-for="(item,index) in scope.row.node" :key="index" class="name-wrapper">
-                                            <span style="display: inline-block">{{item}}</span>
-                                        </div>
+                                        <span v-for="(item,index) in scope.row.node" :key="index" class="name-wrapper">
+                                            <span style="margin-right: 8px;">{{item}}</span>
+                                            <span v-if="scope.row.node.length>1" style="color:#c3c3c3;margin-right: 8px;">|</span>
+                                        </span>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -410,7 +411,7 @@
             findDeviceList(){
                 let map = new Map()
                 this.bindData.forEach(item=>{
-                    console.log(item)
+                    // console.log(item)
                     let tempArr =[];
                     let tempNodeStr = '';
                     if (map.get(item.deviceMacAddress)){//以下一个item中的键在上一个map中查找是否有相同的键
@@ -430,18 +431,19 @@
                         item.node = tempArr;
                         map.set(item.deviceMacAddress,item)
                     }
-                })
+                });
                 let arr =[]
-                for (let item of map.values()) {
-                    arr.push(item)
-
-                }
+                // for (let item of map.values()) {
+                //     arr.push(item)
+                //
+                // }
                 //遍历map中的value
-                // map.forEach(value=>{
-                //     // console.log(key)
-                //     arr.push(value)
-                    console.log(arr)
-                // });
+                map.forEach(value=>{
+                    // console.log(key)
+                    arr.push(value)
+
+                });
+                console.log(arr)
                 return arr
             },
             getallbinds(act2){

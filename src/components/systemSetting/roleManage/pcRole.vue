@@ -37,16 +37,15 @@
                         row-key="id"
                         :indent="20"
                         border
-                        max-height="650"
+                        max-height="750"
                         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
                         :header-cell-style="{
-                            // 'background-color': '#ecf3f0',
                             'color': '#303133',
                             'font-weight': '800',
                             'font-size': '16px',
                             'line-height': '10px',
                             'text-align': 'center',
-                        }">
+                       }">
                     <el-table-column
                             type="selection"
                             min-width="55">
@@ -58,16 +57,16 @@
                             width="250px">
                     </el-table-column>
                     <el-table-column
-                            prop="dataFirstNoChildren"
+                            prop="modulesMaps"
                             label="模块列表">
-<!--                        <template slot-scope="scope">-->
-<!--                            <el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">-->
-<!--                                <el-checkbox v-for="city in scope.row.modulesMaps" :label="city" :key="city">{{city}}</el-checkbox>-->
-<!--                            </el-checkbox-group>-->
-<!--                            <span>{{scope.row.modulesMaps | userStatus | userLists}}</span>-->
-<!--                        </template>-->
+                        <template slot-scope="scope">
+                            <el-checkbox-group v-model="checkList[scope.row.id]">
+                                <el-checkbox :label="item" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" :key="index" ></el-checkbox>
+                            </el-checkbox-group>
+                        </template>
                     </el-table-column>
                 </el-table>
+                <el-button type="primary" style="margin: 20px 0 0 20px" @click="SubmitForm">确定</el-button>
 
             </div>
 
@@ -97,6 +96,7 @@
         // },
         data(){
             return{
+                checkList:{},
                 data:null,
                 defaultProps: {
                     children: 'Subdirectory',
@@ -120,6 +120,10 @@
             // showIndex(item){
             //     console.log(item)
             // },
+
+            SubmitForm(){
+                console.log(this.checkList);
+            },
             //获取组织架构树
             show(){
                 this.dataText = ' ';
@@ -157,6 +161,13 @@
                             type:'success',
                         });
                         this.tableData=response.data.result.data;
+                        console.log(this.tableData)
+                        this.tableData.forEach(item=>{
+                            this.$set(this.checkList,item.id,[]);
+                            item.children.forEach(items=>{
+                                this.$set(this.checkList,items.id,[])
+                            })
+                        })
 
                     }
                 })
