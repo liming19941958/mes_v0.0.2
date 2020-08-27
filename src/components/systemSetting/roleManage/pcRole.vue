@@ -32,12 +32,14 @@
             <div class="role-table">
 
                 <el-table
+                        ref="table"
                         :data="tableData"
-                        style="width: 100%;overflow-y: scroll"
+                        @select="handleSelect"
+                        style="width: 100%;"
                         row-key="id"
                         :indent="20"
                         border
-                        max-height="70%"
+                        max-height="750"
                         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
                         :header-cell-style="{
                             'color': '#303133',
@@ -45,8 +47,7 @@
                             'font-size': '16px',
                             'line-height': '10px',
                             'text-align': 'center',
-                       }"
-                        @selection-change="handleSelectionChange">
+                       }">
                     <el-table-column
                             type="selection"
                             min-width="55">
@@ -61,7 +62,7 @@
                             prop="modulesMaps"
                             label="模块列表">
                         <template slot-scope="scope">
-                            <el-checkbox-group v-model="checkList[scope.row.id]" @change ="handleChange">
+                            <el-checkbox-group v-model="scope.row.checkList">
                                 <el-checkbox :label="item" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" :key="index" ></el-checkbox>
                             </el-checkbox-group>
                         </template>
@@ -83,7 +84,6 @@
         name: "pcRole",
         data(){
             return{
-                checkList:[],
                 data:null,
                 defaultProps: {
                     children: 'Subdirectory',
@@ -97,15 +97,31 @@
                 },
                 tableData: null,
                 dataFirstNoChildren:null,
+                selectRow: []
             }
         },
         created(){
-            this.params.menuType="PC";
             this.show();
         },
         methods:{
-            handleSelectionChange(val){
-                console.log(val)
+
+            // showIndex(item){
+            //     console.log(item)
+            // },
+            handleSelect (selection,row) {
+                if(row.children.length > 0){
+                    // selection = selection.concat(row.children)
+                    row.children.forEach(item => {
+                        this.$refs.table.toggleRowSelection(item)
+                        item.checkList =  Object.keys(item.modulesMaps)
+                        // this.$refs.table.setCurrentRow(item)
+                    })
+                    // console.log(selection,row.children)
+                }else{
+                    selection.checkList =  Object.keys(selection.modulesMaps)
+                }
+                this.selectRow = selection
+                console.log(this.selectRow)
             },
             SubmitForm(){
                 console.log(this.checkList);
@@ -130,32 +146,9 @@
             //组织架构选择树形控件各分支
             handleNodeClick(data){
                 this.params.roleId=data.id;
-                this.getMenuPermissions();
-                console.log(this.params.roleId);
                 this.getMenuList();
-            },
-            handleChange(val){
-               console.log(val)
-            },
-            getMenuPermissions(){
-               this.$http.get('rolePermissions/getMenuPermissions',{
-                  params:{
-                      roleId:this.params.roleId,
-                      menuType:this.params.menuType
-                  }
-               }).then(response=>{
-                   if (response.body.status===200){
-                       this.$message({
-                           type:"success",
-                           message: "操作成功"
-                       })
-                   }else {
-                       this.$message({
-                           type:"error",
-                           message: "获取权限信息失败，请联系管理员！"
-                       })
-                   }
-               })
+                console.log(this.params.roleId);
+
             },
             getMenuList(){
                 this.$http.get('menu/getMenuList',{
@@ -170,24 +163,15 @@
                             type:'success',
                         });
                         this.tableData=response.data.result.data;
-                        // this.tableData.forEach(item=>{
-                        //     item['checked'] = [];
-                        //     item.children.forEach(items=>{
-                        //         items['checked'] = [];
-                        //         items.children.forEach(itemss=>{
-                        //             itemss['checked'] = [];
-                        //         })
-                        //     })
-                        // })
-                        console.log(this.tableData)
+                        console.log(this.tableData);
                         this.tableData.forEach(item=>{
-                            this.$set(this.checkList,item.id,[]);
+                            // console.log(item)
+                            this.$set(item, 'checkList', [])
                             item.children.forEach(items=>{
-                                this.$set(this.checkList,items.id,[]);
-                                items.children.forEach(itemss=>{
-                                    this.$set(this.checkList,itemss.id,[])
+                                this.$set(items, 'checkList', []);
+                                items.children.forEach(Tirth=>{
+                                    this.$set(Tirth, 'checkList', [])
                                 })
-
                             })
                         })
 

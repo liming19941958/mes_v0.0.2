@@ -352,7 +352,9 @@
         //     }
         // },
         created(){
+
             this.getDeviceNodeTree();
+
             document.oncontextmenu = function(){
                 var right = document.getElementById('right');
                 right.style.display = "none"
@@ -362,6 +364,7 @@
                 right.style.display = "none"
             };
         },
+
         methods:{
             // 物业关联弹窗
             PropertyNodeEquipmentAssociation(){
@@ -378,7 +381,6 @@
                     if (itemChild.Subdirectory &&itemChild.Subdirectory.length >0 ){
                         let itemChilds = itemChild.Subdirectory;
                         let obj = {};
-
                         for (var s = 0;s<itemChilds.length;s++){
                             let firstNode = itemChilds[0];
                             if (!firstNode.nodeType){
@@ -405,20 +407,18 @@
             },
             // 设备关联弹窗
             DeviceAssociation(){
-                this.deviceData = this.findDeviceList();
+
                 this.dialogFormDeviceAssociationVisible = true;
             },
             findDeviceList(){
                 let map = new Map()
                 this.bindData.forEach(item=>{
-                    // console.log(item)
                     let tempArr =[];
                     let tempNodeStr = '';
                     if (map.get(item.deviceMacAddress)){//以下一个item中的键在上一个map中查找是否有相同的键
                         let  temp = map.get(item.deviceMacAddress)// 返回 下一个item.deviceMacAddress 键对应的上一个map对应的value（找相同键的值）
                       for (var i=0;i<temp.node.length;i++){
                           tempNodeStr +=  temp.node[i];
-
                       }
                         if (!tempNodeStr.includes(item.node)){
                             //找到相同键的值后，如果在上一个map中的value中的node值中不包含下一个item中的node值，
@@ -443,16 +443,13 @@
                     arr.push(value)
 
                 });
-                console.log(arr)
-                return arr
+                this.deviceData = arr;
             },
             getallbinds(act2){
                 this.$http.get('organddevicenode/getallbinds', {}).then(response => {
                     if (response.body.status === 200) {
                         let bind= response.body.result;
-
                         this.bindData = bind;
-                        // console.log(bind)
                         let device = act2[0].children;
                         device.forEach(deviceItem=>{
                             bind.forEach(itemBinds=>{
@@ -471,6 +468,7 @@
                     if (response.status===200){
                         let treeData = JSON.parse(response.body.result);
                         this.findNode(treeData,bind,act2);
+                        this.findDeviceList();
                         this.data = treeData;
                         if(treeData.length !==0){
                             this.loading = false;
@@ -680,6 +678,8 @@
                         let itemDeviceChildren = itemDevice.children;
                         itemDeviceChildren.forEach(deviceChildren=>{
                             if (deviceChildren.macAddress === data.deviceMacAddress ) {
+                                //通过 key 设置某个节点的当前选中状态，使用此方法必须设置 node-key 属性
+                                //设置右边设备管理树节点选中状态并设置其高亮显示
                                 this.$refs.rightTree.setCurrentKey(deviceChildren.id)
                                 console.log('找到了'+ deviceChildren.macAddress)
                             }
