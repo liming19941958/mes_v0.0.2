@@ -21,7 +21,7 @@
                             :data="data"
                             :props="defaultProps"
                             default-expand-all
-                            highlight-current=true
+                            :highlight-current="true"
                             :expand-on-click-node="false"
                             @node-click="handleNodeClick"
                             style="background-color: #ecf3f0;width: 100%;">
@@ -63,7 +63,7 @@
                             label="模块列表">
                         <template slot-scope="scope">
                             <el-checkbox-group v-model="scope.row.checkList">
-                                <el-checkbox :label="item" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" :key="index" ></el-checkbox>
+                                <el-checkbox :label="item" :checked="item.checked" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" :key="index" ></el-checkbox>
                             </el-checkbox-group>
                         </template>
                     </el-table-column>
@@ -104,9 +104,10 @@
             this.show();
         },
         methods:{
-
-            // showIndex(item){
-            //     console.log(item)
+            // handleSelects(selection,selectRow){
+            //
+            //     console.log(selection,selectRow)
+            //     this.handleSelect (selection.selectRow);
             // },
             handleSelect (selection,row) {
                 if(row.children.length > 0){
@@ -114,14 +115,28 @@
                     row.children.forEach(item => {
                         this.$refs.table.toggleRowSelection(item)
                         item.checkList =  Object.keys(item.modulesMaps)
+                        console.log(item);
+                        item.children.forEach(items => {
+                            this.$refs.table.toggleRowSelection(items)
+                            items.checkList =  Object.keys(items.modulesMaps)
+                            // this.$refs.table.setCurrentRow(item)
+                        })
                         // this.$refs.table.setCurrentRow(item)
                     })
                     // console.log(selection,row.children)
                 }else{
-                    selection.checkList =  Object.keys(selection.modulesMaps)
+
+                    if (selection.length > 0){
+                        console.log(selection,row)
+                        row.checkList =  Object.keys(row.modulesMaps)
+                    }else if (selection.length === 0) {
+                        console.log(selection,row)
+                        row.checkList.length = 0;
+                    }
+
                 }
                 this.selectRow = selection
-                console.log(this.selectRow)
+
             },
             SubmitForm(){
                 console.log(this.checkList);
@@ -166,11 +181,14 @@
                         console.log(this.tableData);
                         this.tableData.forEach(item=>{
                             // console.log(item)
+                            // item['checked']=false;
                             this.$set(item, 'checkList', [])
                             item.children.forEach(items=>{
                                 this.$set(items, 'checkList', []);
+                                // items['checked']=true;
                                 items.children.forEach(Tirth=>{
-                                    this.$set(Tirth, 'checkList', [])
+                                    this.$set(Tirth, 'checkList', []);
+                                    // Tirth['checked']=false;
                                 })
                             })
                         })
