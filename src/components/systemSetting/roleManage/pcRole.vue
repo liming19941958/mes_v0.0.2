@@ -33,11 +33,11 @@
 
                 <el-table
                         :data="tableData"
-                        style="width: 100%;"
+                        style="width: 100%;overflow-y: scroll"
                         row-key="id"
                         :indent="20"
                         border
-                        max-height="750"
+                        max-height="70%"
                         :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
                         :header-cell-style="{
                             'color': '#303133',
@@ -45,7 +45,8 @@
                             'font-size': '16px',
                             'line-height': '10px',
                             'text-align': 'center',
-                       }">
+                       }"
+                        @selection-change="handleSelectionChange">
                     <el-table-column
                             type="selection"
                             min-width="55">
@@ -60,7 +61,7 @@
                             prop="modulesMaps"
                             label="模块列表">
                         <template slot-scope="scope">
-                            <el-checkbox-group v-model="checkList[scope.row.id]">
+                            <el-checkbox-group v-model="checkList[scope.row.id]" @change ="handleChange">
                                 <el-checkbox :label="item" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" :key="index" ></el-checkbox>
                             </el-checkbox-group>
                         </template>
@@ -80,23 +81,9 @@
 
     export default {
         name: "pcRole",
-        // filters: {
-        //     userStatus: function (modulesMaps) {
-        //         let arrayList = Object.keys(modulesMaps);
-        //         return arrayList;
-        //     },
-        //     userLists: function (arrayList) {
-        //         var arr1 = '';
-        //         // const text = `<input type="checkbox" name="like"/>`
-        //         for (var s = 0; s < arrayList.length; s++) {
-        //             arr1 += arrayList[s];
-        //         }
-        //         return arr1;
-        //     }
-        // },
         data(){
             return{
-                checkList:{},
+                checkList:[],
                 data:null,
                 defaultProps: {
                     children: 'Subdirectory',
@@ -113,14 +100,13 @@
             }
         },
         created(){
+            this.params.menuType="PC";
             this.show();
         },
         methods:{
-
-            // showIndex(item){
-            //     console.log(item)
-            // },
-
+            handleSelectionChange(val){
+                console.log(val)
+            },
             SubmitForm(){
                 console.log(this.checkList);
             },
@@ -144,9 +130,32 @@
             //组织架构选择树形控件各分支
             handleNodeClick(data){
                 this.params.roleId=data.id;
-                this.getMenuList();
+                this.getMenuPermissions();
                 console.log(this.params.roleId);
-
+                this.getMenuList();
+            },
+            handleChange(val){
+               console.log(val)
+            },
+            getMenuPermissions(){
+               this.$http.get('rolePermissions/getMenuPermissions',{
+                  params:{
+                      roleId:this.params.roleId,
+                      menuType:this.params.menuType
+                  }
+               }).then(response=>{
+                   if (response.body.status===200){
+                       this.$message({
+                           type:"success",
+                           message: "操作成功"
+                       })
+                   }else {
+                       this.$message({
+                           type:"error",
+                           message: "获取权限信息失败，请联系管理员！"
+                       })
+                   }
+               })
             },
             getMenuList(){
                 this.$http.get('menu/getMenuList',{
@@ -161,11 +170,24 @@
                             type:'success',
                         });
                         this.tableData=response.data.result.data;
+                        // this.tableData.forEach(item=>{
+                        //     item['checked'] = [];
+                        //     item.children.forEach(items=>{
+                        //         items['checked'] = [];
+                        //         items.children.forEach(itemss=>{
+                        //             itemss['checked'] = [];
+                        //         })
+                        //     })
+                        // })
                         console.log(this.tableData)
                         this.tableData.forEach(item=>{
                             this.$set(this.checkList,item.id,[]);
                             item.children.forEach(items=>{
-                                this.$set(this.checkList,items.id,[])
+                                this.$set(this.checkList,items.id,[]);
+                                items.children.forEach(itemss=>{
+                                    this.$set(this.checkList,itemss.id,[])
+                                })
+
                             })
                         })
 
