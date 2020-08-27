@@ -32,7 +32,9 @@
             <div class="role-table">
 
                 <el-table
+                        ref="table"
                         :data="tableData"
+                        @select="handleSelect"
                         style="width: 100%;"
                         row-key="id"
                         :indent="20"
@@ -60,7 +62,7 @@
                             prop="modulesMaps"
                             label="模块列表">
                         <template slot-scope="scope">
-                            <el-checkbox-group v-model="checkList[scope.row.id]">
+                            <el-checkbox-group v-model="scope.row.checkList">
                                 <el-checkbox :label="item" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" :key="index" ></el-checkbox>
                             </el-checkbox-group>
                         </template>
@@ -80,23 +82,8 @@
 
     export default {
         name: "pcRole",
-        // filters: {
-        //     userStatus: function (modulesMaps) {
-        //         let arrayList = Object.keys(modulesMaps);
-        //         return arrayList;
-        //     },
-        //     userLists: function (arrayList) {
-        //         var arr1 = '';
-        //         // const text = `<input type="checkbox" name="like"/>`
-        //         for (var s = 0; s < arrayList.length; s++) {
-        //             arr1 += arrayList[s];
-        //         }
-        //         return arr1;
-        //     }
-        // },
         data(){
             return{
-                checkList:{},
                 data:null,
                 defaultProps: {
                     children: 'Subdirectory',
@@ -110,6 +97,7 @@
                 },
                 tableData: null,
                 dataFirstNoChildren:null,
+                selectRow: []
             }
         },
         created(){
@@ -120,7 +108,21 @@
             // showIndex(item){
             //     console.log(item)
             // },
+            handleSelect (selection,row) {
 
+                if(row.children.length > 0){
+                    // selection = selection.concat(row.children)
+                    row.children.forEach(item => {
+                        this.$refs.table.toggleRowSelection(item)
+                        item.checkList =  Object.keys(item.modulesMaps)
+                        // this.$refs.table.setCurrentRow(item)
+                    })
+                    console.log(selection,row.children)
+                }else{
+                    selection.checkList =  Object.keys(selection.modulesMaps)
+                }
+                this.selectRow = selection
+            },
             SubmitForm(){
                 console.log(this.checkList);
             },
@@ -163,9 +165,9 @@
                         this.tableData=response.data.result.data;
                         console.log(this.tableData)
                         this.tableData.forEach(item=>{
-                            this.$set(this.checkList,item.id,[]);
+                            this.$set(item, 'checkList', [])
                             item.children.forEach(items=>{
-                                this.$set(this.checkList,items.id,[])
+                                this.$set(items, 'checkList', [])
                             })
                         })
 
