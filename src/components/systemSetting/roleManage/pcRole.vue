@@ -35,6 +35,8 @@
                         ref="table"
                         :data="tableData"
                         @select="handleSelect"
+                        @selection-change="change"
+                        @select-all="selectAll"
                         style="width: 100%;"
                         row-key="id"
                         :indent="20"
@@ -84,7 +86,9 @@
         name: "pcRole",
         data(){
             return{
+                selected:false,
                 data:null,
+                selects:[],
                 defaultProps: {
                     children: 'Subdirectory',
                     label: 'name'
@@ -95,13 +99,15 @@
                     roleId:'',
                     menuType:'',
                 },
-                tableData: null,
+                tableData: [],
+                rows:{},
                 dataFirstNoChildren:null,
                 selectRow: []
             }
         },
         created(){
             this.show();
+
         },
         methods:{
             // handleSelects(selection,selectRow){
@@ -109,37 +115,82 @@
             //     console.log(selection,selectRow)
             //     this.handleSelect (selection.selectRow);
             // },
-            handleSelect (selection,row) {
-                if(row.children.length > 0){
-                    // selection = selection.concat(row.children)
-                    row.children.forEach(item => {
-                        this.$refs.table.toggleRowSelection(item)
-                        item.checkList =  Object.keys(item.modulesMaps)
-                        console.log(item);
-                        item.children.forEach(items => {
-                            this.$refs.table.toggleRowSelection(items)
-                            items.checkList =  Object.keys(items.modulesMaps)
-                            // this.$refs.table.setCurrentRow(item)
+            change(val,){
+                this.selects = val;
+                console.log(val)
+                if(this.rows.children.length > 0){
+                    this.$nextTick(() => {
+                        this.rows.children.forEach(item => {
+                            if (val.length > 0){
+                                item.checkList =  Object.keys(item.modulesMaps)
+                            }else if (val.length === 0) {
+                                item.checkList = [];
+                            }
+                            item.children.forEach(items => {
+                                if (val.length > 0){
+                                    items.checkList =  Object.keys(items.modulesMaps)
+                                }else if (val.length === 0) {
+                                    items.checkList = [];
+                                }
+                            })
                         })
-                        // this.$refs.table.setCurrentRow(item)
                     })
-                    // console.log(selection,row.children)
-                }else{
-
-                    if (selection.length > 0){
-                        console.log(selection,row)
-                        row.checkList =  Object.keys(row.modulesMaps)
-                    }else if (selection.length === 0) {
-                        console.log(selection,row)
-                        row.checkList.length = 0;
-                    }
-
+                }else
+                if (val.length > 0){
+                    this.rows.checkList =  Object.keys(this.rows.modulesMaps)
+                }else if (val.length === 0) {
+                    this.rows.checkList = [];
                 }
-                this.selectRow = selection
+            },
+            selectAll(selection){
+                // console.log(selection)
+                    selection.forEach(itemRow=>{
+                        // console.log(item.menuName)
+                        if(itemRow.children.length > 0){
+                            itemRow.children.forEach(item => {
+                                this.$refs.table.toggleRowSelection(item)
+                                if (selection.length > 0){
+                                    item.checkList =  Object.keys(item.modulesMaps)
+                                }else{
+                                    item.checkList = [];
+                                }
+                                item.children.forEach(items => {
+                                    this.$refs.table.toggleRowSelection(items)
+                                    if (selection.length > 0){
+                                        items.checkList =  Object.keys(items.modulesMaps)
+                                    }else if (selection.length === 0) {
+                                        items.checkList = [];
+                                    }
 
+                                })
+                            })
+                            // console.log(selection,row.children)
+                        }else{
+                            if (selection.length > 0){
+                                // console.log(selection,row)
+                                itemRow.checkList =  Object.keys(itemRow.modulesMaps)
+                            }else if (selection.length === 0) {
+                                // console.log(selection,row)
+                                itemRow.checkList = [];
+                            }
+                        }
+                    })
+            },
+            handleSelect (selection,row) {
+                 this.rows = row;
+                if(row.children.length > 0){
+                    this.$nextTick(() => {
+                        row.children.forEach(item => {
+                            this.$refs.table.toggleRowSelection(item);
+                            item.children.forEach(items => {
+                                this.$refs.table.toggleRowSelection(items)
+                            })
+                        })
+                    })
+                }
             },
             SubmitForm(){
-                console.log(this.checkList);
+                console.log(this.selectRow);
             },
             //获取组织架构树
             show(){
