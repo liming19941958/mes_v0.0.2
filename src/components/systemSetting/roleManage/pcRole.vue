@@ -5,26 +5,26 @@
             <div class="role-menu">
                 <div class="roleList">
                     <span>角色列表</span>
-                    <el-tooltip popper-class="atooltip" content="刷新" placement="bottom">
+                    <el-tooltip content="刷新" placement="bottom" popper-class="atooltip">
                     <span>
-                                 <i class="el-icon-refresh-right" @click="show"></i>
+                                 <i @click="show" class="el-icon-refresh-right"></i>
                     </span>
                     </el-tooltip>
                 </div>
                 <div class="roleNameMenu">
                     <el-tree
-                            v-loading="loading"
-                            element-loading-text="拼命加载中"
-                            element-loading-spinner="el-icon-loading"
-                            element-loading-background="rgba(0, 0, 0, 0.001)"
-                            :empty-text="dataText"
                             :data="data"
-                            :props="defaultProps"
-                            default-expand-all
-                            :highlight-current="true"
+                            :empty-text="dataText"
                             :expand-on-click-node="false"
+                            :highlight-current="true"
+                            :props="defaultProps"
                             @node-click="handleNodeClick"
-                            style="background-color: #ecf3f0;width: 100%;">
+                            default-expand-all
+                            element-loading-background="rgba(0, 0, 0, 0.001)"
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-text="拼命加载中"
+                            style="background-color: #ecf3f0;width: 100%;"
+                            v-loading="loading">
                     </el-tree>
                 </div>
             </div>
@@ -32,45 +32,45 @@
             <div class="role-table">
 
                 <el-table
-                        ref="table"
                         :data="tableData"
-                        @select="handleSelect"
-                        @selection-change="change"
-                        @select-all="selectAll"
-                        style="width: 100%;"
-                        row-key="id"
-                        :indent="20"
-                        border
-                        max-height="750"
-                        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
                         :header-cell-style="{
                             'color': '#303133',
                             'font-weight': '800',
                             'font-size': '16px',
                             'line-height': '10px',
                             'text-align': 'center',
-                       }">
+                       }"
+                        :indent="20"
+                        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+                        @select="handleSelect"
+                        @select-all="selectAll"
+                        @selection-change="change"
+                        border
+                        max-height="750"
+                        ref="table"
+                        row-key="id"
+                        style="width: 100%;">
                     <el-table-column
-                            type="selection"
-                            min-width="55">
+                            min-width="55"
+                            type="selection">
                     </el-table-column>
                     <el-table-column
-                            prop="menuName"
                             label="菜单名称"
+                            prop="menuName"
                             sortable
                             width="250px">
                     </el-table-column>
                     <el-table-column
-                            prop="modulesMaps"
-                            label="模块列表">
+                            label="模块列表"
+                            prop="modulesMaps">
                         <template slot-scope="scope">
                             <el-checkbox-group v-model="scope.row.checkList">
-                                <el-checkbox :label="item" :checked="item.checked" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" :key="index" ></el-checkbox>
+                                <el-checkbox :checked="item.checked" :key="index" :label="item" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" ></el-checkbox>
                             </el-checkbox-group>
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-button type="primary" style="margin: 20px 0 0 20px" @click="SubmitForm">确定</el-button>
+                <el-button @click="SubmitForm" style="margin: 20px 0 0 20px" type="primary">确定</el-button>
 
             </div>
 
@@ -120,20 +120,20 @@
                 console.log('change',val)
                 if(this.rows.children.length > 0){
                     this.$nextTick(() => {
-                        this.rows.children.forEach(item => {
-                            if (val.length > 0){
+                        this.rows.children.forEach(item => {//点击顶级节点选择按钮选中该节点下的所有子节点的模块列表（第一级children）
+                            if (val.indexOf(item)!==-1) {
                                 item.checkList =  Object.keys(item.modulesMaps)
-                            }else if (val.length === 0) {
+                            }else {
                                 item.checkList = [];
                             }
-                            item.children.forEach(items => {
-                                if (val.length > 0){
+                            item.children.forEach(items => {//（第二级children）
+                                if (val.indexOf(items) !==-1) {
                                     items.checkList =  Object.keys(items.modulesMaps)
-                                }else if (val.length === 0) {
+                                }else {
                                     items.checkList = [];
                                 }
                             })
-                        })
+                         })
                     })
                 }
             },
@@ -141,40 +141,44 @@
                 // console.log(selection)
                     selection.forEach(itemRow=>{
                         // console.log(item.menuName)
-                        if(itemRow.children.length > 0){
-                            itemRow.children.forEach(item => {
-                                this.$refs.table.toggleRowSelection(item)
-                                if (selection.length > 0){
-                                    item.checkList =  Object.keys(item.modulesMaps)
-                                }else{
-                                    item.checkList = [];
-                                }
-                                item.children.forEach(items => {
-                                    this.$refs.table.toggleRowSelection(items)
-                                    if (selection.length > 0){
-                                        items.checkList =  Object.keys(items.modulesMaps)
-                                    }else if (selection.length === 0) {
-                                        items.checkList = [];
-                                    }
+                            if(itemRow.children.length > 0){
+                                itemRow.children.forEach(item => {
+                                    this.$refs.table.toggleRowSelection(item)
 
+
+
+                                    if (selection.length > 0){
+                                        item.checkList =  Object.keys(item.modulesMaps)
+                                    }else{
+                                        item.checkList = [];
+                                    }
+                                    item.children.forEach(items => {
+                                        this.$refs.table.toggleRowSelection(items)
+                                        if (selection.length > 0){
+                                            items.checkList =  Object.keys(items.modulesMaps)
+                                        }else if (selection.length === 0) {
+                                            items.checkList = [];
+                                        }
+
+                                    })
                                 })
-                            })
-                            // console.log(selection,row.children)
-                        }else{
-                            if (selection.length > 0){
-                                // console.log(selection,row)
-                                itemRow.checkList =  Object.keys(itemRow.modulesMaps)
-                            }else if (selection.length === 0) {
-                                // console.log(selection,row)
-                                itemRow.checkList = [];
+                                // console.log(selection,row.children)
+                            }else{
+                                this.tableData.forEach(tableDataItem=> {
+                                    if (this.selects.indexOf(tableDataItem) !== -1) {
+                                        tableDataItem.checkList = Object.keys(tableDataItem.modulesMaps)
+                                    } else {
+                                        tableDataItem.checkList = [];
+                                    }
+                                })
                             }
-                        }
+
                     })
             },
             handleSelect (selection,row) {
-
-                 this.rows = row;
+                this.rows = row;
                 if(row.children.length > 0){
+                    console.log(selection,row)
                     this.$nextTick(() => {
                         row.children.forEach(item => {
                             this.$refs.table.toggleRowSelection(item);
@@ -185,16 +189,19 @@
                     })
                 }
                 else{
-                    console.log(selection,row)
-                    selection.forEach(itemSelectChange=>{
-                        // let msg = '';
-                        if (row.id === itemSelectChange.id){
-                            row.checkList =  Object.keys(row.modulesMaps)
-                        }else {
-                            row.checkList = [];
-                            console.log('ok')
-                        }
-                    })
+                    if (selection.length > 0) {
+                        selection.forEach(itemSelectChange=>{
+                            // let msg = '';
+                            if (row.id === itemSelectChange.id){
+                                row.checkList =  Object.keys(row.modulesMaps)
+                            }else {
+                                row.checkList = [];
+                                console.log('ok')
+                            }
+                        })
+                    }else {
+                        row.checkList = [];
+                    }
                 }
             },
             SubmitForm(){
@@ -259,7 +266,7 @@
     }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
     .role-management{
         position: relative;
         width: 100%;
