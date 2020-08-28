@@ -117,7 +117,7 @@
             // },
             change(val,){
                 this.selects = val;
-                console.log(val)
+                console.log('change',val)
                 if(this.rows.children.length > 0){
                     this.$nextTick(() => {
                         this.rows.children.forEach(item => {
@@ -135,11 +135,6 @@
                             })
                         })
                     })
-                }else
-                if (val.length > 0){
-                    this.rows.checkList =  Object.keys(this.rows.modulesMaps)
-                }else if (val.length === 0) {
-                    this.rows.checkList = [];
                 }
             },
             selectAll(selection){
@@ -177,6 +172,7 @@
                     })
             },
             handleSelect (selection,row) {
+
                  this.rows = row;
                 if(row.children.length > 0){
                     this.$nextTick(() => {
@@ -186,6 +182,18 @@
                                 this.$refs.table.toggleRowSelection(items)
                             })
                         })
+                    })
+                }
+                else{
+                    console.log(selection,row)
+                    selection.forEach(itemSelectChange=>{
+                        // let msg = '';
+                        if (row.id === itemSelectChange.id){
+                            row.checkList =  Object.keys(row.modulesMaps)
+                        }else {
+                            row.checkList = [];
+                            console.log('ok')
+                        }
                     })
                 }
             },
