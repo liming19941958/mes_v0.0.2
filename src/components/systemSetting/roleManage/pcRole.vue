@@ -65,7 +65,8 @@
                             prop="modulesMaps">
                         <template slot-scope="scope">
                             <el-checkbox-group v-model="scope.row.checkList">
-                                <el-checkbox :checked="item.checked" :key="index" :label="item" v-for="(item,index) in Object.keys(scope.row.modulesMaps)" ></el-checkbox>
+                                <el-checkbox :checked="item.checked" :key="index" :label="item"
+                                             v-for="(item,index) in Object.keys(scope.row.modulesMaps)"></el-checkbox>
                             </el-checkbox-group>
                         </template>
                     </el-table-column>
@@ -84,175 +85,212 @@
 
     export default {
         name: "pcRole",
-        data(){
-            return{
-                selected:false,
-                data:null,
-                selects:[],
+        data() {
+            return {
+                selected: false,
+                isSelectAll: false,
+                data: null,
+                selects: [],
                 defaultProps: {
                     children: 'Subdirectory',
                     label: 'name'
                 },
-                params:{
-                   page:'1',
-                    size:'10',
-                    roleId:'',
-                    menuType:'',
+                params: {
+                    page: '1',
+                    size: '10',
+                    roleId: '',
+                    menuType: '',
                 },
                 tableData: [],
-                rows:{},
-                dataFirstNoChildren:null,
+                rows: {},
+                dataFirstNoChildren: null,
                 selectRow: []
             }
         },
-        created(){
+        created() {
             this.show();
 
         },
-        methods:{
+        methods: {
             // handleSelects(selection,selectRow){
             //
             //     console.log(selection,selectRow)
             //     this.handleSelect (selection.selectRow);
             // },
-            change(val,){
+            selectAll(selections) {
+                console.log(selections)
+                this.tableData.forEach(itemTableData => {
+                    if (selections.indexOf(itemTableData) !== -1) {//全选
+                        if (itemTableData.children.length > 0) {
+
+                            itemTableData.children.forEach(item1 => {
+
+                                this.$refs.table.toggleRowSelection(item1);
+                                item1.checkList = Object.keys(item1.modulesMaps)
+                                item1.children.forEach(item2 => {
+                                    this.$refs.table.toggleRowSelection(item2);
+                                    item2.checkList = Object.keys(item2.modulesMaps)
+                                })
+                            })
+                        } else {
+                            itemTableData.checkList = Object.keys(itemTableData.modulesMaps)
+                        }
+                    } else {//取消全选
+                        if (itemTableData.children.length > 0) {
+                            itemTableData.children.forEach(item1 => {
+                                this.$refs.table.toggleRowSelection(item1);
+                                item1.checkList = []
+                                item1.children.forEach(item2 => {
+                                    this.$refs.table.toggleRowSelection(item2);
+                                    item2.checkList = []
+                                })
+                            })
+                        } else {
+                            itemTableData.checkList = []
+                        }
+                    }
+                })
+            },
+            change(val) {
                 this.selects = val;
-                console.log('change',val)
-                if(this.rows.children.length > 0){
-                    this.$nextTick(() => {
-                        this.rows.children.forEach(item => {//点击顶级节点选择按钮选中该节点下的所有子节点的模块列表（第一级children）
-                            if (val.indexOf(item)!==-1) {
-                                item.checkList =  Object.keys(item.modulesMaps)
-                            }else {
-                                item.checkList = [];
-                            }
-                            item.children.forEach(items => {//（第二级children）
-                                if (val.indexOf(items) !==-1) {
-                                    items.checkList =  Object.keys(items.modulesMaps)
-                                }else {
-                                    items.checkList = [];
+                console.log('change:',val)
+                if (this.rows.id) {
+                    if (this.rows.children.length > 0) {
+                        this.$nextTick(() => {
+                            this.rows.children.forEach(item => {//点击顶级节点选择按钮选中该节点下的所有子节点的模块列表（第一级children）
+                                if (val.indexOf(item) !== -1) {//当时选中的对象中包含item
+                                    item.checkList = Object.keys(item.modulesMaps)
+                                } else {
+                                    item.checkList = [];
                                 }
-                            })
-                         })
-                    })
-                }
-            },
-            selectAll(selection){
-                // console.log(selection)
-                    selection.forEach(itemRow=>{
-                        // console.log(item.menuName)
-                            if(itemRow.children.length > 0){
-                                itemRow.children.forEach(item => {
-                                    this.$refs.table.toggleRowSelection(item)
-
-
-
-                                    if (selection.length > 0){
-                                        item.checkList =  Object.keys(item.modulesMaps)
-                                    }else{
-                                        item.checkList = [];
-                                    }
-                                    item.children.forEach(items => {
-                                        this.$refs.table.toggleRowSelection(items)
-                                        if (selection.length > 0){
-                                            items.checkList =  Object.keys(items.modulesMaps)
-                                        }else if (selection.length === 0) {
-                                            items.checkList = [];
-                                        }
-
-                                    })
-                                })
-                                // console.log(selection,row.children)
-                            }else{
-                                this.tableData.forEach(tableDataItem=> {
-                                    if (this.selects.indexOf(tableDataItem) !== -1) {
-                                        tableDataItem.checkList = Object.keys(tableDataItem.modulesMaps)
+                                item.children.forEach(items => {//（第二级children）
+                                    if (val.indexOf(items) !== -1) {
+                                        items.checkList = Object.keys(items.modulesMaps)
                                     } else {
-                                        tableDataItem.checkList = [];
+                                        items.checkList = [];
                                     }
                                 })
-                            }
-
-                    })
-            },
-            handleSelect (selection,row) {
-                this.rows = row;
-                if(row.children.length > 0){
-                    console.log(selection,row)
-                    this.$nextTick(() => {
-                        row.children.forEach(item => {
-                            this.$refs.table.toggleRowSelection(item);
-                            item.children.forEach(items => {
-                                this.$refs.table.toggleRowSelection(items)
                             })
                         })
-                    })
-                }
-                else{
-                    if (selection.length > 0) {
-                        selection.forEach(itemSelectChange=>{
-                            // let msg = '';
-                            if (row.id === itemSelectChange.id){
-                                row.checkList =  Object.keys(row.modulesMaps)
-                            }else {
-                                row.checkList = [];
-                                console.log('ok')
-                            }
-                        })
-                    }else {
-                        row.checkList = [];
                     }
                 }
             },
-            SubmitForm(){
+
+            handleSelect(selection, row) {
+                this.rows = row;
+                if (row.children.length > 0) {
+                    this.$nextTick(() => {
+                        row.children.forEach(item => {
+                            if (selection.indexOf(row) !== -1) {//判断所点击的父节点是否选中，若选中，则选中其所有子孙节点
+                                this.$refs.table.toggleRowSelection(item);
+                                // return
+                                // console.log(item)
+                            }else{//取消选中父节点后也取消选中其子节点
+                                if (selection.indexOf(item) !==-1) {//只取消选择已选中的子节点
+                                    this.$refs.table.toggleRowSelection(item);
+                                }
+
+                            }
+                            item.children.forEach(items => {
+                                if (selection.indexOf(item) !== -1) {//选中孙节点
+                                    this.$refs.table.toggleRowSelection(items)
+                                }else{//取消选中孙节点
+                                    if (selection.indexOf(items) !==-1) {//只取消选择已选中的子节点
+                                        this.$refs.table.toggleRowSelection(items);
+                                    }
+                                }
+                            })
+                        })
+                    })
+                } else {
+                    if (row.parentId){
+
+                        this.tableData.forEach(itemTree=>{
+                            if (itemTree.children.length>0){
+                                if (row.parentId === itemTree.id){
+                                    if (selection.indexOf(itemTree) !==-1){
+                                        return
+                                    }else{
+                                        this.$refs.table.toggleRowSelection(itemTree)
+                                        console.log('第一次')
+                                    }
+                                }
+                                itemTree.children.forEach(itemChildren=> {
+                                    if (row.parentId === itemChildren.id){
+                                        if (selection.indexOf(itemChildren) === -1) {
+                                            this.$refs.table.toggleRowSelection(itemChildren)
+                                        }
+                                }
+                                })
+                            }
+                        })
+                    }
+                    if (selection.length > 0) {
+                        selection.forEach(itemSelectChange => {
+                            // let msg = '';
+                            if (row.id === itemSelectChange.id) {
+                                row.checkList = Object.keys(row.modulesMaps)
+                            } else {
+                                row.checkList = [];
+                                // console.log('ok')
+                            }
+                        })
+                    } else {
+                        row.checkList = [];
+                    }
+                }
+
+
+            },
+            SubmitForm() {
                 console.log(this.selectRow);
             },
             //获取组织架构树
-            show(){
+            show() {
                 this.dataText = ' ';
                 // let r_path = '/organization';
                 // sessionStorage.setItem('Path',r_path );
-                this.$http.post(('role/show'),{}).then(response=>{
-                    if (response.status===200){
+                this.$http.post(('role/show'), {}).then(response => {
+                    if (response.status === 200) {
                         let act = JSON.parse(response.body.result);
-                        this.data=act;
-                        if(this.data.length !==0){
+                        this.data = act;
+                        if (this.data.length !== 0) {
                             this.loading = false;
-                        }else if (this.data.length === 0) {
+                        } else if (this.data.length === 0) {
                             this.dataText = "暂无数据";
                         }
                     }
                 })
             },
             //组织架构选择树形控件各分支
-            handleNodeClick(data){
-                this.params.roleId=data.id;
+            handleNodeClick(data) {
+                this.params.roleId = data.id;
                 this.getMenuList();
-                console.log(this.params.roleId);
+                // console.log(this.params.roleId);
 
             },
-            getMenuList(){
-                this.$http.get('menu/getMenuList',{
+            getMenuList() {
+                this.$http.get('menu/getMenuList', {
                     params: {
-                        page:this.params.page,
+                        page: this.params.page,
                         size: this.params.size
                     }
-                }).then(response=>{
-                    if (response.body.status===200){
+                }).then(response => {
+                    if (response.body.status === 200) {
                         this.$message({
-                            message:'操作成功!',
-                            type:'success',
+                            message: '操作成功!',
+                            type: 'success',
                         });
-                        this.tableData=response.data.result.data;
-                        console.log(this.tableData);
-                        this.tableData.forEach(item=>{
+                        this.tableData = response.data.result.data;
+                        // console.log(this.tableData);
+                        this.tableData.forEach(item => {
                             // console.log(item)
                             // item['checked']=false;
                             this.$set(item, 'checkList', [])
-                            item.children.forEach(items=>{
+                            item.children.forEach(items => {
                                 this.$set(items, 'checkList', []);
                                 // items['checked']=true;
-                                items.children.forEach(Tirth=>{
+                                items.children.forEach(Tirth => {
                                     this.$set(Tirth, 'checkList', []);
                                     // Tirth['checked']=false;
                                 })
@@ -267,15 +305,17 @@
 </script>
 
 <style lang="scss" scoped>
-    .role-management{
+    .role-management {
         position: relative;
         width: 100%;
         height: 100%;
         background-color: #effff3;
+
         ::v-deep .el-table th {
-            padding:8px 0;
+            padding: 8px 0;
         }
-        .el-table ::v-deep td{
+
+        .el-table ::v-deep td {
             text-align: left;
             padding-left: 8px;
             min-width: 67px;
@@ -292,10 +332,12 @@
             font-size: 16px;
             border: 1px solid #999999;
         }
+
         //有子节点 且已展开
         .el-table ::v-deep .el-table__expand-icon--expanded {
             -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
+
             .el-icon-arrow-right:before {
                 content: '-';
                 display: inline-block;
@@ -309,63 +351,69 @@
         }
 
 
+        .roles-menu-table {
+            display: flex;
+            height: 95vh;
+            width: 100%;
 
+            .role-menu {
+                position: relative;
+                display: inline-block;
+                float: left;
+                height: 100%;
+                width: 28%;
+                min-width: 200px;
+                margin-right: 8px;
+                background-color: #ecf3f0;
 
-    .roles-menu-table{
-        display: flex;
-        height: 95vh;
-        width: 100%;
-    .role-menu{
-        position: relative;
-        display: inline-block;
-        float: left;
-        height: 100%;
-        width: 28%;
-        min-width: 200px;
-        margin-right: 8px;
-        background-color: #ecf3f0;
-    .roleList{
-        position: relative;
-        display: inline-block;
-        width: 100%;
-        border-bottom: 1px solid #d5d5d5;
-        line-height: 50px;
-    span:nth-child(1){
-        float: left;
-        display: inline-block;
-        margin-left: 30px;
-    }
-    span:nth-child(2){
-        position: relative;
-        color:  #007aff !important;
-    i:hover{
-        cursor: pointer;
-    }
-    display: inline-block;
-    float: right;
-    margin-right: 30px;
-    text-indent: 10px;
-    }
-    }
-    .roleNameMenu{
-        float: left;
-        width: 100%;
-        padding: 20px 0 0 20px;
-        height: 100%;
-        overflow: scroll;
-    }
+                .roleList {
+                    position: relative;
+                    display: inline-block;
+                    width: 100%;
+                    border-bottom: 1px solid #d5d5d5;
+                    line-height: 50px;
 
-    }
-    .role-table{
-        overflow: scroll;
-        position: relative;
-        display: inline-block;
-        float: right;
-        width: 100%;
-        height: 100vh;
-        background-color: #ecf3f0;
+                    span:nth-child(1) {
+                        float: left;
+                        display: inline-block;
+                        margin-left: 30px;
+                    }
 
-    }
-    }
+                    span:nth-child(2) {
+                        position: relative;
+                        color: #007aff !important;
+
+                        i:hover {
+                            cursor: pointer;
+                        }
+
+                        display: inline-block;
+                        float: right;
+                        margin-right: 30px;
+                        text-indent: 10px;
+                    }
+                }
+
+                .roleNameMenu {
+                    float: left;
+                    width: 100%;
+                    padding: 20px 0 0 20px;
+                    height: 100%;
+                    overflow: scroll;
+                }
+
+            }
+
+            .role-table {
+                overflow: scroll;
+                position: relative;
+                display: inline-block;
+                float: right;
+                width: 100%;
+                height: 100vh;
+                background-color: #ecf3f0;
+
+            }
+        }
     }
 </style>
