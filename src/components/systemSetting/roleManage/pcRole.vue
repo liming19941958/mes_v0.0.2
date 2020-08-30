@@ -112,24 +112,22 @@
 
         },
         methods: {
-            // handleSelects(selection,selectRow){
-            //
-            //     console.log(selection,selectRow)
-            //     this.handleSelect (selection.selectRow);
-            // },
             selectAll(selections) {
-                console.log(selections)
+                // console.log(selections)
                 this.tableData.forEach(itemTableData => {
                     if (selections.indexOf(itemTableData) !== -1) {//全选
                         if (itemTableData.children.length > 0) {
-
                             itemTableData.children.forEach(item1 => {
-
-                                this.$refs.table.toggleRowSelection(item1);
-                                item1.checkList = Object.keys(item1.modulesMaps)
+                                if (selections.indexOf(item1) === -1){//只选中没有选中的项
+                                    this.$refs.table.toggleRowSelection(item1);
+                                    item1.checkList = Object.keys(item1.modulesMaps)
+                                }
                                 item1.children.forEach(item2 => {
-                                    this.$refs.table.toggleRowSelection(item2);
-                                    item2.checkList = Object.keys(item2.modulesMaps)
+
+                                    if (selections.indexOf(item2) === -1){
+                                        this.$refs.table.toggleRowSelection(item2);
+                                        item2.checkList = Object.keys(item2.modulesMaps)
+                                    }
                                 })
                             })
                         } else {
@@ -138,11 +136,15 @@
                     } else {//取消全选
                         if (itemTableData.children.length > 0) {
                             itemTableData.children.forEach(item1 => {
-                                this.$refs.table.toggleRowSelection(item1);
-                                item1.checkList = []
+                                if (selections.indexOf(item1) !== -1){//只取消选择已经选中的项
+                                    this.$refs.table.toggleRowSelection(item1);
+                                    item1.checkList = []
+                                }
                                 item1.children.forEach(item2 => {
-                                    this.$refs.table.toggleRowSelection(item2);
-                                    item2.checkList = []
+                                    if (selections.indexOf(item2) !== -1){
+                                        this.$refs.table.toggleRowSelection(item2);
+                                        item2.checkList = []
+                                    }
                                 })
                             })
                         } else {
@@ -153,7 +155,7 @@
             },
             change(val) {
                 this.selects = val;
-                console.log('change:',val)
+                // console.log('change:',val)
                 if (this.rows.id) {
                     if (this.rows.children.length > 0) {
                         this.$nextTick(() => {
@@ -204,7 +206,6 @@
                     })
                 } else {
                     if (row.parentId){
-
                         this.tableData.forEach(itemTree=>{
                             if (itemTree.children.length>0){
                                 if (row.parentId === itemTree.id){
@@ -239,8 +240,6 @@
                         row.checkList = [];
                     }
                 }
-
-
             },
             SubmitForm() {
                 console.log(this.selectRow);
