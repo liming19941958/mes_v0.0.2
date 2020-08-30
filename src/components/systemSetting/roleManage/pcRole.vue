@@ -45,6 +45,7 @@
                         @select="handleSelect"
                         @select-all="selectAll"
                         @selection-change="change"
+                        @cell-click = "cellClick"
                         border
                         max-height="750"
                         ref="table"
@@ -64,8 +65,10 @@
                             label="模块列表"
                             prop="modulesMaps">
                         <template slot-scope="scope">
-                            <el-checkbox-group v-model="scope.row.checkList">
-                                <el-checkbox :checked="item.checked" :key="index" :label="item"
+                            <el-checkbox-group v-model="scope.row.checkList" @change="handleCheckedModuleListChange">
+                                <el-checkbox
+                                             :key="index"
+                                             :label="item"
                                              v-for="(item,index) in Object.keys(scope.row.modulesMaps)"></el-checkbox>
                             </el-checkbox-group>
                         </template>
@@ -90,6 +93,7 @@
                 selected: false,
                 isSelectAll: false,
                 data: null,
+                cellClickRow:{},
                 selects: [],
                 defaultProps: {
                     children: 'Subdirectory',
@@ -112,6 +116,30 @@
 
         },
         methods: {
+            handleCheckedModuleListChange(val){//选中模块列表中的项后同时选中该行及其父节点
+                if (val.length>0){
+                    if (this.selects.indexOf(this.cellClickRow) ===-1){
+                        console.log(this.cellClickRow)
+                        this.$refs.table.toggleRowSelection(this.cellClickRow);
+                        if (this.cellClickRow.parentId){
+                            // console.log(this.cellClickRow.parentId)
+                            this.tableData.forEach(itemData=>{
+                                if (this.cellClickRow.parentId ===itemData.id ){
+                                    this.$refs.table.toggleRowSelection(itemData);
+                                }
+                            })
+                        }
+                    }
+                }else {
+                    if (this.selects.indexOf(this.cellClickRow) !==-1){
+                        this.$refs.table.toggleRowSelection(this.cellClickRow);
+                    }
+                }
+                console.log(val)
+            },
+            cellClick(row){//点击单元格获取该行对象
+                this.cellClickRow = row
+            },
             selectAll(selections) {
                 // console.log(selections)
                 this.tableData.forEach(itemTableData => {
@@ -162,6 +190,7 @@
                             this.rows.children.forEach(item => {//点击顶级节点选择按钮选中该节点下的所有子节点的模块列表（第一级children）
                                 if (val.indexOf(item) !== -1) {//当时选中的对象中包含item
                                     item.checkList = Object.keys(item.modulesMaps)
+                                    console.log(item.checkList)
                                 } else {
                                     item.checkList = [];
                                 }
@@ -231,6 +260,7 @@
                             // let msg = '';
                             if (row.id === itemSelectChange.id) {
                                 row.checkList = Object.keys(row.modulesMaps)
+                                console.log(row.checkList)
                             } else {
                                 row.checkList = [];
                                 // console.log('ok')
@@ -283,8 +313,6 @@
                         this.tableData = response.data.result.data;
                         // console.log(this.tableData);
                         this.tableData.forEach(item => {
-                            // console.log(item)
-                            // item['checked']=false;
                             this.$set(item, 'checkList', [])
                             item.children.forEach(items => {
                                 this.$set(items, 'checkList', []);
