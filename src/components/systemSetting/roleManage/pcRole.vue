@@ -119,14 +119,27 @@
             handleCheckedModuleListChange(val){//选中模块列表中的项后同时选中该行及其父节点
                 if (val.length>0){
                     if (this.selects.indexOf(this.cellClickRow) ===-1){
-                        console.log(this.cellClickRow)
                         this.$refs.table.toggleRowSelection(this.cellClickRow);
                         if (this.cellClickRow.parentId){
                             // console.log(this.cellClickRow.parentId)
                             this.tableData.forEach(itemData=>{
                                 if (this.cellClickRow.parentId ===itemData.id ){
-                                    this.$refs.table.toggleRowSelection(itemData);
+                                    if (this.selects.indexOf(itemData) ===-1) {
+                                        this.$refs.table.toggleRowSelection(itemData);
+                                    }
                                 }
+                                itemData.children.forEach(itemDataChild=>{
+                                    if (this.cellClickRow.parentId ===itemDataChild.id ){
+                                        if (this.selects.indexOf(itemDataChild) ===-1) {
+                                            this.$refs.table.toggleRowSelection(itemDataChild);
+                                        }
+                                        if (itemDataChild.parentId){//判断有没有祖父节点
+                                            if (this.selects.indexOf(itemData) ===-1) {//若祖父节点没有被选择，则选中它
+                                                this.$refs.table.toggleRowSelection(itemData);
+                                            }
+                                        }
+                                    }
+                                })
                             })
                         }
                     }
@@ -135,13 +148,11 @@
                         this.$refs.table.toggleRowSelection(this.cellClickRow);
                     }
                 }
-                console.log(val)
             },
             cellClick(row){//点击单元格获取该行对象
                 this.cellClickRow = row
             },
             selectAll(selections) {
-                // console.log(selections)
                 this.tableData.forEach(itemTableData => {
                     if (selections.indexOf(itemTableData) !== -1) {//全选
                         if (itemTableData.children.length > 0) {
@@ -151,7 +162,6 @@
                                     item1.checkList = Object.keys(item1.modulesMaps)
                                 }
                                 item1.children.forEach(item2 => {
-
                                     if (selections.indexOf(item2) === -1){
                                         this.$refs.table.toggleRowSelection(item2);
                                         item2.checkList = Object.keys(item2.modulesMaps)
@@ -184,50 +194,33 @@
             change(val) {
                 this.selects = val;
                 // console.log('change:',val)
-                if (this.rows.id) {
-                    if (this.rows.children.length > 0) {
-                        this.$nextTick(() => {
-                            this.rows.children.forEach(item => {//点击顶级节点选择按钮选中该节点下的所有子节点的模块列表（第一级children）
-                                if (val.indexOf(item) !== -1) {//当时选中的对象中包含item
-                                    item.checkList = Object.keys(item.modulesMaps)
-                                    console.log(item.checkList)
-                                } else {
-                                    item.checkList = [];
-                                }
-                                item.children.forEach(items => {//（第二级children）
-                                    if (val.indexOf(items) !== -1) {
-                                        items.checkList = Object.keys(items.modulesMaps)
-                                    } else {
-                                        items.checkList = [];
-                                    }
-                                })
-                            })
-                        })
-                    }
-                }
             },
 
             handleSelect(selection, row) {
                 this.rows = row;
-                if (row.children.length > 0) {
+                if (row.children.length > 0){
                     this.$nextTick(() => {
                         row.children.forEach(item => {
-                            if (selection.indexOf(row) !== -1) {//判断所点击的父节点是否选中，若选中，则选中其所有子孙节点
+                            if (this.selects.indexOf(row) !== -1) {//判断所点击的父节点是否选中，若选中，则选中其所有子孙节点
                                 this.$refs.table.toggleRowSelection(item);
+                                item.checkList = Object.keys(item.modulesMaps)
                                 // return
                                 // console.log(item)
                             }else{//取消选中父节点后也取消选中其子节点
-                                if (selection.indexOf(item) !==-1) {//只取消选择已选中的子节点
+                                if (this.selects.indexOf(item) !==-1) {//只取消选择已选中的子节点
                                     this.$refs.table.toggleRowSelection(item);
+                                    item.checkList = [];
                                 }
 
                             }
                             item.children.forEach(items => {
-                                if (selection.indexOf(item) !== -1) {//选中孙节点
+                                if (this.selects.indexOf(item) !== -1) {//选中孙节点
                                     this.$refs.table.toggleRowSelection(items)
+                                    items.checkList = Object.keys(items.modulesMaps)
                                 }else{//取消选中孙节点
-                                    if (selection.indexOf(items) !==-1) {//只取消选择已选中的子节点
+                                    if (this.selects.indexOf(items) !==-1) {//只取消选择已选中的子节点
                                         this.$refs.table.toggleRowSelection(items);
+                                        items.checkList = [];
                                     }
                                 }
                             })
@@ -242,7 +235,6 @@
                                         return
                                     }else{
                                         this.$refs.table.toggleRowSelection(itemTree)
-                                        console.log('第一次')
                                     }
                                 }
                                 itemTree.children.forEach(itemChildren=> {
@@ -260,10 +252,8 @@
                             // let msg = '';
                             if (row.id === itemSelectChange.id) {
                                 row.checkList = Object.keys(row.modulesMaps)
-                                console.log(row.checkList)
                             } else {
                                 row.checkList = [];
-                                // console.log('ok')
                             }
                         })
                     } else {
@@ -272,7 +262,12 @@
                 }
             },
             SubmitForm() {
-                console.log(this.selectRow);
+                this.$http.post(('rolePermissions/setMenuPermissions' + this.params.roleId),{
+
+                }).then(response=>{
+                   console.log(response.body.status)
+                })
+                console.log(this.selects);
             },
             //获取组织架构树
             show() {
@@ -294,9 +289,53 @@
             //组织架构选择树形控件各分支
             handleNodeClick(data) {
                 this.params.roleId = data.id;
+                this.params.menuType = 'PC';
                 this.getMenuList();
-                // console.log(this.params.roleId);
+                console.log(this.params.roleId);
 
+            },
+            getMenuPermissions(){//获取模块列表权限表
+                this.$http.get('rolePermissions/getMenuPermissions',{
+                    params:{
+                        roleId:this.params.roleId,
+                        menuType:this.params.menuType,
+                    }
+                }).then(response=>{
+                   if (response.body.status === 200){
+                       let dataPermissions = response.body.result
+                       console.log(dataPermissions);
+                       let nodeListKeys = Object.keys(dataPermissions);
+                       let nodeListValues = Object.values(dataPermissions);
+                       console.log(nodeListKeys)
+                       console.log(nodeListValues)
+                       this.tableData.forEach(treeData=>{
+                           nodeListKeys.forEach(itemKeys=>{
+                               if (treeData.id === itemKeys ){
+                                   this.$refs.table.toggleRowSelection(treeData);
+                                   //js中想根据动态key得到某对象中相对应的value的方法有两个(⊙o⊙)哦：
+                                   // 1、var key = "name1";var value = obj[key];
+                                   // 2、var key = "name1";var value = eval("obj."+key);
+                                   var a = dataPermissions[itemKeys];
+                                   treeData.checkList = Object.keys(a)
+                               }
+                               treeData.children.forEach(treeDataChild=>{
+                                   if (treeDataChild.id === itemKeys ){
+                                       this.$refs.table.toggleRowSelection(treeDataChild);
+                                       var b = dataPermissions[itemKeys];
+                                       treeDataChild.checkList = Object.keys(b)
+                                   }
+                                   treeDataChild.children.forEach(treeDataChilds=>{
+                                       if (treeDataChilds.id === itemKeys ){
+                                           this.$refs.table.toggleRowSelection(treeDataChilds);
+                                           var c = dataPermissions[itemKeys];
+                                           treeDataChilds.checkList = Object.keys(c)
+                                       }
+                                   })
+                               })
+                           })
+                       })
+                   }
+                })
             },
             getMenuList() {
                 this.$http.get('menu/getMenuList', {
@@ -311,7 +350,6 @@
                             type: 'success',
                         });
                         this.tableData = response.data.result.data;
-                        // console.log(this.tableData);
                         this.tableData.forEach(item => {
                             this.$set(item, 'checkList', [])
                             item.children.forEach(items => {
@@ -323,7 +361,7 @@
                                 })
                             })
                         })
-
+                        this.getMenuPermissions();
                     }
                 })
             },

@@ -410,7 +410,7 @@
 
                 this.dialogFormDeviceAssociationVisible = true;
             },
-            findDeviceList(){
+            findDeviceList(){//利用map去重
                 let map = new Map()
                 this.bindData.forEach(item=>{
                     let tempArr =[];
@@ -430,6 +430,7 @@
                         tempArr.push(item.node);
                         item.node = tempArr;
                         map.set(item.deviceMacAddress,item)
+                        console.log(map)
                     }
                 });
                 let arr =[]
