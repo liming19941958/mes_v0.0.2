@@ -262,12 +262,35 @@
                 }
             },
             SubmitForm() {
-                console.log(this.selects);
-
+                let selectArray = [];
+                this.selects.forEach(itemSelects=>{
+                    let selectObject ={};
+                    selectObject['menuId'] = itemSelects.id;
+                    selectArray.push(selectObject)
+                    let modulesMapsItem = itemSelects.modulesMaps;
+                    let modulesMapsItemKeys = Object.keys(modulesMapsItem);
+                    let obj ={};
+                    modulesMapsItemKeys.forEach(itemKeys=>{
+                        itemSelects.checkList.forEach(checkListItem=>{
+                            if (checkListItem === itemKeys) {
+                                obj[checkListItem] = modulesMapsItem[itemKeys];
+                            }
+                        })
+                    })
+                    selectObject['modulesMaps'] = obj;
+                });
+                // console.log(selectArray)
                 // Form Data 转Request payload，使用JSON.stringify(data)
-                this.$http.post(('rolePermissions/setMenuPermissions' + '/' + this.params.roleId),JSON.stringify(this.selects)
+                this.$http.post(('rolePermissions/setMenuPermissions' + '/' + this.params.roleId),JSON.stringify(selectArray)
                 ).then(response=>{
                    console.log(response.body.status)
+                    if (response.body.status === 200) {
+                        this.$message({
+                            message: '操作成功!',
+                            type:"success"
+
+                        })
+                    }
                 })
             },
             //获取组织架构树
@@ -292,7 +315,7 @@
                 this.params.roleId = data.id;
                 this.params.menuType = 'PC';
                 this.getMenuList();
-                console.log(this.params.roleId);
+                // console.log(this.params.roleId);
 
             },
             getMenuPermissions(){//获取模块列表权限表
@@ -304,11 +327,7 @@
                 }).then(response=>{
                    if (response.body.status === 200){
                        let dataPermissions = response.body.result
-                       console.log(dataPermissions);
                        let nodeListKeys = Object.keys(dataPermissions);
-                       let nodeListValues = Object.values(dataPermissions);
-                       console.log(nodeListKeys)
-                       console.log(nodeListValues)
                        this.tableData.forEach(treeData=>{
                            nodeListKeys.forEach(itemKeys=>{
                                if (treeData.id === itemKeys ){
