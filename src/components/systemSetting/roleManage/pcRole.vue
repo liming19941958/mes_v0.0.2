@@ -262,7 +262,7 @@
                 }
             },
             SubmitForm() {
-                this.$http.post(('rolePermissions/setMenuPermissions' + this.params.roleId),{
+                this.$http.post(('rolePermissions/setMenuPermissions' + '/' + this.params.roleId),{
 
                 }).then(response=>{
                    console.log(response.body.status)
