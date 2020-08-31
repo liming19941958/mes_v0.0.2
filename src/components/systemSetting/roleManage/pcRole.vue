@@ -262,12 +262,13 @@
                 }
             },
             SubmitForm() {
-                this.$http.post(('rolePermissions/setMenuPermissions' + '/' + this.params.roleId),{
+                console.log(this.selects);
 
-                }).then(response=>{
+                // Form Data 转Request payload，使用JSON.stringify(data)
+                this.$http.post(('rolePermissions/setMenuPermissions' + '/' + this.params.roleId),JSON.stringify(this.selects)
+                ).then(response=>{
                    console.log(response.body.status)
                 })
-                console.log(this.selects);
             },
             //获取组织架构树
             show() {
