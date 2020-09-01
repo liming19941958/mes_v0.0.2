@@ -78,7 +78,7 @@
                                 <router-link to="/StaffInformationPage">
                                     <el-menu-item index="2-3-1">职员资料</el-menu-item>
                                 </router-link>
-                                <router-link to="/ClassSettingPage">
+                                <router-link to="/shift">
                                     <el-menu-item index="2-3-2">班别设定</el-menu-item>
                                 </router-link>
                                 <router-link to="/SchedulingInformationPage">

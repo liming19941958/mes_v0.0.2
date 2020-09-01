@@ -78,7 +78,7 @@ var router = new VueRouter({
                 {path:'/CustomerInformationPage',component:CustomerInformationPage,name:'2-1'},
                 {path:'/DataImportPage',component:DataImportPage,name:'2-2'},
                 {path:'/StaffInformationPage',component:StaffInformationPage,name:'2-3-1'},
-                {path:'/ClassSettingPage',component:ClassSettingPage,name:'2-3-2'},
+                {path:'/shift',component:ClassSettingPage,name:'2-3-2'},
                 {path:'/SchedulingInformationPage',component:SchedulingInformationPage,name:'2-3-3'},
                 {path:'/UnitOfMeasurementPage',component:UnitOfMeasurementPage,name:'2-4-1'},//计量单位
                 {path:'/MaterialInformationPage',component:MaterialInformationPage,name:'2-4-2'},//料件资料

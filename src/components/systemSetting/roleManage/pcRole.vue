@@ -101,7 +101,7 @@
                 },
                 params: {
                     page: '1',
-                    size: '10',
+                    size: '40',
                     roleId: '',
                     menuType: '',
                 },
@@ -211,7 +211,6 @@
                                     this.$refs.table.toggleRowSelection(item);
                                     item.checkList = [];
                                 }
-
                             }
                             item.children.forEach(items => {
                                 if (this.selects.indexOf(item) !== -1) {//选中孙节点
