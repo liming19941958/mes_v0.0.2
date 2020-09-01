@@ -1,7 +1,8 @@
 <template>
     <div class="class-setting-page">
+        <addShift  v-show="isShow2" ></addShift>
         <div class="container" v-show="isShow">
-            <el-button type="text" style="margin-top: 12px" @click="isShow=!isShow">
+            <el-button type="text" style="margin-top: 12px" @click="changeStatus">
                 <i class="el-icon-plus"></i>
                 新增
             </el-button>
@@ -197,10 +198,12 @@
 </template>
 
 <script>
+    import addShift from './classSettingAdd/index'
     export default {
         name: "CustomerInformation",
         data() {
             return {
+                isShow2:false,
                 isShow:true,
                 total: null,
                 totalPage: null,
@@ -219,7 +222,14 @@
         created() {
             this.getBaseShiftList();
         },
+        components:{
+            addShift
+        },
         methods: {
+            changeStatus(){
+              this.isShow =!this.isShow;
+                this.isShow2 =!this.isShow2;
+            },
             getBaseShiftList() {
                 this.dataText = ' ';
                 this.$http.get('base/baseShift/list',
@@ -291,15 +301,18 @@
 
     .class-setting-page {
         position: relative;
-        padding: 0 10px 0 10px;
         width: 100%;
         height: 100%;
         /*background-color: #f6ff32;*/
+        .container-table{
+            padding: 0 10px 0 10px;
+            background-color: #f1e0ff;
+        }
         .container {
             width: 100%;
             height: 60px;
             /*line-height: 60px;*/
-            /*background-color: #b2e2ff;*/
+            background-color: #b2e2ff;
         }
     }
 </style>

@@ -263,7 +263,8 @@
 
             <el-tab-pane label="PC可操作权限" name="second">
 <!--                :is等号后面的双引号里面需要加  '' -->
-                   <component :is="'pc'"></component>
+                <pc></pc>
+<!--                   <component :is="'pc'"></component>-->
             </el-tab-pane>
 
             <el-tab-pane label="app可操作权限" name="third">
