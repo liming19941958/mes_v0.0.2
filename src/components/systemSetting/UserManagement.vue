@@ -569,7 +569,6 @@
             },
             handleAdd() {//点击新增按钮
                 this.dialogFormAddInformationVisible = true;
-
                 // elementUI的el-select中v-model的值要跟遍历出来的option的值的类型要保持一致才可以回显成功,
                 // 所以得用JSON.stringify(row.state)对其数值类型转换为字符串类型
                 this.ruleForm.user_status = '1';

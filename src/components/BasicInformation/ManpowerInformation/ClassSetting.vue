@@ -1,8 +1,159 @@
 <template>
     <div class="class-setting-page">
-        <addShift  v-show="isShow2" ></addShift>
+        <div class="container2" v-show="isShow2">
+            <div class="editForm">
+                添加班别
+            </div>
+            <div class="tableForm">
+                <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
+                    <el-form-item label="班别编号：" prop="classNumber" style="margin-bottom: 15px;" >
+                        <!--                                prop的值要与 v-model的值相同-->
+                        <el-input v-model="ruleForm.code" placeholder="长度不能超过50"></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="班别名称：" prop="className" style="margin-bottom: 15px;">
+                        <el-input v-model="ruleForm.name" placeholder="长度不能超过100"></el-input>
+                    </el-form-item>
+                    <el-form-item label="班别类型：" prop="classType" style="margin-bottom: 15px;">
+                        <el-select v-model="ruleForm.category"  placeholder="请选择班别类型">
+                            <el-option
+                                    v-for="(item,index) in shiftCategory"
+                                    :key="index"
+                                    :label="item.name"
+                                    :value="item.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <div class="timeTable">
+                        <div style="display: flex;flex: 1;width: 100%;">
+                            <el-row style="flex:0.425;line-height:40px;"></el-row>
+                            <el-row style="flex:1;line-height:40px;padding-right: 15px;">上班</el-row>
+                            <el-row style="flex:1;line-height:40px;">下班</el-row>
+                            <el-row style="flex:0.5;line-height:40px;">休息累计(分钟)</el-row>
+                            <el-row style="flex:1;line-height:40px;">工时类型</el-row>
+                            <el-row style="flex:1;line-height:40px;">有效工时(小时)</el-row>
+                        </div>
+                        <div style="flex: 1;display: flex;">
+                            <el-row style="flex:0.425;line-height:40px;">
+                                时间1：
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.onTime1" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.offTime1" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:0.5;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.restTime1" style="width: 85%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-select v-model="ruleForm.timeCategory1"  placeholder="请选择班别类型" style="width: 90%">
+                                    <el-option
+                                            v-for="(item,index) in timeCategory"
+                                            :key="index"
+                                            :label="item.name"
+                                            :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input :disabled="true" type="text" v-model="ruleForm.effectiveTime1" style="width: 40%"></el-input>
+                            </el-row>
+                        </div>
+                        <div style="flex: 1;display: flex;">
+                            <el-row style="flex:0.425;line-height:40px;">时间2：</el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.onTime2" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.offTime2" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:0.5;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.restTime2" style="width: 85%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-select v-model="ruleForm.timeCategory2"  placeholder="请选择班别类型" style="width: 90%">
+                                    <el-option
+                                            v-for="(item,index) in timeCategory"
+                                            :key="index"
+                                            :label="item.name"
+                                            :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input :disabled="true" type="text" v-model="ruleForm.effectiveTime2" style="width: 40%"></el-input>
+                            </el-row>
+                        </div>
+                        <div style="flex: 1;display: flex;">
+                            <el-row style="flex:0.425;line-height:40px;">时间3：</el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.onTime3" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.offTime3" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:0.5;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.restTime3" style="width: 85%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-select v-model="ruleForm.timeCategory3"  placeholder="请选择班别类型" style="width: 90%">
+                                    <el-option
+                                            v-for="(item,index) in timeCategory"
+                                            :key="index"
+                                            :label="item.name"
+                                            :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input :disabled="true" type="text" v-model="ruleForm.effectiveTime3" style="width: 40%"></el-input>
+                            </el-row>
+                        </div>
+                        <div style="flex: 1;display: flex;">
+                            <el-row style="flex:0.425;line-height:40px;">时间4：</el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.onTime4" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.offTime4" style="width: 90%"></el-input>
+                            </el-row>
+                            <el-row style="flex:0.5;line-height:40px;">
+                                <el-input type="text" v-model="ruleForm.restTime4" style="width: 85%"></el-input>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-select v-model="ruleForm.timeCategory4"  placeholder="请选择班别类型" style="width: 90%">
+                                    <el-option
+                                            v-for="(item,index) in timeCategory"
+                                            :key="index"
+                                            :label="item.name"
+                                            :value="item.id">
+                                    </el-option>
+                                </el-select>
+                            </el-row>
+                            <el-row style="flex:1;line-height:40px;">
+                                <el-input :disabled="true" type="text" v-model="ruleForm.effectiveTime4" style="width: 40%"></el-input>
+                            </el-row>
+                        </div>
+                    </div>
+                    <el-form-item label="有效否："  prop="Effectiveness"  style="margin-bottom: 25px;">
+                        <el-radio-group v-model="ruleForm.Effectiveness">
+                            <el-radio label="有效"></el-radio>
+                            <el-radio label="无效"></el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="描述：" style="margin-bottom: 25px;">
+                        <el-input v-model="ruleForm.description" type="textarea"  placeholder="请输入描述（200个字符以内）"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="primary" @click="addClassSubmit('ruleForm')">确 定</el-button>
+                    <el-button @click="cancel('ruleForm')">返 回</el-button>
+                </div>
+            </div>
+        </div>
         <div class="container" v-show="isShow">
-            <el-button type="text" style="margin-top: 12px" @click="changeStatus">
+            <el-button type="text" style="margin-top: 12px" @click="addClassSetting">
                 <i class="el-icon-plus"></i>
                 新增
             </el-button>
@@ -15,7 +166,7 @@
                 删除
             </el-button>
         </div>
-        <div class="container-table" v-show="isShow">
+        <div class="container-table"  v-show="isShow">
             <el-table
                     @selection-change="handleSelectionChange"
                     :empty-text="dataText"
@@ -198,7 +349,6 @@
 </template>
 
 <script>
-    import addShift from './classSettingAdd/index'
     export default {
         name: "CustomerInformation",
         data() {
@@ -207,11 +357,60 @@
                 isShow:true,
                 total: null,
                 totalPage: null,
+                shiftCategory:[],
+                timeCategory:[],
                 dataText: '',
                 shiftData: [],
                 loading: true,
                 multipleSelection: [],
                 arrSelects: [],
+                ruleForm:{
+                    name: "",
+                    category: '',
+                    code: "",
+                    description: "",
+                    effectiveTime1: 24,
+                    effectiveTime2: "5",
+                    effectiveTime3: 2,
+                    effectiveTime4: 7,
+                    enabled: "true",
+                    onTime1: "08:00:00",
+                    onTime2: "00:00:00",
+                    onTime3: "00:00:00",
+                    onTime4: "00:00:00",
+                    offTime1: "07:59:59",
+                    offTime2: "00:00:00",
+                    offTime3: "00:00:00",
+                    offTime4: "00:00:00",
+                    restTime1: "10",
+                    restTime2: "100",
+                    restTime3: "10",
+                    restTime4: "10",
+                    shiftId: "",
+                    timeCategory1: "",
+                    timeCategory2: "",
+                    timeCategory3: "",
+                    timeCategory4: "",
+
+                },
+                rules: {
+                    // 定义是否必填项
+                    classNumber: [
+                        { required: true, message: '请输入班别编号', trigger: 'blur' },
+                        { min: 1, max: 50, message: '长度在 1 到 50 个字符', trigger: 'blur' }
+                    ],
+                    className: [
+                        { required: true, message: '请输入班别名称', trigger: 'blur' },
+                        { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur'}
+                    ],
+                    classType: [
+                        { required: true, message: '请选择班别类型', trigger: 'blur' },
+                    ],
+                    enabled:[
+                        { required: true, message: '请选择班别类型', trigger: 'blur' },
+                    ]
+
+                },
                 params: {
                     size: 10,
                     page: 1,
@@ -221,13 +420,38 @@
         },
         created() {
             this.getBaseShiftList();
-        },
-        components:{
-            addShift
+            this.addDetails();
         },
         methods: {
-            changeStatus(){
+            addClassSubmit(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        alert('submit!');
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            cancel(formName){
+                console.log(this.ruleForm.category);
+                console.log(this.ruleForm.enabled);
+                this.ruleForm.code = null;
+                this.ruleForm.name = null;
+                this.isShow =!this.isShow;
+                this.isShow2 =!this.isShow2;
+                this.$refs[formName].resetFields();
+            },
+            addClassSetting(){
+                //点击新增按钮默认选中正常班
+              this.ruleForm.category = '10000205';
+                //点击新增按钮默认选中有效
+                this.ruleForm.Effectiveness= '有效';
               this.isShow =!this.isShow;
+              this.isShow2 =!this.isShow2;
+            },
+            changeStatus2(){
+                this.isShow =!this.isShow;
                 this.isShow2 =!this.isShow2;
             },
             getBaseShiftList() {
@@ -259,6 +483,16 @@
                         this.dataText = "暂无数据";
                     }
                 })
+            },
+            addDetails(){
+                this.$http.get('base/baseShift/addDetails').then(response=>{
+                    if(response.body.status === 200){
+                        this.shiftCategory = response.body.result.shiftCategory;
+                        this.timeCategory = response.body.result.timeCategory;
+                        this.ruleForm.timeCategory1 = this.ruleForm.timeCategory2 = this.ruleForm.timeCategory3= this.ruleForm.timeCategory4 = this.timeCategory[1].id;
+                        console.log(this.shiftCategory)
+                    }
+             })
             },
             handleNodeClick(data) {
                 console.log(data);
@@ -298,21 +532,55 @@
 </script>
 
 <style scoped lang="scss">
-
     .class-setting-page {
         position: relative;
         width: 100%;
         height: 100%;
-        /*background-color: #f6ff32;*/
-        .container-table{
-            padding: 0 10px 0 10px;
-            background-color: #f1e0ff;
-        }
-        .container {
+        padding-right: 10px;
+        .container{
+            position: relative;
             width: 100%;
             height: 60px;
-            /*line-height: 60px;*/
-            background-color: #b2e2ff;
+            line-height: 40px;
+            padding-left: 10px;
+
+        }
+        .container-table{
+            position: relative;
+            width: 100%;
+        }
+        .container2 {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            .editForm{
+                position: relative;
+                width: 100%;
+                height: 50px;
+                line-height: 50px;
+                padding-left: 10px;
+                border-bottom: 1px solid #c6c6c6;
+            }
+            .tableForm{
+                position: relative;
+                width: 100%;
+                height: 75%;
+                padding-left: 100px;
+                padding-bottom: 50px;
+                padding-top: 30px;
+               overflow-y: scroll;
+                .timeTable{
+                    padding-left: 15px;
+                    width: 80%;
+                    min-width: 950px;
+                    height: 200px;
+                    margin-bottom: 15px;
+                    /*background-color: #ddf0ff;*/
+                    display: flex;
+                    flex-direction:column
+                }
+            }
         }
     }
 </style>
