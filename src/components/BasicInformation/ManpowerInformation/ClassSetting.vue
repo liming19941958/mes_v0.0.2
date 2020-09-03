@@ -693,7 +693,6 @@
                         message: '请选择要删除的数据!'
                     });
                 }
-
             },
             handleClick(val) {//点击班别编号查看班别设定信息
                 this.isShowComfirm = false;
@@ -731,6 +730,8 @@
                 this.isShow2 = !this.isShow2;
             },
             cancel(formName) {
+                this.isShowEdit = false;
+                this.isShowCopyAdd = false;
                 this.ruleForm.description = null;
                 this.ruleForm.code = null;
                 this.ruleForm.name = null;
