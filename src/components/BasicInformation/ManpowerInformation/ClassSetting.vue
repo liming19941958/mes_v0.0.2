@@ -38,15 +38,25 @@
                                 时间1：
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.onTime1"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.onTime1"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.offTime1"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.offTime1"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:0.5;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.restTime1"
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.restTime1"
                                           style="width: 85%"></el-input>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
@@ -61,22 +71,31 @@
                                 </el-select>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.effectiveTime1"
+                                <el-input :disabled="isEffectiveTimeDisable" type="text" v-model="ruleForm.effectiveTime1"
                                           style="width: 40%"></el-input>
                             </el-row>
                         </div>
                         <div style="flex: 1;display: flex;">
                             <el-row style="flex:0.425;line-height:40px;">时间2：</el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.onTime2"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.onTime2"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.offTime2"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.offTime2"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:0.5;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.restTime2"
+                                <el-input :disabled="isDisable"
+                                          type="text" v-model="ruleForm.restTime2"
                                           style="width: 85%"></el-input>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
@@ -91,19 +110,27 @@
                                 </el-select>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.effectiveTime2"
+                                <el-input :disabled="isEffectiveTimeDisable" type="text" v-model="ruleForm.effectiveTime2"
                                           style="width: 40%"></el-input>
                             </el-row>
                         </div>
                         <div style="flex: 1;display: flex;">
                             <el-row style="flex:0.425;line-height:40px;">时间3：</el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.onTime3"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.onTime3"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.offTime3"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.offTime3"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:0.5;line-height:40px;">
                                 <el-input :disabled="isDisable" type="text" v-model="ruleForm.restTime3"
@@ -121,19 +148,27 @@
                                 </el-select>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.effectiveTime3"
+                                <el-input :disabled="isEffectiveTimeDisable" type="text" v-model="ruleForm.effectiveTime3"
                                           style="width: 40%"></el-input>
                             </el-row>
                         </div>
                         <div style="flex: 1;display: flex;">
                             <el-row style="flex:0.425;line-height:40px;">时间4：</el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.onTime4"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.onTime4"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable" type="text" v-model="ruleForm.offTime4"
-                                          style="width: 90%"></el-input>
+                                <el-input :disabled="isDisable"
+                                          type="text"
+                                          v-model="ruleForm.offTime4"
+                                          style="width: 90%"
+                                          @input="inputChange">
+                                </el-input>
                             </el-row>
                             <el-row style="flex:0.5;line-height:40px;">
                                 <el-input :disabled="isDisable" type="text" v-model="ruleForm.restTime4"
@@ -151,7 +186,7 @@
                                 </el-select>
                             </el-row>
                             <el-row style="flex:1;line-height:40px;">
-                                <el-input :disabled="isDisable"
+                                <el-input :disabled="isEffectiveTimeDisable"
                                           type="text"
                                           v-model="ruleForm.effectiveTime4"
                                           style="width: 40%">
@@ -388,6 +423,7 @@
                 isShowComfirm: true,
                 isShowCopyAdd: false,
                 isShowEdit: false,
+                isEffectiveTimeDisable:true,
                 isDisable: true,
                 isShow2: false,
                 isShow: true,
@@ -461,6 +497,44 @@
             this.addDetails();
         },
         methods: {
+            inputChange(){
+                var onTime1 = this.makeDurationToSeconds(this.ruleForm.onTime1);
+                var offTime1 = this.makeDurationToSeconds(this.ruleForm.offTime1);
+                if (offTime1 > onTime1){
+                    this.ruleForm.effectiveTime1 = (offTime1 - onTime1) / 3600;
+                }else if (offTime1 === onTime1){
+                    this.ruleForm.effectiveTime1 = 0;
+                }else {
+                    this.ruleForm.effectiveTime1 = (24*60*60 - onTime1 + offTime1) / 3600;
+                }
+                var onTime2 = this.makeDurationToSeconds(this.ruleForm.onTime2);
+                var offTime2 = this.makeDurationToSeconds(this.ruleForm.offTime2);
+                if (offTime2 > onTime2){
+                    this.ruleForm.effectiveTime2 = (offTime2 - onTime2) / 3600;
+                }else if (offTime2 === onTime2){
+                    this.ruleForm.effectiveTime2 = 0;
+                }else {
+                    this.ruleForm.effectiveTime2 = (24*60*60 - onTime2 + offTime2) / 3600;
+                }
+                var onTime3 = this.makeDurationToSeconds(this.ruleForm.onTime3);
+                var offTime3 = this.makeDurationToSeconds(this.ruleForm.offTime3)
+                if (offTime3 > onTime3){
+                    this.ruleForm.effectiveTime3 = (offTime3 - onTime3) / 3600;
+                }else if (offTime3 === onTime3){
+                    this.ruleForm.effectiveTime3 = 0;
+                }else {
+                    this.ruleForm.effectiveTime3 = (24 * 60 * 60 - onTime3 + offTime3) / 3600;
+                }
+                var onTime4 = this.makeDurationToSeconds(this.ruleForm.onTime4);
+                var offTime4 = this.makeDurationToSeconds(this.ruleForm.offTime4);
+                if (offTime4 > onTime4){
+                    this.ruleForm.effectiveTime4 = (offTime4 - onTime4) / 3600;
+                }else if (offTime4 === onTime4){
+                    this.ruleForm.effectiveTime4 = 0;
+                }else {
+                    this.ruleForm.effectiveTime4 = (24 * 60 * 60 - onTime4 + offTime4) / 3600;
+                }
+            },
             addClassSubmit(formName) {
                 if (this.ruleForm.enabled1 === '有效') {
                     this.ruleForm.enabled = true;
@@ -685,8 +759,57 @@
                 this.ruleForm.restTime2 = 0;
                 this.ruleForm.restTime3 = 0;
                 this.ruleForm.restTime4 = 0;
+                this.ruleForm.timeCategory1 = this.timeCategory[1].id;
+                this.ruleForm.timeCategory2 = this.timeCategory[1].id;
+                this.ruleForm.timeCategory3 = this.timeCategory[1].id;
+                this.ruleForm.timeCategory4 = this.timeCategory[1].id;
+                var onTime1 = this.makeDurationToSeconds(this.ruleForm.onTime1);
+                var offTime1 = this.makeDurationToSeconds(this.ruleForm.offTime1);
+                if (offTime1 > onTime1){
+                    this.ruleForm.effectiveTime1 = (offTime1 - onTime1) / 3600;
+                }else if (offTime1 === onTime1){
+                    this.ruleForm.effectiveTime1 = 0;
+                }else {
+                    this.ruleForm.effectiveTime1 = (24*60*60 - onTime1 + offTime1) / 3600;
+                }
+                var onTime2 = this.makeDurationToSeconds(this.ruleForm.onTime2);
+                var offTime2 = this.makeDurationToSeconds(this.ruleForm.offTime2);
+                if (offTime2 > onTime2){
+                    this.ruleForm.effectiveTime1 = (offTime2 - onTime2) / 3600;
+                }else if (offTime2 === onTime2){
+                    this.ruleForm.effectiveTime2 = 0;
+                }else {
+                    this.ruleForm.effectiveTime2 = (24*60*60 - onTime2 + offTime2) / 3600;
+                }
+                var onTime3 = this.makeDurationToSeconds(this.ruleForm.onTime3);
+                var offTime3 = this.makeDurationToSeconds(this.ruleForm.offTime3)
+                if (offTime3 > onTime3){
+                    this.ruleForm.effectiveTime3 = (offTime3 - onTime3) / 3600;
+                }else if (offTime3 === onTime3){
+                    this.ruleForm.effectiveTime3 = 0;
+                }else {
+                    this.ruleForm.effectiveTime3 = (24 * 60 * 60 - onTime3 + offTime3) / 3600;
+                }
+                var onTime4 = this.makeDurationToSeconds(this.ruleForm.onTime4);
+                var offTime4 = this.makeDurationToSeconds(this.ruleForm.offTime4);
+                if (offTime4 > onTime4){
+                    this.ruleForm.effectiveTime4 = (offTime4 - onTime4) / 3600;
+                }else if (offTime4 === onTime4){
+                    this.ruleForm.effectiveTime4 = 0;
+                }else {
+                    this.ruleForm.effectiveTime4 = (24 * 60 * 60 - onTime4 + offTime4) / 3600;
+                }
                 this.isShow = !this.isShow;
                 this.isShow2 = !this.isShow2;
+            },
+            makeDurationToSeconds(time){
+                var str = time;
+                var arr = str.split(':');
+                var hs = parseInt(arr[0]*3600);
+                var ms = parseInt(arr[1]*60);
+                var ss = parseInt(arr[2]);
+                var seconds = hs + ms + ss;
+                return seconds;
             },
             changeStatus2() {
                 this.isShow = !this.isShow;
