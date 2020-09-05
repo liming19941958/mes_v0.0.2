@@ -2,6 +2,7 @@ import VueRouter from 'vue-router'
 import HomeContainer from './components/tabbar/HomeContainer'
 import login from './components/tabbar/LoginContainer'
 import HomePage from './components/home/home-contain'
+import menu from './components/systemSetting/menuManage'
 import RoleManagementPage from './components/systemSetting/RoleManagement'
 import organization from './components/systemSetting/UserManagement'//系统设置-用户管理
 import userlog from './components/systemSetting/LogQuery'
@@ -68,13 +69,14 @@ var router = new VueRouter({
         {path:'/home',component:HomeContainer,
             children:[
                 {path:'/home',component:HomePage,name:'0'},//首页
-                {path:'/role',component:RoleManagementPage,name:'1-1',},//角色管理
-                {path:'/organization',component:organization,name:'1-2',},//用户管理
-                {path:'/userlog',component:userlog,name:'1-3'},//日志查询
-                {path:'/debuglog',component:ExceptionLogPage,name:'1-4'},//异常日志
-                {path:'/topology',component:topology,name:'1-5'},
-                {path:'/KanbanConfigurationPage',component:KanbanConfigurationPage,name:'1-6'},
-                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage,name:'1-7'},
+                {path:'/menus',component:menu,name:'1-1',},//菜单管理
+                {path:'/role',component:RoleManagementPage,name:'1-2',},//角色管理
+                {path:'/organization',component:organization,name:'1-3',},//用户管理
+                {path:'/userlog',component:userlog,name:'1-4'},//日志查询
+                {path:'/debuglog',component:ExceptionLogPage,name:'1-5'},//异常日志
+                {path:'/topology',component:topology,name:'1-6'},
+                {path:'/KanbanConfigurationPage',component:KanbanConfigurationPage,name:'1-7'},
+                {path:'/HomePageConfigurationPage',component:HomePageConfigurationPage,name:'1-8'},
                 {path:'/CustomerInformationPage',component:CustomerInformationPage,name:'2-1'},
                 {path:'/DataImportPage',component:DataImportPage,name:'2-2'},
                 {path:'/StaffInformationPage',component:StaffInformationPage,name:'2-3-1'},

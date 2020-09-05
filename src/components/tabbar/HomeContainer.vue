@@ -37,26 +37,29 @@
                             <span slot="title">系统设置</span>
                         </template>
                         <el-menu-item-group>
+                            <router-link to="/menus">
+                                <el-menu-item index="1-1">菜单管理</el-menu-item>
+                            </router-link>
                             <router-link to="/role">
-                                <el-menu-item index="1-1">角色管理</el-menu-item>
+                                <el-menu-item index="1-2">角色管理</el-menu-item>
                             </router-link>
                             <router-link to="/organization">
-                                 <el-menu-item index="1-2">用户管理</el-menu-item>
+                                 <el-menu-item index="1-3">用户管理</el-menu-item>
                             </router-link>
                             <router-link to="/userlog">
-                                 <el-menu-item index="1-3">日志查询</el-menu-item>
+                                 <el-menu-item index="1-4">日志查询</el-menu-item>
                             </router-link>
                             <router-link to="/debuglog">
-                                 <el-menu-item index="1-4">异常日志</el-menu-item>
+                                 <el-menu-item index="1-5">异常日志</el-menu-item>
                             </router-link>
                             <router-link to="/topology">
-                                 <el-menu-item index="1-5">拓扑管理</el-menu-item>
+                                 <el-menu-item index="1-6">拓扑管理</el-menu-item>
                             </router-link>
                             <router-link to="/KanbanConfigurationPage">
-                                 <el-menu-item index="1-6">看板配置</el-menu-item>
+                                 <el-menu-item index="1-7">看板配置</el-menu-item>
                             </router-link>
                             <router-link to="/HomePageConfigurationPage">
-                                 <el-menu-item index="1-7">首页配置</el-menu-item>
+                                 <el-menu-item index="1-8">首页配置</el-menu-item>
                             </router-link>
                         </el-menu-item-group>
                     </el-submenu>

@@ -211,7 +211,7 @@
                                     <template slot-scope="scope">
                                         <span v-for="(item,index) in scope.row.node" :key="index" class="name-wrapper">
                                             <span style="margin-right: 8px;">{{item}}</span>
-                                            <span v-if="scope.row.node.length>1" style="color:#c3c3c3;margin-right: 8px;">|</span>
+                                            <span v-if="scope.row.node.length>1 && index<(scope.row.node.length -1) " style="color:#c3c3c3;margin-right: 8px;">|</span>
                                         </span>
                                     </template>
                                 </el-table-column>
@@ -407,7 +407,6 @@
             },
             // 设备关联弹窗
             DeviceAssociation(){
-
                 this.dialogFormDeviceAssociationVisible = true;
             },
             findDeviceList(){//利用map去重

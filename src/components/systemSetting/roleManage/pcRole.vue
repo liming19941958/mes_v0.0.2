@@ -57,9 +57,7 @@
                     </el-table-column>
                     <el-table-column
                             label="菜单名称"
-                            prop="menuName"
-                            sortable
-                            width="250px">
+                            prop="menuName">
                     </el-table-column>
                     <el-table-column
                             label="模块列表"
@@ -394,11 +392,11 @@
         width: 100%;
         height: 100%;
         background-color: #effff3;
-
+/*设置表头文字居中*/
         ::v-deep .el-table th {
             padding: 8px 0;
         }
-
+/*设置表格单元格内容左对齐*/
         .el-table ::v-deep td {
             text-align: left;
             padding-left: 8px;
