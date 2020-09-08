@@ -79,7 +79,7 @@
                     <el-table-column
                             label="创建时间">
                         <template slot-scope="scope">
-                            <el-tooltip popper-class="atooltip" :content="scope.row.date" placement="bottom">
+                            <el-tooltip popper-class="atooltip" content="scope.row.date" placement="bottom">
                                 <p>{{ scope.row.date }}</p>
                                 <div slot="reference" class="name-wrapper">
                                   <el-tag size="medium">{{ scope.row.date }}</el-tag>

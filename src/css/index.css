@@ -170,6 +170,7 @@
    }
 
    /*异常日志鼠标经过弹出气泡提示背景颜色*/
+   /*标签中的方向值（bottom/top/left/right）要与css中的一致*/
    .el-tooltip__popper[x-placement^=bottom] .popper__arrow{
        border-bottom-color: rgba(0,0,0,0.3);
    }
@@ -210,6 +211,12 @@
    }
    .el-dialog__header {
        padding: 20px 20px 0 35px!important;
+   }
+   label {
+       display: inline-block;
+       max-width: 140%!important;
+       margin-bottom: 5px;
+       font-weight: 700;
    }
 
    @font-face{

@@ -6,7 +6,6 @@
             </div>
             <div class="tableBar">
                 <el-table
-                        lazy="true"
                         v-loading="loading"
                         element-loading-text="拼命加载中"
                         element-loading-spinner="el-icon-loading"
@@ -107,7 +106,6 @@
                             this.dataText = '';
                             this.loading =  false;
                         }
-                        console.log(this.tableData )
                     }
                 })
             }
