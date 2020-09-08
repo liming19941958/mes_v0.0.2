@@ -108,6 +108,15 @@
                         </el-form-item>
                         <el-form-item label="模块：" style="margin-bottom: 15px;width: 25%;">
                             <div class="add-moudles">
+                                <div v-for="(items,index) in moduleList" :key="index" style="display: flex">
+                                   <span style="flex: 1;">{{items.name}}</span>
+                                    <span style="flex: 1;text-align: center">{{items.apiAddress}}</span>
+                                    <span style="flex: 1;text-align: right">
+                                        <i class="el-icon-circle-close" style="margin-right: 10px;cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="deleteModule(index)"></i>
+                                        <i class="el-icon-edit" style="cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="editModule(index)"></i>
+                                    </span>
+
+                                </div>
                                 <div class="addChild" @click="addmodule">
                                     <i class="el-icon-circle-plus-outline" style="margin-right: 10px"></i>
                                     <span >添加子集</span>
@@ -118,19 +127,20 @@
 
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormEditInformationVisible = false">取 消</el-button>
+                        <el-button @click="cancelDialogParent">取 消</el-button>
                         <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog width="30%" title="添加模块" :visible.sync="dialogFormAddVisible">
+                <el-dialog width="650px!important" title="添加模块" :visible.sync="dialogFormAddVisible">
                     <el-form :model="moduleForm" :rules="rules" ref="moduleForm" label-width="100px" class="demo-moduleForm" >
-                        <el-form-item label="模块名称：" prop="moudleName" style="margin-bottom: 15px;">
-                            <el-input v-model="moduleForm.moudleName" placeholder="请输入菜单名称" style="width: 125%!important;"></el-input>
+                        <el-form-item label="模块名称：" prop="name" style="margin-bottom: 15px;">
+                            <el-input v-model="moduleForm.name" placeholder="请输入菜单名称" style="width: 125%!important;"></el-input>
                         </el-form-item>
                         <el-form-item label="API地址："  prop="apiAddress" style="margin-bottom: 15px;width: 25%;">
                             <div class="add-moudles">
                                 <div v-for="(item,index) in moduleForm.apiAddress " :key="index">
-                                    <el-input v-model="item.api" placeholder="请输入内容"  style="margin-bottom: 15px;"></el-input>
+                                    <el-input v-model="item.api" placeholder="请输入内容"  style="width: 92%;margin: 0 10px 15px 0;display: inline-block"></el-input>
+                                    <i class="el-icon-circle-close" style="cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="deleteapi(index)"></i>
                                 </div>
                                 <div class="addChild" @click="addapi">
                                     <i class="el-icon-circle-plus-outline" style="margin-right: 10px;"></i>
@@ -140,7 +150,7 @@
                         </el-form-item>
                     </el-form>
                     <div slot="footer" class="dialog-footer">
-                        <el-button @click="dialogFormAddVisible = false">取 消</el-button>
+                        <el-button @click="cancelDialog">取 消</el-button>
                         <el-button type="primary" @click="submit('moduleForm')">确 定</el-button>
                     </div>
                 </el-dialog>
@@ -157,8 +167,7 @@
                 loading: true,
                 dataText: '',
                 tableData: [],
-                addModule:[],
-                addApiChild:[],
+                moduleList:[],
                 index:'',
                 row:'',
                 dialogFormAddVisible:false,
@@ -168,7 +177,7 @@
                     label: 'name'
                 },
                 moduleForm:{
-                    moduleName:'',
+                    name:'',
                     apiAddressInput:'',
                     apiAddress:[]
                 },
@@ -196,7 +205,7 @@
                     order: [
                         { required: true, message: '请输入显示顺序', trigger: 'blur' },
                     ],
-                    moudleName:[
+                    name:[
                         { required: true, message: '请输入模块名称', trigger: 'blur' },
                     ],
                     apiAddress:[
@@ -216,17 +225,30 @@
                 this.moduleForm.apiAddress.push(n);
                 console.log(this.moduleForm.apiAddress);
             },
+            deleteapi(index){
+                this.$delete(this.moduleForm.apiAddress,index)
+               console.log(index)
+            },
+            cancelDialog(){
+                this.moduleForm.name = ' ';
+                this.moduleForm.apiAddress = [];
+                this.dialogFormAddVisible = false;
+            },
             submit(formName){
                 this.$refs[formName].validate((valid) => {
-                    console.log(this.$refs[formName].validate)
                     if (valid) {
-                        alert('om')
+                        let obj = {};
+                        obj['name']= this.moduleForm.name;
+                        obj['apiAddress']= this.moduleForm.apiAddress[0].api;
+                        this.moduleList.push(obj);
+                        this.moduleForm.name = ' ';
+                        this.moduleForm.apiAddress = [];
+                        this.dialogFormAddVisible = false;
                     } else {
                         console.log('error submit!!');
                         return false;
                     }
                 });
-                console.log(this.moduleForm.apiAddress)
             },
             addmodule(){
                 var n = {api:''};
@@ -242,6 +264,14 @@
                         return false;
                     }
                 });
+            },
+            cancelDialogParent(){
+                this.moduleList = [];
+                this.ruleForm.menuName = '';
+                this.ruleForm.menuAddress = '';
+                this.ruleForm.iconAddress = '';
+                this.ruleForm.displayStatus = '1';
+                this.dialogFormEditInformationVisible = false
             },
             getMenuList() {
                 this.dataText = ' ';
@@ -363,10 +393,9 @@
             }
 
            .add-moudles{
-
                margin-bottom: 12px;
                position: relative;
-              min-width: 70px;
+               min-width: 70px;
                width: 500%;
                min-height: 80px;
                padding:25px;
