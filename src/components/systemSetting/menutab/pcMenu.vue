@@ -77,7 +77,7 @@
 
                 </el-table>
                 <!--                    修改子菜单/添加子菜单（dialog不能放在el-table标签里面）-->
-                <el-dialog width="40%!important" :title="ruleForm.title"  :visible.sync="dialogFormEditInformationVisible">
+                <el-dialog width="780px!important" :title="ruleForm.title"  :visible.sync="dialogFormEditInformationVisible">
                     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" >
                         <el-form-item label="父级菜单：" style="margin-bottom: 15px;">
                             <!--                                prop的值要与 v-model的值相同-->
@@ -166,6 +166,7 @@
             return {
                 loading: true,
                 dataText: '',
+                url:[],
                 tableData: [],
                 moduleList:[],
                 index:'',
@@ -241,6 +242,7 @@
                         obj['name']= this.moduleForm.name;
                         obj['apiAddress']= this.moduleForm.apiAddress;
                         this.moduleList.push(obj);
+                        console.log(this.moduleList)
                         this.moduleForm.name = ' ';
                         this.moduleForm.apiAddress = [];
                         this.dialogFormAddVisible = false;
@@ -251,6 +253,7 @@
                 });
             },
             addmodule(){
+                this.moduleForm.apiAddress = [];
                 var n = {api:''};
                 this.moduleForm.apiAddress.push(n);
                 this.dialogFormAddVisible = true;
@@ -261,7 +264,7 @@
             submitForm(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('om')
+                        this.$http.post(this.url,)
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -307,23 +310,26 @@
                 this.ruleForm.parentMenu = row.menuName
             },
             handleEdit(index,row){
+                this.url = 'menu/update'
                 this.moduleList = [];
                 this.ruleForm.title = '修改';
                 this.ruleForm.order = index;
                 this.ruleForm.menuName = row.menuName;
                 this.ruleForm.menuAddress = row.menuLink;
-
                 let keys = Object.keys(row.modulesMaps);
                 // console.log(keys)
                 keys.forEach(item=>{
                     let obj = {};
-                    // console.log(item)
+                    let apiAddress = [];
+                    row.modulesMaps[item].forEach(item1=>{
+                        let n = {api:''};
+                        n['api'] = item1;
+                        apiAddress.push(n);
+                    });
                     obj['name'] = item;
-                    obj['apiAddress'] = row.modulesMaps[item];
+                    obj['apiAddress'] = apiAddress;
                     this.moduleList.push(obj)
-                    console.log(this.moduleList)
-                })
-                // this.moduleList = this.editModuleList;
+                });
                 this.dialogFormEditInformationVisible = true;
                 if (row.parentId === null){
                     this.ruleForm.parentMenu = '顶级菜单';
@@ -332,7 +338,6 @@
                     let parentId = row.parentId;
                     this.findNode(data,parentId);
                 }
-                // console.log(index,row)
             },
             findNode(data,parentId){
                 data.forEach(item=>{
