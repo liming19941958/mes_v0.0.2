@@ -110,7 +110,7 @@
                             <div class="add-moudles">
                                 <div v-for="(items,index) in moduleList" :key="index" style="display: flex">
                                    <span style="flex: 1;">{{items.name}}</span>
-                                    <span style="flex: 1;text-align: center">{{items.apiAddress}}</span>
+                                    <span style="flex: 1;text-align: center">{{items.apiAddress[0].api}}</span>
                                     <span style="flex: 1;text-align: right">
                                         <i class="el-icon-circle-close" style="margin-right: 10px;cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="deleteModule(index)"></i>
                                         <i class="el-icon-edit" style="cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="editModule(index)"></i>
@@ -239,7 +239,7 @@
                     if (valid) {
                         let obj = {};
                         obj['name']= this.moduleForm.name;
-                        obj['apiAddress']= this.moduleForm.apiAddress[0].api;
+                        obj['apiAddress']= this.moduleForm.apiAddress;
                         this.moduleList.push(obj);
                         this.moduleForm.name = ' ';
                         this.moduleForm.apiAddress = [];
@@ -254,6 +254,9 @@
                 var n = {api:''};
                 this.moduleForm.apiAddress.push(n);
                 this.dialogFormAddVisible = true;
+            },
+            deleteModule(index){
+                this.$delete(this.moduleList,index)
             },
             submitForm(formName){
                 this.$refs[formName].validate((valid) => {
@@ -296,19 +299,31 @@
             handleAdd(index,row){
                 this.index = index;
                 this.row = row;
+                this.moduleList = [];
                 // console.log(index,row)
                 this.dialogFormEditInformationVisible = true;
                 this.ruleForm.order = index;
                 this.ruleForm.title = '新增';
                 this.ruleForm.parentMenu = row.menuName
-
-
-
             },
             handleEdit(index,row){
+                this.moduleList = [];
                 this.ruleForm.title = '修改';
                 this.ruleForm.order = index;
                 this.ruleForm.menuName = row.menuName;
+                this.ruleForm.menuAddress = row.menuLink;
+
+                let keys = Object.keys(row.modulesMaps);
+                // console.log(keys)
+                keys.forEach(item=>{
+                    let obj = {};
+                    // console.log(item)
+                    obj['name'] = item;
+                    obj['apiAddress'] = row.modulesMaps[item];
+                    this.moduleList.push(obj)
+                    console.log(this.moduleList)
+                })
+                // this.moduleList = this.editModuleList;
                 this.dialogFormEditInformationVisible = true;
                 if (row.parentId === null){
                     this.ruleForm.parentMenu = '顶级菜单';
@@ -317,7 +332,7 @@
                     let parentId = row.parentId;
                     this.findNode(data,parentId);
                 }
-                console.log(index,row)
+                // console.log(index,row)
             },
             findNode(data,parentId){
                 data.forEach(item=>{
