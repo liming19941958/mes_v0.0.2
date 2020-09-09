@@ -289,7 +289,7 @@
                             this.dataText = '';
                             this.loading = false;
                         }
-                        // console.log(this.tableData)
+                        console.log(this.tableData)
                     }
                 })
             },
@@ -308,6 +308,7 @@
             handleEdit(index,row){
                 this.ruleForm.title = '修改';
                 this.ruleForm.order = index;
+                this.ruleForm.menuName = row.menuName;
                 this.dialogFormEditInformationVisible = true;
                 if (row.parentId === null){
                     this.ruleForm.parentMenu = '顶级菜单';
