@@ -113,7 +113,7 @@
                                     <span style="flex: 1;text-align: center">{{items.apiAddress[0].api}}</span>
                                     <span style="flex: 1;text-align: right">
                                         <i class="el-icon-circle-close" style="margin-right: 10px;cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="deleteModule(index)"></i>
-                                        <i class="el-icon-edit" style="cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="editModule(index)"></i>
+                                        <i class="el-icon-edit" style="cursor:pointer;font-size:18px;color:#0f97ff;display: inline-block" @click="editModule(index,items)"></i>
                                     </span>
 
                                 </div>
@@ -131,7 +131,7 @@
                         <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog width="650px!important" title="添加模块" :visible.sync="dialogFormAddVisible">
+                <el-dialog width="650px!important" :title="ruleForm.title" :visible.sync="dialogFormAddVisible">
                     <el-form :model="moduleForm" :rules="rules" ref="moduleForm" label-width="100px" class="demo-moduleForm" >
                         <el-form-item label="模块名称：" prop="name" style="margin-bottom: 15px;">
                             <el-input v-model="moduleForm.name" placeholder="请输入菜单名称" style="width: 125%!important;"></el-input>
@@ -165,6 +165,7 @@
         data() {
             return {
                 loading: true,
+                addOrEdit:true,
                 dataText: '',
                 url:[],
                 tableData: [],
@@ -183,11 +184,14 @@
                     apiAddress:[]
                 },
                 ruleForm:{
-                    title:'',
+                    id:'',
+                    title:'添加模块',
                     parentMenu:'',
                     menuName:'',
                     menuAddress:'',
                     iconAddress:'',
+                    modulesMaps:{},
+                    parentId:'',
                     displayStatus:'1',
                     order:'',
                     Module:''
@@ -224,10 +228,16 @@
             addapi(){
                 var n = {api:''};
                 this.moduleForm.apiAddress.push(n);
-                console.log(this.moduleForm.apiAddress);
+                // console.log(this.moduleForm.apiAddress);
             },
             deleteapi(index){
-                this.$delete(this.moduleForm.apiAddress,index)
+                if (index >0){
+                    this.$delete(this.moduleForm.apiAddress,index)
+                }else{
+                    this.moduleForm.apiAddress[index].api = ' ';
+
+                }
+
                console.log(index)
             },
             cancelDialog(){
@@ -241,10 +251,14 @@
                         let obj = {};
                         obj['name']= this.moduleForm.name;
                         obj['apiAddress']= this.moduleForm.apiAddress;
-                        this.moduleList.push(obj);
-                        console.log(this.moduleList)
-                        this.moduleForm.name = ' ';
-                        this.moduleForm.apiAddress = [];
+                        if (this.addOrEdit){
+                            this.moduleList.push(obj);
+                            this.moduleForm.name = ' ';
+                            this.moduleForm.apiAddress = [];
+                        }else{
+                            this.moduleForm.name = ' ';
+                            this.moduleForm.apiAddress = [];
+                        }
                         this.dialogFormAddVisible = false;
                     } else {
                         console.log('error submit!!');
@@ -253,18 +267,75 @@
                 });
             },
             addmodule(){
-                this.moduleForm.apiAddress = [];
-                var n = {api:''};
-                this.moduleForm.apiAddress.push(n);
-                this.dialogFormAddVisible = true;
+                this.addOrEdit = true;
+                if (this.addOrEdit){
+                    this.moduleForm.apiAddress = [];
+                    var n = {api:''};
+                    this.moduleForm.apiAddress.push(n);
+                    this.dialogFormAddVisible = true;
+                }
             },
             deleteModule(index){
                 this.$delete(this.moduleList,index)
+                console.log(this.moduleList);
+            },
+            editModule(index,items){
+                this.addOrEdit = false;
+                if (!this.addOrEdit){
+                    this.ruleForm.title = '修改模块';
+                    this.moduleForm.name = items.name;
+                    this.moduleForm.apiAddress = items.apiAddress;
+                    this.dialogFormAddVisible = true;
+                    console.log(index,items)
+                }
+
             },
             submitForm(formName){
+                let moduleMap = this.moduleList;
+                console.log(moduleMap)
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$http.post(this.url,)
+                        console.log(moduleMap)
+                        let obj = {};
+                        moduleMap.forEach(item=>{
+                            let arrApi = [];
+                            item.apiAddress.forEach(apis=>{
+                                arrApi.push(apis.api);
+                            })
+                            obj[item.name] = arrApi;
+                        });
+                        console.log(obj);
+                        let state = '';
+                        if (this.ruleForm.displayStatus ===1) {
+                            state = true;
+                        }else{
+                            state = false;
+                        }
+                        this.$http.post(this.url,JSON.stringify({
+                            id:this.ruleForm.id,
+                            menuIcon:this.ruleForm.iconAddress,
+                            menuLink:this.ruleForm.menuAddress,
+                            menuName:this.ruleForm.menuName,
+                            modulesMaps:obj,
+                            parentId:this.ruleForm.parentId,
+                            showIndex:this.ruleForm.order + 1,
+                            state:state,
+                        })).then(response=>{
+                            if (response.body.status === 200){
+                                this.getMenuList();
+                                this.dialogFormEditInformationVisible = false;
+                                this.$message({
+                                    type:"success",
+                                    message:"操作成功！"
+                                })
+                            }else{
+                                this.dialogFormEditInformationVisible = false;
+                                this.$message({
+                                    type:"error",
+                                    message: response.body.result,
+                                })
+                            }
+                        })
                     } else {
                         console.log('error submit!!');
                         return false;
@@ -295,11 +366,12 @@
                             this.dataText = '';
                             this.loading = false;
                         }
-                        console.log(this.tableData)
+                        // console.log(this.tableData)
                     }
                 })
             },
             handleAdd(index,row){
+                this.url = 'menu/save';
                 this.index = index;
                 this.row = row;
                 this.moduleList = [];
@@ -313,22 +385,33 @@
                 this.url = 'menu/update'
                 this.moduleList = [];
                 this.ruleForm.title = '修改';
+                this.ruleForm.id = row.id;
+                this.ruleForm.parentId = row.parentId;
                 this.ruleForm.order = index;
                 this.ruleForm.menuName = row.menuName;
                 this.ruleForm.menuAddress = row.menuLink;
                 let keys = Object.keys(row.modulesMaps);
-                // console.log(keys)
+                // console.log(row)
                 keys.forEach(item=>{
                     let obj = {};
                     let apiAddress = [];
-                    row.modulesMaps[item].forEach(item1=>{
+                    if (row.modulesMaps[item].length>0){
+                        row.modulesMaps[item].forEach(item1=>{
+                            let n = {api:''};
+                            n['api'] = item1;
+                            apiAddress.push(n);
+                        });
+                        obj['name'] = item;
+                        obj['apiAddress'] = apiAddress;
+                        this.moduleList.push(obj)
+                    }else{
                         let n = {api:''};
-                        n['api'] = item1;
+                        n['api'] = ' ';
                         apiAddress.push(n);
-                    });
-                    obj['name'] = item;
-                    obj['apiAddress'] = apiAddress;
-                    this.moduleList.push(obj)
+                        obj['name'] = item;
+                        obj['apiAddress'] = apiAddress;
+                        this.moduleList.push(obj)
+                    }
                 });
                 this.dialogFormEditInformationVisible = true;
                 if (row.parentId === null){
